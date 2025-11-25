@@ -1,0 +1,25 @@
+fragment ShippingZoneDetails on ShippingZone {
+  id
+  name
+  default
+  countries {
+    code
+    country
+  }
+  warehouses {
+    id
+    name
+  }
+  channels {
+    id
+    name
+  }
+}
+
+fragment ShippingZoneError on ShippingError {
+  field
+  code
+  message
+  warehouses
+  channels
+}

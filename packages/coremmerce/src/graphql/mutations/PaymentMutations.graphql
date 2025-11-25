@@ -1,0 +1,93 @@
+mutation paymentGatewaysInitialize(
+  $checkoutId: ID!
+  $paymentGateways: [PaymentGatewayToInitialize!]
+) {
+  paymentGatewayInitialize(id: $checkoutId, paymentGateways: $paymentGateways) {
+    errors {
+      field
+      message
+      code
+    }
+    gatewayConfigs {
+      id
+      data
+      errors {
+        field
+        message
+        code
+      }
+    }
+  }
+}
+
+mutation transactionInitialize(
+  $checkoutId: ID!
+  $action: TransactionFlowStrategyEnum
+  $paymentGateway: PaymentGatewayToInitialize!
+  $amount: PositiveDecimal
+) {
+  transactionInitialize(
+    id: $checkoutId
+    action: $action
+    paymentGateway: $paymentGateway
+    amount: $amount
+  ) {
+    transaction {
+      id
+      actions
+    }
+    transactionEvent {
+      message
+      type
+    }
+    data
+    errors {
+      field
+      code
+      message
+    }
+  }
+}
+
+mutation transactionProcess($id: ID!, $data: JSON) {
+  transactionProcess(id: $id, data: $data) {
+    transaction {
+      id
+      actions
+    }
+    transactionEvent {
+      message
+      type
+    }
+    data
+    errors {
+      field
+      code
+      message
+    }
+  }
+}
+
+mutation CheckoutPaymentCreate($checkoutId: ID!, $input: PaymentInput!) {
+  checkoutPaymentCreate(checkoutId: $checkoutId, input: $input) {
+    checkout {
+      id
+      totalPrice {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+    payment {
+      id
+      gateway
+      token
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}

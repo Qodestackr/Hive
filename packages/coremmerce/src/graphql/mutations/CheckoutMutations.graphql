@@ -1,0 +1,281 @@
+mutation CheckoutCreate($channel: String!, $lines: [CheckoutLineInput!]!) {
+  #pass channel slug NOT ID!!
+  checkoutCreate(input: { channel: $channel, lines: $lines }) {
+    checkout {
+      id
+      email
+      lines {
+        id
+        quantity
+        totalPrice {
+          gross {
+            ...Money
+          }
+        }
+        variant {
+          product {
+            id
+            name
+            slug
+            thumbnail {
+              url
+              alt
+            }
+            category {
+              name
+            }
+          }
+          pricing {
+            price {
+              gross {
+                ...Money
+              }
+            }
+          }
+          name
+          id
+        }
+      }
+      totalPrice {
+        gross {
+          ...Money
+        }
+      }
+    }
+    errors {
+      field
+      code
+    }
+  }
+}
+
+mutation CheckoutAddLine($id: ID!, $productVariantId: ID!) {
+  checkoutLinesAdd(
+    id: $id
+    lines: [{ quantity: 1, variantId: $productVariantId }]
+  ) {
+    checkout {
+      id
+      lines {
+        id
+        quantity
+        variant {
+          name
+          product {
+            name
+          }
+        }
+      }
+    }
+    errors {
+      message
+    }
+  }
+}
+
+mutation CheckoutDeleteLines($checkoutId: ID!, $lineIds: [ID!]!) {
+  checkoutLinesDelete(id: $checkoutId, linesIds: $lineIds) {
+    checkout {
+      id
+    }
+    errors {
+      field
+      code
+    }
+  }
+}
+
+mutation checkoutLinesUpdate(
+  $checkoutId: ID!
+  $lines: [CheckoutLineUpdateInput!]!
+  $languageCode: LanguageCodeEnum!
+) {
+  checkoutLinesUpdate(id: $checkoutId, lines: $lines) {
+    errors {
+      ...CheckoutErrorFragment
+    }
+    checkout {
+      ...CheckoutFragment
+    }
+  }
+}
+
+mutation checkoutLineDelete(
+  $checkoutId: ID!
+  $lineId: ID
+  $languageCode: LanguageCodeEnum!
+) {
+  checkoutLineDelete(id: $checkoutId, lineId: $lineId) {
+    errors {
+      ...CheckoutErrorFragment
+    }
+    checkout {
+      ...CheckoutFragment
+    }
+  }
+}
+
+mutation checkoutEmailUpdate(
+  $email: String!
+  $checkoutId: ID!
+  $languageCode: LanguageCodeEnum!
+) {
+  checkoutEmailUpdate(email: $email, id: $checkoutId) {
+    errors {
+      ...CheckoutErrorFragment
+    }
+    checkout {
+      ...CheckoutFragment
+    }
+  }
+}
+
+mutation checkoutCustomerAttach(
+  $checkoutId: ID!
+  $languageCode: LanguageCodeEnum!
+) {
+  checkoutCustomerAttach(id: $checkoutId) {
+    errors {
+      ...CheckoutErrorFragment
+    }
+    checkout {
+      ...CheckoutFragment
+    }
+  }
+}
+
+mutation checkoutShippingAddressUpdate(
+  $checkoutId: ID!
+  $shippingAddress: AddressInput!
+  $validationRules: CheckoutAddressValidationRules
+  $languageCode: LanguageCodeEnum!
+) {
+  checkoutShippingAddressUpdate(
+    id: $checkoutId
+    shippingAddress: $shippingAddress
+    validationRules: $validationRules
+  ) {
+    errors {
+      ...CheckoutErrorFragment
+    }
+    checkout {
+      ...CheckoutFragment
+    }
+  }
+}
+
+mutation checkoutBillingAddressUpdate(
+  $checkoutId: ID!
+  $billingAddress: AddressInput!
+  $validationRules: CheckoutAddressValidationRules
+  $languageCode: LanguageCodeEnum!
+) {
+  checkoutBillingAddressUpdate(
+    id: $checkoutId
+    billingAddress: $billingAddress
+    validationRules: $validationRules
+  ) {
+    errors {
+      ...CheckoutErrorFragment
+    }
+    checkout {
+      ...CheckoutFragment
+    }
+  }
+}
+
+mutation checkoutDeliveryMethodUpdate(
+  $checkoutId: ID!
+  $deliveryMethodId: ID!
+  $languageCode: LanguageCodeEnum!
+) {
+  checkoutDeliveryMethodUpdate(
+    id: $checkoutId
+    deliveryMethodId: $deliveryMethodId
+  ) {
+    errors {
+      ...CheckoutErrorFragment
+    }
+    checkout {
+      ...CheckoutFragment
+    }
+  }
+}
+
+mutation checkoutAddPromoCode(
+  $checkoutId: ID
+  $promoCode: String!
+  $languageCode: LanguageCodeEnum!
+) {
+  checkoutAddPromoCode(checkoutId: $checkoutId, promoCode: $promoCode) {
+    errors {
+      ...CheckoutErrorFragment
+    }
+    checkout {
+      ...CheckoutFragment
+    }
+  }
+}
+
+mutation checkoutRemovePromoCode(
+  $checkoutId: ID
+  $promoCode: String
+  $promoCodeId: ID
+  $languageCode: LanguageCodeEnum!
+) {
+  checkoutRemovePromoCode(
+    checkoutId: $checkoutId
+    promoCode: $promoCode
+    promoCodeId: $promoCodeId
+  ) {
+    errors {
+      ...CheckoutErrorFragment
+    }
+    checkout {
+      ...CheckoutFragment
+    }
+  }
+}
+
+mutation checkoutComplete($checkoutId: ID!) {
+  checkoutComplete(id: $checkoutId) {
+    order {
+      id
+      number
+      total {
+        gross {
+          ...Money
+        }
+      }
+    }
+
+    errors {
+      ...CheckoutErrorFragment
+    }
+  }
+}
+
+mutation CheckoutCustomerAttachMutation($id: ID!) {
+  checkoutCustomerAttach(id: $id) {
+    errors {
+      ...CheckoutErrorFragment
+    }
+  }
+}
+
+mutation CheckoutDeliveryMethodUpdateMutation(
+  $checkoutId: ID!
+  $deliveryMethodId: ID!
+) {
+  checkoutDeliveryMethodUpdate(
+    id: $checkoutId
+    deliveryMethodId: $deliveryMethodId
+  ) {
+    errors {
+      ...CheckoutErrorFragment
+    }
+    checkout {
+      id
+    }
+  }
+}

@@ -1,0 +1,3129 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Promco API",
+    "version": "1.0.0",
+    "description": "Auto-generated OpenAPI from Zod schemas"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development server"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ID"
+          },
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "name",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UserCreate": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com",
+            "description": "User email address"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "example": "John Doe",
+            "description": "Full name of the user"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "example": "SecurePass123!",
+            "description": "Password (minimum 8 characters)"
+          }
+        },
+        "required": [
+          "email",
+          "name",
+          "password"
+        ]
+      },
+      "UserUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Jane Doe"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "example": "NewPass123!"
+          }
+        }
+      },
+      "PurchaseOrderItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "purchaseOrderId": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "quantityOrdered": {
+            "type": "integer",
+            "exclusiveMinimum": 0
+          },
+          "quantityReceived": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "unitCost": {
+            "type": "number",
+            "minimum": 0
+          },
+          "batchNumber": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "expiryDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lineTotal": {
+            "type": "number",
+            "minimum": 0
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "purchaseOrderId",
+          "productId",
+          "quantityOrdered",
+          "unitCost",
+          "batchNumber",
+          "expiryDate",
+          "lineTotal",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PurchaseOrderResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "poNumber": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "supplierContact": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "ordered",
+              "received",
+              "cancelled"
+            ]
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "receivedDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "totalCost": {
+            "type": "number",
+            "minimum": 0
+          },
+          "currency": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3,
+            "default": "KES"
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": {}
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseOrderItem"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "organizationId",
+          "poNumber",
+          "supplierName",
+          "supplierContact",
+          "status",
+          "orderDate",
+          "receivedDate",
+          "totalCost",
+          "notes",
+          "metadata",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "QuickStockArrival": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "minLength": 1,
+            "example": "prod_123"
+          },
+          "quantity": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "example": 50
+          },
+          "unitCost": {
+            "type": "number",
+            "minimum": 0,
+            "example": 9200
+          },
+          "supplierName": {
+            "type": "string",
+            "example": "ABC Distributors"
+          },
+          "batchNumber": {
+            "type": "string",
+            "example": "BATCH-2025-001"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "productId",
+          "quantity",
+          "unitCost"
+        ]
+      },
+      "PurchaseOrderItemCreate": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "minLength": 1,
+            "example": "prod_123"
+          },
+          "quantityOrdered": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "example": 50
+          },
+          "quantityReceived": {
+            "type": "integer",
+            "minimum": 0,
+            "example": 50
+          },
+          "unitCost": {
+            "type": "number",
+            "minimum": 0,
+            "example": 9200
+          },
+          "batchNumber": {
+            "type": "string",
+            "example": "BATCH-2025-001"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "productId",
+          "quantityOrdered",
+          "unitCost"
+        ]
+      },
+      "PurchaseOrderCreate": {
+        "type": "object",
+        "properties": {
+          "supplierName": {
+            "type": "string",
+            "example": "ABC Distributors"
+          },
+          "supplierContact": {
+            "type": "string",
+            "example": "+254712345678"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "receivedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseOrderItemCreate"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "PurchaseOrderListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchaseOrderResponse"
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "number"
+              },
+              "limit": {
+                "type": "number"
+              },
+              "total": {
+                "type": "number"
+              },
+              "totalPages": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "page",
+              "limit",
+              "total",
+              "totalPages"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "pagination"
+        ]
+      },
+      "PurchaseOrderUpdate": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "ordered",
+              "received",
+              "cancelled"
+            ]
+          },
+          "receivedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "InventoryMovementResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "movementType": {
+            "type": "string",
+            "enum": [
+              "purchase",
+              "sale",
+              "adjustment",
+              "promo_redemption",
+              "return",
+              "damage",
+              "theft"
+            ]
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "unitCostAtMovement": {
+            "type": "number",
+            "minimum": 0
+          },
+          "totalCost": {
+            "type": "number",
+            "minimum": 0
+          },
+          "fifoBatchId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "referenceType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "referenceId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "campaignId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "promoCodeId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "stockAfterMovement": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": {}
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "organizationId",
+          "productId",
+          "movementType",
+          "quantity",
+          "unitCostAtMovement",
+          "totalCost",
+          "fifoBatchId",
+          "referenceType",
+          "referenceId",
+          "campaignId",
+          "promoCodeId",
+          "stockAfterMovement",
+          "notes",
+          "metadata",
+          "createdAt"
+        ]
+      },
+      "InventoryMovementListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InventoryMovementResponse"
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "number"
+              },
+              "limit": {
+                "type": "number"
+              },
+              "total": {
+                "type": "number"
+              },
+              "totalPages": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "page",
+              "limit",
+              "total",
+              "totalPages"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "pagination"
+        ]
+      },
+      "FIFOBatchInfo": {
+        "type": "object",
+        "properties": {
+          "batchId": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "unitCost": {
+            "type": "number",
+            "minimum": 0
+          },
+          "quantityRemaining": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "purchaseDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "batchNumber": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "expiryDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "batchId",
+          "productId",
+          "unitCost",
+          "quantityRemaining",
+          "purchaseDate",
+          "batchNumber",
+          "expiryDate"
+        ]
+      },
+      "ProductFIFOBatchesResponse": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "currentFIFOCost": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "totalStockQuantity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "batches": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FIFOBatchInfo"
+            }
+          }
+        },
+        "required": [
+          "productId",
+          "productName",
+          "currentFIFOCost",
+          "totalStockQuantity",
+          "batches"
+        ]
+      },
+      "CampaignProfitabilityResponse": {
+        "type": "object",
+        "properties": {
+          "isProfitable": {
+            "type": "boolean"
+          },
+          "estimatedProfit": {
+            "type": "number"
+          },
+          "estimatedProfitPercent": {
+            "type": "number"
+          },
+          "basePrice": {
+            "type": "number",
+            "minimum": 0
+          },
+          "discountAmount": {
+            "type": "number",
+            "minimum": 0
+          },
+          "netRevenue": {
+            "type": "number",
+            "minimum": 0
+          },
+          "currentFIFOCost": {
+            "type": "number",
+            "minimum": 0
+          },
+          "recommendation": {
+            "type": "string"
+          },
+          "suggestedDiscount": {
+            "type": "number"
+          },
+          "alternativeProducts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "string"
+                },
+                "productName": {
+                  "type": "string"
+                },
+                "suggestedDiscount": {
+                  "type": "number"
+                },
+                "estimatedProfit": {
+                  "type": "number"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "productId",
+                "productName",
+                "suggestedDiscount",
+                "estimatedProfit",
+                "reason"
+              ]
+            }
+          }
+        },
+        "required": [
+          "isProfitable",
+          "estimatedProfit",
+          "estimatedProfitPercent",
+          "basePrice",
+          "discountAmount",
+          "netRevenue",
+          "currentFIFOCost"
+        ]
+      },
+      "CampaignProfitabilityCheck": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "minLength": 1,
+            "example": "prod_123"
+          },
+          "discountPercent": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "example": 20
+          },
+          "discountAmount": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "productId",
+          "discountPercent"
+        ]
+      },
+      "CampaignTargetSegment": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "tiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "minSpend": {
+            "type": "number",
+            "minimum": 0
+          },
+          "cities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lastOrderDaysAgo": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "CampaignResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "flash_sale",
+              "loyalty_nudge",
+              "restock_alert",
+              "event_promo",
+              "dead_hour_boost",
+              "product_launch",
+              "reactivation"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "scheduled",
+              "active",
+              "paused",
+              "completed",
+              "cancelled"
+            ]
+          },
+          "messageTemplate": {
+            "type": "string"
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "whatsapp",
+                "sms",
+                "email"
+              ]
+            },
+            "default": [
+              "whatsapp"
+            ]
+          },
+          "targetSegment": {
+            "$ref": "#/components/schemas/CampaignTargetSegment"
+          },
+          "targetRadius": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "targetProductIds": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "offerType": {
+            "type": "string"
+          },
+          "offerValue": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "minPurchaseAmount": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "estimatedFIFOCost": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "estimatedProfitPerRedemption": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "minProfitThreshold": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "saleorVoucherCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "maxRedemptions": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "redemptionsUsed": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "scheduledFor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "startsAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "sent": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "delivered": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "opened": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "clicked": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "capturesCount": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "conversions": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "revenue": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0
+          },
+          "discountCost": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0
+          },
+          "totalCOGS": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0
+          },
+          "actualProfit": {
+            "type": "number",
+            "default": 0
+          },
+          "avgProfitPerRedemption": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "isLosingMoney": {
+            "type": "boolean",
+            "default": false
+          },
+          "budgetAmount": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "spentAmount": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": {}
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "organizationId",
+          "name",
+          "type",
+          "status",
+          "messageTemplate",
+          "targetSegment",
+          "targetRadius",
+          "targetProductIds",
+          "offerType",
+          "offerValue",
+          "minPurchaseAmount",
+          "estimatedFIFOCost",
+          "estimatedProfitPerRedemption",
+          "minProfitThreshold",
+          "saleorVoucherCode",
+          "maxRedemptions",
+          "scheduledFor",
+          "startsAt",
+          "endsAt",
+          "avgProfitPerRedemption",
+          "budgetAmount",
+          "metadata",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CampaignCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "example": "Weekend Flash Sale"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "flash_sale",
+              "loyalty_nudge",
+              "restock_alert",
+              "event_promo",
+              "dead_hour_boost",
+              "product_launch",
+              "reactivation"
+            ]
+          },
+          "messageTemplate": {
+            "type": "string",
+            "minLength": 1,
+            "example": "Get 20% off Hennessy this weekend!"
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "whatsapp",
+                "sms",
+                "email"
+              ]
+            },
+            "default": [
+              "whatsapp"
+            ]
+          },
+          "targetSegment": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CampaignTargetSegment"
+              },
+              {
+                "type": "object"
+              }
+            ]
+          },
+          "targetRadius": {
+            "type": "number",
+            "minimum": 0
+          },
+          "targetProductIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "offerType": {
+            "type": "string",
+            "enum": [
+              "percentage_discount",
+              "fixed_discount",
+              "buy_x_get_y",
+              "free_delivery"
+            ]
+          },
+          "offerValue": {
+            "type": "number",
+            "minimum": 0,
+            "example": 20
+          },
+          "minPurchaseAmount": {
+            "type": "number",
+            "minimum": 0
+          },
+          "minProfitThreshold": {
+            "type": "number"
+          },
+          "scheduledFor": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "maxRedemptions": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "example": 100
+          },
+          "budgetAmount": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "messageTemplate",
+          "offerType"
+        ]
+      },
+      "CampaignListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CampaignResponse"
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "number"
+              },
+              "limit": {
+                "type": "number"
+              },
+              "total": {
+                "type": "number"
+              },
+              "totalPages": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "page",
+              "limit",
+              "total",
+              "totalPages"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "pagination"
+        ]
+      },
+      "CampaignUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "example": "Weekend Flash Sale"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "flash_sale",
+              "loyalty_nudge",
+              "restock_alert",
+              "event_promo",
+              "dead_hour_boost",
+              "product_launch",
+              "reactivation"
+            ]
+          },
+          "messageTemplate": {
+            "type": "string",
+            "minLength": 1,
+            "example": "Get 20% off Hennessy this weekend!"
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "whatsapp",
+                "sms",
+                "email"
+              ]
+            },
+            "default": [
+              "whatsapp"
+            ]
+          },
+          "targetSegment": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CampaignTargetSegment"
+              },
+              {
+                "type": "object"
+              }
+            ]
+          },
+          "targetRadius": {
+            "type": "number",
+            "minimum": 0
+          },
+          "targetProductIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "offerType": {
+            "type": "string",
+            "enum": [
+              "percentage_discount",
+              "fixed_discount",
+              "buy_x_get_y",
+              "free_delivery"
+            ]
+          },
+          "offerValue": {
+            "type": "number",
+            "minimum": 0,
+            "example": 20
+          },
+          "minPurchaseAmount": {
+            "type": "number",
+            "minimum": 0
+          },
+          "minProfitThreshold": {
+            "type": "number"
+          },
+          "scheduledFor": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "maxRedemptions": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "example": 100
+          },
+          "budgetAmount": {
+            "type": "number",
+            "minimum": 0
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "scheduled",
+              "active",
+              "paused",
+              "completed",
+              "cancelled"
+            ]
+          }
+        }
+      },
+      "CampaignStats": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "string"
+          },
+          "campaignName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "scheduled",
+              "active",
+              "paused",
+              "completed",
+              "cancelled"
+            ]
+          },
+          "sent": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "delivered": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "opened": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "clicked": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "conversions": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "capturesCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "revenue": {
+            "type": "number",
+            "minimum": 0
+          },
+          "discountCost": {
+            "type": "number",
+            "minimum": 0
+          },
+          "totalCOGS": {
+            "type": "number",
+            "minimum": 0
+          },
+          "actualProfit": {
+            "type": "number"
+          },
+          "avgProfitPerRedemption": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "deliveryRate": {
+            "type": "number"
+          },
+          "openRate": {
+            "type": "number"
+          },
+          "clickRate": {
+            "type": "number"
+          },
+          "conversionRate": {
+            "type": "number"
+          },
+          "roi": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "campaignId",
+          "campaignName",
+          "status",
+          "sent",
+          "delivered",
+          "opened",
+          "clicked",
+          "conversions",
+          "capturesCount",
+          "revenue",
+          "discountCost",
+          "totalCOGS",
+          "actualProfit",
+          "avgProfitPerRedemption",
+          "deliveryRate",
+          "openRate",
+          "clickRate",
+          "conversionRate",
+          "roi"
+        ]
+      },
+      "PromoCode": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customerId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "productId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "discountType": {
+            "type": "string",
+            "enum": [
+              "percentage",
+              "fixed_amount"
+            ]
+          },
+          "discountValue": {
+            "type": "number",
+            "minimum": 0
+          },
+          "isRedeemed": {
+            "type": "boolean",
+            "default": false
+          },
+          "redeemedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "saleorOrderId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "quantityRedeemed": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "default": 1
+          },
+          "originalPrice": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "discountAmount": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "netRevenue": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "unitCostAtRedemption": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "totalCOGS": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "actualProfit": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "isProfitable": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": {}
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "organizationId",
+          "campaignId",
+          "customerId",
+          "productId",
+          "code",
+          "discountType",
+          "discountValue",
+          "redeemedAt",
+          "saleorOrderId",
+          "originalPrice",
+          "discountAmount",
+          "netRevenue",
+          "unitCostAtRedemption",
+          "totalCOGS",
+          "actualProfit",
+          "isProfitable",
+          "expiresAt",
+          "metadata",
+          "createdAt"
+        ]
+      },
+      "PromoCodeRedemptionResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "promoCode": {
+            "$ref": "#/components/schemas/PromoCode"
+          },
+          "discountAmount": {
+            "type": "number",
+            "minimum": 0
+          },
+          "netRevenue": {
+            "type": "number",
+            "minimum": 0
+          },
+          "unitCostAtRedemption": {
+            "type": "number",
+            "minimum": 0
+          },
+          "actualProfit": {
+            "type": "number"
+          },
+          "isProfitable": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "success",
+          "promoCode",
+          "discountAmount",
+          "netRevenue",
+          "unitCostAtRedemption",
+          "actualProfit",
+          "isProfitable"
+        ]
+      },
+      "PromoCodeRedeem": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "example": "HENNY20-ABC123"
+          },
+          "saleorOrderId": {
+            "type": "string"
+          },
+          "quantityRedeemed": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "default": 1
+          },
+          "originalPrice": {
+            "type": "number",
+            "minimum": 0,
+            "example": 11000
+          }
+        },
+        "required": [
+          "code",
+          "originalPrice"
+        ]
+      },
+      "PromoCodeValidationResponse": {
+        "type": "object",
+        "properties": {
+          "isValid": {
+            "type": "boolean"
+          },
+          "promoCode": {
+            "$ref": "#/components/schemas/PromoCode"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "isValid"
+        ]
+      },
+      "PromoCodeValidate": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "example": "HENNY20-ABC123"
+          },
+          "customerId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "PromoCodeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "campaignId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customerId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "productId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "discountType": {
+            "type": "string",
+            "enum": [
+              "percentage",
+              "fixed_amount"
+            ]
+          },
+          "discountValue": {
+            "type": "number",
+            "minimum": 0
+          },
+          "isRedeemed": {
+            "type": "boolean",
+            "default": false
+          },
+          "redeemedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "saleorOrderId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "quantityRedeemed": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "default": 1
+          },
+          "originalPrice": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "discountAmount": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "netRevenue": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "unitCostAtRedemption": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "totalCOGS": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "actualProfit": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "isProfitable": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": {}
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "organizationId",
+          "campaignId",
+          "customerId",
+          "productId",
+          "code",
+          "discountType",
+          "discountValue",
+          "redeemedAt",
+          "saleorOrderId",
+          "originalPrice",
+          "discountAmount",
+          "netRevenue",
+          "unitCostAtRedemption",
+          "totalCOGS",
+          "actualProfit",
+          "isProfitable",
+          "expiresAt",
+          "metadata",
+          "createdAt"
+        ]
+      },
+      "BulkPromoCodeResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "codesGenerated": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "codes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PromoCodeResponse"
+            }
+          }
+        },
+        "required": [
+          "success",
+          "codesGenerated",
+          "codes"
+        ]
+      },
+      "BulkPromoCodeCreate": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "productId": {
+            "type": "string"
+          },
+          "discountType": {
+            "type": "string",
+            "enum": [
+              "percentage",
+              "fixed_amount"
+            ]
+          },
+          "discountValue": {
+            "type": "number",
+            "minimum": 0,
+            "example": 20
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "customerIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "codePrefix": {
+            "type": "string",
+            "example": "HENNY20"
+          },
+          "codeLength": {
+            "type": "integer",
+            "minimum": 4,
+            "maximum": 20,
+            "default": 8
+          }
+        },
+        "required": [
+          "campaignId",
+          "discountType",
+          "discountValue",
+          "expiresAt",
+          "customerIds"
+        ]
+      },
+      "PromoCodeCreate": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "example": "HENNY20-ABC123"
+          },
+          "discountType": {
+            "type": "string",
+            "enum": [
+              "percentage",
+              "fixed_amount"
+            ]
+          },
+          "discountValue": {
+            "type": "number",
+            "minimum": 0,
+            "example": 20
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "discountType",
+          "discountValue",
+          "expiresAt"
+        ]
+      },
+      "PromoCodeListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PromoCodeResponse"
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "number"
+              },
+              "limit": {
+                "type": "number"
+              },
+              "total": {
+                "type": "number"
+              },
+              "totalPages": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "page",
+              "limit",
+              "total",
+              "totalPages"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "pagination"
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  "paths": {
+    "/api/users": {
+      "post": {
+        "summary": "Create a new user",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "summary": "Get user by ID",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "123"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update user",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/v1/purchase-orders/quick-arrival": {
+      "post": {
+        "summary": "Quick stock arrival entry",
+        "description": "Simplified stock entry for onboarding. Creates PO and updates FIFO batches in one step.",
+        "tags": [
+          "Purchase Orders",
+          "FIFO"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuickStockArrival"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseOrderResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      }
+    },
+    "/api/v1/purchase-orders": {
+      "post": {
+        "summary": "Create purchase order",
+        "description": "Create a full purchase order with multiple line items.",
+        "tags": [
+          "Purchase Orders"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseOrderCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseOrderResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      },
+      "get": {
+        "summary": "List purchase orders",
+        "description": "Get paginated list of purchase orders with filtering.",
+        "tags": [
+          "Purchase Orders"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "draft",
+                "ordered",
+                "received",
+                "cancelled"
+              ]
+            },
+            "required": false,
+            "name": "status",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "supplierName",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "required": false,
+            "name": "startDate",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "required": false,
+            "name": "endDate",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "poNumber",
+                "orderDate",
+                "receivedDate",
+                "totalCost",
+                "createdAt"
+              ],
+              "default": "createdAt"
+            },
+            "required": false,
+            "name": "sortBy",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            },
+            "required": false,
+            "name": "sortOrder",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseOrderListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters"
+          }
+        }
+      }
+    },
+    "/api/v1/purchase-orders/{id}": {
+      "get": {
+        "summary": "Get purchase order by ID",
+        "description": "Get full purchase order details including line items.",
+        "tags": [
+          "Purchase Orders"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "po_123"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseOrderResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Purchase order not found"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update purchase order",
+        "description": "Update purchase order status or details.",
+        "tags": [
+          "Purchase Orders"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseOrderUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseOrderResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Purchase order not found"
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/movements": {
+      "get": {
+        "summary": "List inventory movements",
+        "description": "Get paginated inventory movement history with FIFO cost tracking.",
+        "tags": [
+          "Inventory",
+          "FIFO"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "productId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "purchase",
+                "sale",
+                "adjustment",
+                "promo_redemption",
+                "return",
+                "damage",
+                "theft"
+              ]
+            },
+            "required": false,
+            "name": "movementType",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "campaignId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "required": false,
+            "name": "startDate",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "required": false,
+            "name": "endDate",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "createdAt",
+                "quantity",
+                "totalCost"
+              ],
+              "default": "createdAt"
+            },
+            "required": false,
+            "name": "sortBy",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            },
+            "required": false,
+            "name": "sortOrder",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryMovementListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters"
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/fifo-batches/{productId}": {
+      "get": {
+        "summary": "Get FIFO batches for product",
+        "description": "Show all FIFO batches for a product, ordered by purchase date (FIFO order). Transparency for profit calculations.",
+        "tags": [
+          "Inventory",
+          "FIFO"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "prod_123"
+            },
+            "required": true,
+            "name": "productId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductFIFOBatchesResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns/profit-check": {
+      "post": {
+        "summary": "Pre-flight profitability check",
+        "description": "Check if a discount will be profitable based on current FIFO costs. Returns recommendations if not profitable.",
+        "tags": [
+          "Campaigns",
+          "Profit Intelligence"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CampaignProfitabilityCheck"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignProfitabilityResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns": {
+      "post": {
+        "summary": "Create campaign",
+        "description": "Create a new promotional campaign.",
+        "tags": [
+          "Campaigns"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CampaignCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          }
+        }
+      },
+      "get": {
+        "summary": "List campaigns",
+        "description": "Get paginated list of campaigns with filtering.",
+        "tags": [
+          "Campaigns"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "draft",
+                "scheduled",
+                "active",
+                "paused",
+                "completed",
+                "cancelled"
+              ]
+            },
+            "required": false,
+            "name": "status",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "flash_sale",
+                "loyalty_nudge",
+                "restock_alert",
+                "event_promo",
+                "dead_hour_boost",
+                "product_launch",
+                "reactivation"
+              ]
+            },
+            "required": false,
+            "name": "type",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "required": false,
+            "name": "isLosingMoney",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "required": false,
+            "name": "startDate",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "required": false,
+            "name": "endDate",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "name",
+                "status",
+                "actualProfit",
+                "capturesCount",
+                "createdAt"
+              ],
+              "default": "createdAt"
+            },
+            "required": false,
+            "name": "sortBy",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            },
+            "required": false,
+            "name": "sortOrder",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters"
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns/{id}": {
+      "get": {
+        "summary": "Get campaign by ID",
+        "description": "Get full campaign details.",
+        "tags": [
+          "Campaigns"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "camp_123"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Campaign not found"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update campaign",
+        "description": "Update campaign details or status.",
+        "tags": [
+          "Campaigns"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CampaignUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Campaign not found"
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns/{id}/stats": {
+      "get": {
+        "summary": "Get campaign statistics",
+        "description": "Get real-time campaign performance stats including profit metrics.",
+        "tags": [
+          "Campaigns",
+          "Profit Intelligence"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignStats"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Campaign not found"
+          }
+        }
+      }
+    },
+    "/api/v1/promo-codes/redeem": {
+      "post": {
+        "summary": "Redeem promo code",
+        "description": "Redeem a promo code and calculate actual profit using FIFO cost at time of redemption.",
+        "tags": [
+          "Promo Codes",
+          "Profit Intelligence"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PromoCodeRedeem"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromoCodeRedemptionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Promo code not found"
+          },
+          "410": {
+            "description": "Promo code expired or already redeemed"
+          }
+        }
+      }
+    },
+    "/api/v1/promo-codes/validate": {
+      "post": {
+        "summary": "Validate promo code",
+        "description": "Check if a promo code is valid without redeeming it.",
+        "tags": [
+          "Promo Codes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PromoCodeValidate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromoCodeValidationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          }
+        }
+      }
+    },
+    "/api/v1/promo-codes/bulk": {
+      "post": {
+        "summary": "Bulk create promo codes",
+        "description": "Generate multiple promo codes for a campaign.",
+        "tags": [
+          "Promo Codes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkPromoCodeCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkPromoCodeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Campaign not found"
+          }
+        }
+      }
+    },
+    "/api/v1/promo-codes": {
+      "post": {
+        "summary": "Create promo code",
+        "description": "Create a single promo code.",
+        "tags": [
+          "Promo Codes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PromoCodeCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromoCodeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "409": {
+            "description": "Promo code already exists"
+          }
+        }
+      },
+      "get": {
+        "summary": "List promo codes",
+        "description": "Get paginated list of promo codes with filtering.",
+        "tags": [
+          "Promo Codes"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "campaignId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "customerId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "productId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "required": false,
+            "name": "isRedeemed",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "required": false,
+            "name": "isProfitable",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "code",
+                "createdAt",
+                "redeemedAt",
+                "actualProfit"
+              ],
+              "default": "createdAt"
+            },
+            "required": false,
+            "name": "sortBy",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            },
+            "required": false,
+            "name": "sortOrder",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromoCodeListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters"
+          }
+        }
+      }
+    },
+    "/api/v1/promo-codes/{id}": {
+      "get": {
+        "summary": "Get promo code by ID",
+        "description": "Get promo code details.",
+        "tags": [
+          "Promo Codes"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "promo_123"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromoCodeResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Promo code not found"
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {}
+}

@@ -1,0 +1,19 @@
+fragment ShippingMethodChannelListingFields on ShippingMethodChannelListing {
+  channel {
+    id
+    name
+    slug
+  }
+  price {
+    amount
+    currency
+  }
+  minimumOrderPrice {
+    amount
+    currency
+  }
+  maximumOrderPrice {
+    amount
+    currency
+  }
+}

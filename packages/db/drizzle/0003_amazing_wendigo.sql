@@ -1,0 +1,1 @@
+ALTER TABLE "customer" ADD COLUMN "attributed_revenue" real DEFAULT 0;

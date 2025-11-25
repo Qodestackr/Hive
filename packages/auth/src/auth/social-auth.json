@@ -1,0 +1,17 @@
+{
+    "web": {
+        "client_id": "644434745663-s4idvq7qp0jjqth81me4drpdofkdm7d3.apps.googleusercontent.com",
+        "project_id": "alcorabooks",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret": "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",
+        "redirect_uris": [
+            "https://alcorabooks.com/api/auth/callback/google"
+        ],
+        "javascript_origins": [
+            "https://alcorabooks.com",
+            "http://localhost:3000"
+        ]
+    }
+}

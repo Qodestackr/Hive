@@ -1,0 +1,161 @@
+# Get product inventory across all warehouses
+query ProductInventory($id: ID!) {
+  product(id: $id) {
+    ...ProductInventory
+  }
+}
+
+# List all products with inventory information
+query ProductsInventory(
+  $first: Int = 50
+  $after: String
+  $filter: ProductFilterInput
+) {
+  products(first: $first, after: $after, filter: $filter) {
+    edges {
+      node {
+        id
+        name
+        productType {
+          id
+          name
+        }
+        category {
+          id
+          name
+        }
+        thumbnail {
+          url
+          alt
+        }
+        variants {
+          id
+          name
+          sku
+          pricing {
+            price {
+              gross {
+                ...Money
+              }
+            }
+          }
+          stocks {
+            ...StockBasic
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+
+# Get low stock products (for alerts)
+query LowStockProducts($threshold: Int = 10, $first: Int = 100) {
+  products(first: $first) {
+    edges {
+      node {
+        id
+        name
+        variants {
+          id
+          name
+          sku
+          stocks {
+            warehouse {
+              id
+              name
+            }
+            quantity
+            quantityAllocated
+          }
+        }
+      }
+    }
+  }
+  # Client-side filtering needed to check quantities against threshold
+  # E.G
+  # const threshold = 10;
+  # const lowStockProducts = data.products.edges.filter(productEdge => {
+  #   return productEdge.node.variants.some(variant => {
+  #     return variant.stocks.some(stock => (stock.quantity - stock.quantityAllocated) < threshold);
+  #   });
+  # });
+}
+
+# List all warehouses
+query Warehouses($first: Int = 100) {
+  warehouses(first: $first) {
+    edges {
+      node {
+        ...WarehouseDetails
+      }
+    }
+  }
+}
+
+query ChannelWarehouses($channelId: ID!) {
+  channel(id: $channelId) {
+    id
+    warehouses {
+      id
+      name
+    }
+  }
+}
+
+# Get warehouse inventory
+query WarehouseStock($id: ID!, $first: Int = 100) {
+  warehouse(id: $id) {
+    ...WarehouseBasic
+    stocks(first: $first) {
+      edges {
+        node {
+          id
+          productVariant {
+            id
+            name
+            sku
+          }
+          quantity
+          quantityAllocated
+        }
+      }
+    }
+  }
+}
+
+# ######################
+# while WarehouseStock is robust, we went with the method below in /dashboard/[channel]/inventory:
+query GetInventory($channel: String!, $first: Int, $after: String) {
+  products(first: $first, after: $after, channel: $channel) {
+    edges {
+      node {
+        id
+        name
+        variants {
+          id
+          name
+          quantityAvailable
+          quantityOrdered
+          margin
+          quantityLimitPerCustomer
+          stocks {
+            warehouse {
+              id
+              name
+            }
+            quantity
+            quantityAllocated
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

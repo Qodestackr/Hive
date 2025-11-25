@@ -1,0 +1,310 @@
+# Voucher queries for campaign management
+
+# Get all vouchers with pagination
+query GetVouchers(
+  $first: Int!
+  $after: String
+  $channel: String
+) {
+  vouchers(first: $first, after: $after, channel: $channel) {
+    edges {
+      node {
+        id
+        name
+        code
+        type
+        discountValueType
+        discountValue
+        usageLimit
+        used
+        applyOncePerOrder
+        applyOncePerCustomer
+        singleUse
+        onlyForStaff
+        minCheckoutItemsQuantity
+        startDate
+        endDate
+        
+        # For linking to Promco campaigns
+        metadata {
+          key
+          value
+        }
+        
+        # Channel-specific settings
+        channelListings {
+          channel {
+            id
+            slug
+          }
+          minSpent {
+            amount
+            currency
+          }
+        }
+        
+        # For SPECIFIC_PRODUCT vouchers
+        products(first: 10) {
+          edges {
+            node {
+              id
+              name
+            }
+          }
+        }
+        
+        categories(first: 10) {
+          edges {
+            node {
+              id
+              name
+            }
+          }
+        }
+        
+        collections(first: 10) {
+          edges {
+            node {
+              id
+              name
+            }
+          }
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    totalCount
+  }
+}
+
+# Get voucher by code
+query GetVoucherByCode($code: String!) {
+  vouchers(first: 1, filter: { search: $code }) {
+    edges {
+      node {
+        id
+        name
+        code
+        type
+        discountValueType
+        discountValue
+        usageLimit
+        used
+        applyOncePerOrder
+        applyOncePerCustomer
+        singleUse
+        startDate
+        endDate
+        
+        metadata {
+          key
+          value
+        }
+        
+        channelListings {
+          channel {
+            id
+            slug
+          }
+          minSpent {
+            amount
+            currency
+          }
+        }
+      }
+    }
+  }
+}
+
+# Get voucher by ID with full details
+query GetVoucherDetails($id: ID!) {
+  voucher(id: $id) {
+    id
+    name
+    code
+    type
+    discountValueType
+    discountValue
+    usageLimit
+    used
+    applyOncePerOrder
+    applyOncePerCustomer
+    singleUse
+    onlyForStaff
+    minCheckoutItemsQuantity
+    startDate
+    endDate
+    
+    metadata {
+      key
+      value
+    }
+    
+    channelListings {
+      channel {
+        id
+        slug
+        name
+      }
+      minSpent {
+        amount
+        currency
+      }
+    }
+    
+    products(first: 100) {
+      edges {
+        node {
+          id
+          name
+          slug
+        }
+      }
+    }
+    
+    categories(first: 100) {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+    
+    collections(first: 100) {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+    
+    variants(first: 100) {
+      edges {
+        node {
+          id
+          sku
+          name
+        }
+      }
+    }
+    
+    # Countries for shipping vouchers
+    countries {
+      code
+      country
+    }
+  }
+}
+
+# If already knows the ID(Tenant specific)
+query GetVoucherById($id: ID!, $channel: String) {
+  voucher(id: $id, channel: $channel) {
+    id
+    name
+    code
+    type
+    discountValueType
+    discountValue
+    usageLimit
+    used
+    applyOncePerOrder
+    applyOncePerCustomer
+    singleUse
+    onlyForStaff
+    startDate
+    endDate
+    minCheckoutItemsQuantity
+
+    minSpent {
+      amount
+      currency
+    }
+
+    metadata {
+      key
+      value
+    }
+
+    privateMetadata {
+      key
+      value
+    }
+
+    codes(first: 50) {
+      edges {
+        node {
+          id
+          code
+          used
+        }
+      }
+    }
+
+    categories(first: 50) {
+      edges {
+        node {
+          id
+          name
+          slug
+        }
+      }
+    }
+
+    collections(first: 50) {
+      edges {
+        node {
+          id
+          name
+          slug
+        }
+      }
+    }
+
+    products(first: 50) {
+      edges {
+        node {
+          id
+          name
+          slug
+        }
+      }
+    }
+
+    variants(first: 50) {
+      edges {
+        node {
+          id
+          name
+          sku
+        }
+      }
+    }
+
+    countries {
+      code
+      country
+    }
+
+    translation(languageCode: EN) {
+      name
+    }
+
+    channelListings {
+      channel {
+        id
+        slug
+      }
+      discountValue
+      minSpent {
+        amount
+        currency
+      }
+    }
+  }
+}

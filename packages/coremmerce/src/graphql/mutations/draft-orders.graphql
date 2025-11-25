@@ -1,0 +1,176 @@
+mutation DraftOrderCreate($input: DraftOrderCreateInput!) {
+  draftOrderCreate(input: $input) {
+    order {
+      id
+      token
+      number
+      status
+      user {
+        id
+        email
+        firstName
+        lastName
+      }
+      userEmail
+      metadata {
+        key
+        value
+      }
+      privateMetadata {
+        key
+        value
+      }
+      lines {
+        id
+        productName
+        variantName
+        quantity
+        unitPrice {
+          gross {
+            amount
+            currency
+          }
+        }
+      }
+      total {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+
+# 1. Update billing & shipping addresses on a draft order
+mutation DraftOrderUpdate($id: ID!, $input: DraftOrderInput!) {
+  draftOrderUpdate(id: $id, input: $input) {
+    order {
+      id
+      number
+      status
+      userEmail
+      customerNote
+      status
+      isPaid
+      metadata {
+        key
+        value
+      }
+       privateMetadata {
+        key
+        value
+      }
+      user {
+        id
+        email
+        firstName
+        lastName
+      }
+      lines {
+        variant {
+          id
+        }
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+
+# 2. Assign (or change) the shipping method on a draft order
+mutation DraftOrderUpdateShippingMethod($id: ID!, $shippingMethodId: ID) {
+  orderUpdateShipping(order: $id, input: { shippingMethod: $shippingMethodId }) {
+    order {
+      id
+      shippingMethod {
+        id
+        name
+      }
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# 3. Finalize the draft order (convert to real order)
+mutation OrderCreateFromDraftOrder($id: ID!) {
+  draftOrderComplete(id: $id) {
+    order {
+      id
+      status
+      number
+      total {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+# Add lines to a draft order
+mutation DraftOrderLinesCreate($id: ID!, $lines: [OrderLineCreateInput!]!) {
+  orderLinesCreate(id: $id, input: $lines) {
+    order {
+      id
+      number
+      status
+      lines {
+        id
+        productName
+        variantName
+        quantity
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+
+# Delete a line from a draft order
+mutation DraftOrderLineDelete($lineId: ID!) {
+  orderLineDelete(id: $lineId) {
+    order {
+      id
+      number
+      status
+    }
+    orderLine {
+      id
+      productName
+      quantity
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+
+# Delete a draft order
+mutation DraftOrderDelete($id: ID!) {
+  draftOrderDelete(id: $id) {
+    errors {
+      field
+      message
+      code
+    }
+  }
+}

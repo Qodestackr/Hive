@@ -1,0 +1,26 @@
+1. Purchase based: Record COGS when inventory is purchased not sold
+2. Sales based: Record COGS when inventory is sold, based on costs you provide
+3. Unit based(with inventory IQ now): Automated landed cost calculation and COGS recognition based on FIFO
+
+// If no FIFO data exists, use simpler cost tracking
+if (!product.currentFIFOCost) {
+  // Fallback: Use last purchase price or manual input
+  const estimatedCost = product.lastPurchasePrice || product.manualCostOverride;
+  return { profit: netRevenue - estimatedCost, warning: "Estimate only" };
+}
+```
+
+**The insight here:** FIFO is good **moat for distributors** (who DO have purchase orders). 
+But small retailers can still benefit from **basic profit warnings** using simpler cost tracking.
+
+HITL IS NEEDED HERE. INVOLVE AN AI TOOL TO ENCOURAGE RECORDING STUFF OR USE FALLBACKS THAT SHOWS WHY;S... 
+PROPOSING COST OF PREV BOTTLES(E.G 6 BOTTLES SO 6 PROMO CODES) DISGUISED AS PROMOTION..
+
+=====================================================================================
+For distributors (full FIFO)
+SELECT unitCostAtMovement FROM inventory_movements WHERE promoCodeId = 'promo-xyz';
+
+-- For small shops (fallback)
+SELECT currentFIFOCost FROM products WHERE id = 'product-abc';
+(If NULL, use manualCostOverride or lastPurchasePrice)
+=====================================================================================

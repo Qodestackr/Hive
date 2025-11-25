@@ -1,0 +1,114 @@
+# Get draft order details
+query DraftOrderDetails($id: ID!) {
+  order(id: $id) {
+    id
+    token
+    created
+    status
+    number
+    userEmail
+    customerNote
+    shippingAddress {
+      firstName
+      lastName
+      phone
+    }
+    total {
+      gross {
+        amount
+        currency
+      }
+    }
+    subtotal {
+      gross {
+        amount
+        currency
+      }
+    }
+    lines {
+      id
+      productName
+      variantName
+      quantity
+      unitPrice {
+        gross {
+          amount
+          currency
+        }
+      }
+      totalPrice {
+        gross {
+          amount
+          currency
+        }
+      }
+      variant {
+        id
+        product {
+          id
+          name
+        }
+      }
+    }
+    total {
+      gross {
+        amount
+        currency
+      }
+    }
+    metadata {
+      key
+      value
+    }
+    privateMetadata {
+      key
+      value
+    }
+  }
+}
+
+query DraftOrders($first: Int!, $after: String, $filter: OrderDraftFilterInput) {
+  draftOrders(first: $first, after: $after, filter: $filter) {
+    edges {
+      node {
+        id
+        created
+        status
+        number
+        userEmail
+         user {
+          email
+          firstName
+          lastName
+        }
+        metadata { 
+          key
+          value
+        }
+        privateMetadata {
+          key
+          value
+        }
+        total {
+          gross {
+            amount
+            currency
+          }
+        }
+        lines {
+          id
+          productName
+          quantity
+        }
+        channel {
+          slug
+          id
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

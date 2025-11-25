@@ -1,0 +1,71 @@
+mutation PromotionCreate($input: PromotionCreateInput!) {
+  promotionCreate(input: $input) {
+    promotion {
+      ...PromotionFragment
+    }
+    errors {
+      field
+      code
+      message
+    }
+  }
+}
+
+mutation PromotionRuleCreate($input: PromotionRuleCreateInput!) {
+  promotionRuleCreate(input: $input) {
+    promotionRule {
+      ...PromotionRuleFragment
+    }
+    errors {
+      field
+      code
+      message
+    }
+  }
+}
+
+mutation PromotionUpdate($id: ID!, $input: PromotionUpdateInput!) {
+  promotionUpdate(id: $id, input: $input) {
+    promotion {
+      ...PromotionFragment
+    }
+    errors {
+      field
+      code
+      message
+    }
+  }
+}
+
+mutation PromotionRuleUpdate($id: ID!, $input: PromotionRuleUpdateInput!) {
+  promotionRuleUpdate(id: $id, input: $input) {
+    promotionRule {
+      ...PromotionRuleFragment
+    }
+    errors {
+      field
+      code
+      message
+    }
+  }
+}
+
+mutation PromotionDelete($id: ID!) {
+  promotionDelete(id: $id) {
+    errors {
+      field
+      code
+      message
+    }
+  }
+}
+
+mutation PromotionRuleDelete($id: ID!) {
+  promotionRuleDelete(id: $id) {
+    errors {
+      field
+      code
+      message
+    }
+  }
+}

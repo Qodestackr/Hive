@@ -1,0 +1,145 @@
+# Create a new voucher
+mutation CreateVoucher($input: VoucherInput!) {
+  voucherCreate(input: $input) {
+    voucher {
+      id
+      code
+      name
+      type
+      discountValueType
+      discountValue
+      usageLimit
+      used
+      applyOncePerOrder
+      applyOncePerCustomer
+      singleUse
+      startDate
+      endDate
+      
+      metadata {
+        key
+        value
+      }
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# Update existing voucher
+mutation UpdateVoucher($id: ID!, $input: VoucherInput!) {
+  voucherUpdate(id: $id, input: $input) {
+    voucher {
+      id
+      code
+      name
+      type
+      usageLimit
+      used
+      
+      metadata {
+        key
+        value
+      }
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# Delete voucher
+mutation DeleteVoucher($id: ID!) {
+  voucherDelete(id: $id) {
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# Add products to voucher (for SPECIFIC_PRODUCT type)
+mutation VoucherAddCatalogues($id: ID!, $input: CatalogueInput!) {
+  voucherCataloguesAdd(id: $id, input: $input) {
+    voucher {
+      id
+      products(first: 100) {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      categories(first: 100) {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      collections(first: 100) {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      variants(first: 100) {
+        edges {
+          node {
+            id
+            sku
+          }
+        }
+      }
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# Remove products from voucher
+mutation VoucherRemoveCatalogues($id: ID!, $input: CatalogueInput!) {
+  voucherCataloguesRemove(id: $id, input: $input) {
+    voucher {
+      id
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# Update voucher metadata (for Promco campaign linking)
+mutation UpdateVoucherMetadata($id: ID!, $metadata: [MetadataInput!]!) {
+  updateMetadata(id: $id, input: $metadata) {
+    item {
+      ... on Voucher {
+        id
+        metadata {
+          key
+          value
+        }
+      }
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}

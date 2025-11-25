@@ -1,0 +1,57 @@
+fragment StockBasic on Stock {
+  id
+  warehouse {
+    id
+    name
+  }
+  quantity
+  quantityAllocated
+  quantityReserved
+}
+
+fragment ProductInventory on Product {
+  id
+  name
+  variants {
+    id
+    sku
+    name
+    quantityAvailable
+    stocks {
+      ...StockBasic
+    }
+  }
+}
+
+fragment WarehouseBasic on Warehouse {
+  id
+  name
+  email
+  isPrivate
+  slug
+}
+
+fragment WarehouseDetails on Warehouse {
+  ...WarehouseBasic
+  address {
+    streetAddress1
+    streetAddress2
+    city
+    cityArea
+    postalCode
+    country {
+      code
+      country
+    }
+    countryArea
+    phone
+  }
+  # shippingZones {
+  #   id
+  #   name
+  # }
+  metadata {
+    key
+    value
+  }
+}

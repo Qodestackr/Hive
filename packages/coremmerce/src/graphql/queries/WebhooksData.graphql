@@ -1,0 +1,302 @@
+# subscription InventoryAndProductUpdates {
+#   event {
+#     __typename
+#     ... on ProductUpdated {
+#       product {
+#         id
+#         name
+#         slug
+#         description
+#         updatedAt
+#         category {
+#           id
+#           name
+#         }
+#         collections {
+#           id
+#           name
+#         }
+#         metadata {
+#           key
+#           value
+#         }
+#         privateMetadata {
+#           key
+#           value
+#         }
+#         variants {
+#           id
+#           name
+#           sku
+#           trackInventory
+#           quantityAvailable
+#           stocks {
+#             warehouse {
+#               id
+#               name
+#             }
+#             quantity
+#             quantityAllocated
+#           }
+#           channelListings {
+#             channel {
+#               id
+#               name
+#               slug
+#               currencyCode
+#             }
+#             price {
+#               amount
+#               currency
+#             }
+#             costPrice {
+#               amount
+#               currency
+#             }
+#             preorderThreshold {
+#               quantity
+#             }
+#           }
+#         }
+#       }
+#     }
+#     ... on ProductVariantStockUpdated {
+#       productVariant {
+#         id
+#         name
+#         sku
+#         trackInventory
+#         quantityAvailable
+#         stocks {
+#           warehouse {
+#             id
+#             name
+#           }
+#           quantity
+#           quantityAllocated
+#         }
+#         channelListings {
+#           channel {
+#             id
+#             name
+#             slug
+#             currencyCode
+#           }
+#           price {
+#             amount
+#             currency
+#           }
+#           costPrice {
+#             amount
+#             currency
+#           }
+#         }
+#       }
+#       warehouse {
+#         id
+#         name
+#       }
+#       issuedAt
+#     }
+#   }
+# }
+
+# subscription InventoryAnalytics {
+#   event {
+#     __typename
+#     ... on ProductCreated {
+#       product {
+#         id
+#         name
+#         metadata {
+#           key
+#           value
+#         }
+#         variants {
+#           id
+#           sku
+#           stocks {
+#             warehouse {
+#               id
+#             }
+#             quantity
+#             quantityAllocated
+#           }
+#           channelListings {
+#             price {
+#               amount
+#             }
+#             costPrice {
+#               amount
+#             }
+#             channel {
+#               slug
+#               currencyCode
+#             }
+#           }
+#         }
+#         category {
+#           name
+#         }
+#         collections {
+#           name
+#         }
+#       }
+#     }
+#     ... on ProductUpdated {
+#       product {
+#         id
+#         name
+#         metadata {
+#           key
+#           value
+#         }
+#         variants {
+#           id
+#           sku
+#           stocks {
+#             warehouse {
+#               id
+#             }
+#             quantity
+#             quantityAllocated
+#           }
+#           channelListings {
+#             price {
+#               amount
+#             }
+#             costPrice {
+#               amount
+#             }
+#             channel {
+#               slug
+#               currencyCode
+#             }
+#           }
+#         }
+#       }
+#     }
+#     ... on ProductVariantUpdated {
+#       productVariant {
+#         id
+#         sku
+#         stocks {
+#           warehouse {
+#             id
+#           }
+#           quantity
+#           quantityAllocated
+#         }
+#         channelListings {
+#           price {
+#             amount
+#           }
+#           costPrice {
+#             amount
+#           }
+#           channel {
+#             slug
+#           }
+#         }
+#       }
+#     }
+#     ... on ProductVariantStockUpdated {
+#       productVariant {
+#         id
+#         sku
+#         stocks {
+#           warehouse {
+#             id
+#           }
+#           quantity
+#           quantityAllocated
+#         }
+#       }
+#     }
+#   }
+# }
+
+# subscription FullCommerceMonitor {
+#   event {
+#     __typename
+#     ...ProductEventsFragment
+#     ... on OrderCreated {
+#       order {
+#         id
+#         created
+#         status
+#         user {
+#           id
+#           email
+#         }
+#         lines {
+#           variant {
+#             id
+#             sku
+#           }
+#           quantity
+#           unitPrice {
+#             gross {
+#               amount
+#             }
+#           }
+#         }
+#         total {
+#           gross {
+#             amount
+#           }
+#         }
+#       }
+#     }
+#     ... on OrderConfirmed {
+#       order {
+#         id
+#         status
+#       }
+#     }
+#     ... on OrderFulfilled {
+#       order {
+#         id
+#         fulfillments {
+#           lines {
+#             quantity
+#             orderLine {
+#               variant {
+#                 sku
+#               }
+#             }
+#           }
+#         }
+#       }
+#     }
+#     ... on OrderPaid {
+#       order {
+#         id
+#       }
+#     }
+#     ... on OrderRefunded {
+#       order {
+#         id
+#       }
+#     }
+#   }
+# }
+
+# fragment ProductEventsFragment on Event {
+#   ... on ProductVariantOutOfStock {
+#     productVariant {
+#       sku
+#     }
+#     warehouse {
+#       id
+#     }
+#   }
+#   ... on ProductVariantBackInStock {
+#     productVariant {
+#       sku
+#     }
+#     warehouse {
+#       id
+#     }
+#   }
+# }

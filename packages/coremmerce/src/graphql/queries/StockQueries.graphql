@@ -1,0 +1,29 @@
+query CheckStock($productId: ID!) {
+  product(id: $productId) {
+    name
+    variants {
+      sku
+      attributes {
+        attribute {
+          id
+          name
+        }
+        values {
+          id
+          name
+        }
+      }
+      stocks {
+        quantity
+        warehouse {
+          name
+        }
+      }
+    }
+    channelListings {
+      channel {
+        name
+      }
+    }
+  }
+}

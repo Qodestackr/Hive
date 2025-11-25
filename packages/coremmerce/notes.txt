@@ -1,0 +1,22 @@
+🏗️ WHAT IS THIS PACKAGE?
+
+This package holds our **core business logic, clients, and GraphQL machinery** related to Saleor:
+- Saleor Codegen outputs
+- URQL clients
+- Reusable queries/mutations
+- Utility fns for pricing, stock, availability, etc.
+
+Saleor is *not just a backend*, it's our infrastructure backbone.
+This package is the glue between Saleor and our apps.
+
+---
+
+WHY THE NAME?
+
+We wanted a name that:
+- Combines **"core"** (central logic)
+- With **"commerce"** (Saleor infra)
+- But isn’t as boring as `core-commerce`
+
+We chose **"coremmerce"** — a portmanteau of core + commerce.
+It’s clean. It’s cursed. It’s confusing *just enough*.

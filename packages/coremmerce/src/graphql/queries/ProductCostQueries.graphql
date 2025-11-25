@@ -1,0 +1,163 @@
+# Cost-focused product queries for profit calculation
+
+# Get products with cost data for FIFO tracking
+query GetProductsWithCostData(
+  $channel: String!
+  $first: Int!
+  $after: String
+) {
+  products(first: $first, after: $after, channel: $channel) {
+    edges {
+      node {
+        id
+        name
+        slug
+        variants {
+          id
+          sku
+          name
+          quantityAvailable
+          
+          # Cost price from channel listings
+          channelListings {
+            channel {
+              id
+              slug
+            }
+            costPrice {
+              amount
+              currency
+            }
+            price {
+              amount
+              currency
+            }
+          }
+          
+          # Metadata for FIFO tracking
+          metadata {
+            key
+            value
+          }
+          
+          # Pricing for margin calculation
+          pricing {
+            price {
+              gross {
+                amount
+                currency
+              }
+            }
+          }
+        }
+        
+        # Product metadata
+        metadata {
+          key
+          value
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    totalCount
+  }
+}
+
+# Get single variant with cost data
+query GetVariantWithCostData($id: ID!, $channel: String!) {
+  productVariant(id: $id, channel: $channel) {
+    id
+    sku
+    name
+    quantityAvailable
+    
+    channelListings {
+      channel {
+        id
+        slug
+      }
+      costPrice {
+        amount
+        currency
+      }
+      price {
+        amount
+        currency
+      }
+    }
+    
+    metadata {
+      key
+      value
+    }
+    
+    privateMetadata {
+      key
+      value
+    }
+    
+    pricing {
+      price {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+    
+    product {
+      id
+      name
+      category {
+        id
+        name
+      }
+    }
+  }
+}
+
+query GetVariantsByIds(
+  $ids: [ID!]!
+  $channel: String!
+  $first: Int!
+) {
+  productVariants(
+    ids: $ids
+    first: $first
+    channel: $channel
+  ) {
+    edges {
+      node {
+        id
+        sku
+        name
+        quantityAvailable
+        
+        channelListings {
+          costPrice {
+            amount
+            currency
+          }
+          price {
+            amount
+            currency
+          }
+        }
+        
+        metadata {
+          key
+          value
+        }
+        
+        product {
+          id
+          name
+        }
+      }
+    }
+  }
+}

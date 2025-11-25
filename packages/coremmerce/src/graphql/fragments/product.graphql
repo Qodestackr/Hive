@@ -1,0 +1,147 @@
+fragment ProductBasic on Product {
+  id
+  name
+  slug
+  description
+  thumbnail {
+    url
+    alt
+  }
+  category {
+    id
+    name
+  }
+  pricing {
+    priceRange {
+      start {
+        gross {
+          ...Money
+        }
+      }
+    }
+  }
+}
+
+fragment VariantDetails on ProductVariant {
+  id
+  name
+  sku
+  quantityAvailable
+
+  channelListings {
+    costPrice {
+      ...Money
+    }
+  }
+
+  pricing {
+    price {
+      gross {
+        ...Money
+      }
+    }
+  }
+}
+
+# Extended product details with pricing
+fragment ProductDetails on Product {
+  ...ProductBasic
+  category {
+    id
+    name
+  }
+  pricing {
+    priceRange {
+      start {
+        gross {
+          ...Money
+        }
+      }
+      stop {
+        gross {
+          ...Money
+        }
+      }
+    }
+    discount {
+      gross {
+        ...Money
+      }
+    }
+  }
+  isAvailable
+  variants {
+    ...VariantDetails
+  }
+  metadata {
+    key
+    value
+  }
+}
+
+fragment ProductListItem on Product {
+  id
+  name
+  slug
+  variants {
+    ...VariantDetails
+  }
+  pricing {
+    priceRange {
+      start {
+        gross {
+          ...Money
+        }
+      }
+      stop {
+        gross {
+          ...Money
+        }
+      }
+    }
+  }
+  category {
+    id
+    name
+  }
+  thumbnail(size: 1024, format: WEBP) {
+    url
+    alt
+  }
+}
+
+# ---------------
+# Common error fragments
+fragment AttributeBulkCreateError on AttributeBulkCreateError {
+  code
+  message
+  path
+}
+
+fragment ProductError on ProductError {
+  code
+  message
+  field
+}
+
+
+###
+fragment ProductAvailabilityDetailsFragment on Product {
+  pricing {
+    displayGrossPrices
+    priceRange {
+      start {
+        ...TaxedMoney
+      }
+    }
+  }
+  isAvailable(address: { country: $countryCode })
+  variantsAvailability: variants {
+    id
+    quantityLimitPerCustomer
+    quantityAvailable(countryCode: $countryCode)
+    pricing {
+      ...VariantPricingInfoFragment
+    }
+  }
+}

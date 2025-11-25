@@ -1,0 +1,89 @@
+query order($id: ID!, $languageCode: LanguageCodeEnum!) {
+  order(id: $id) {
+    ...OrderFragment
+  }
+}
+
+# GetOrderDetails
+query FindOrder($id: ID!) {
+  order(id: $id) {
+    ...OrderBasic
+    lines {
+      id
+      variant {
+        id
+      }
+      productName
+      quantity
+      unitPrice {
+        gross {
+          ...Money
+        }
+      }
+      totalPrice {
+        gross {
+          ...Money
+        }
+      }
+    }
+    shippingAddress {
+      firstName
+      lastName
+      streetAddress1
+      city
+      country {
+        code
+      }
+    }
+  }
+}
+
+query GetOrdersByStatus($status: [OrderStatusFilter!]!, $first: Int!) {
+  orders(first: $first, filter: { status: $status }) {
+    edges {
+      node {
+        id
+        status
+        userEmail
+        created
+        number
+        total {
+          gross {
+            ...Money
+          }
+        }
+      }
+    }
+  }
+}
+
+query GetOrderFulfillment($id: ID!) {
+  order(id: $id) {
+    ...OrderFulfillment
+  }
+}
+
+### CURRENTLY USING THIS TO RESPECT CHANNEL/TENANCY LEVEL:
+query GetOrdersByChannel(
+  $channel: String!
+  $first: Int
+  $filter: OrderFilterInput
+) {
+  orders(channel: $channel, first: $first, filter: $filter) {
+    edges {
+      node {
+        id
+        number
+        status
+        created
+        userEmail
+        total {
+          gross {
+            amount
+            currency
+          }
+        }
+      }
+    }
+  }
+}

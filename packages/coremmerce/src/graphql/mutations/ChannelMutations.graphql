@@ -1,0 +1,211 @@
+mutation CreateChannel($input: ChannelCreateInput!) {
+  channelCreate(input: $input) {
+    channel {
+      ...ChannelWithSettings
+    }
+    errors {
+      ...ChannelErrors
+    }
+  }
+}
+
+# Update an existing channel
+mutation UpdateChannel($id: ID!, $input: ChannelUpdateInput!) {
+  channelUpdate(id: $id, input: $input) {
+    channel {
+      ...ChannelWithSettings
+    }
+    errors {
+      ...ChannelErrors
+    }
+  }
+}
+
+# Delete a channel
+mutation DeleteChannel($id: ID!, $input: ChannelDeleteInput) {
+  channelDelete(id: $id, input: $input) {
+    channel {
+      id
+      name
+    }
+    errors {
+      ...ChannelErrors
+    }
+  }
+}
+
+# Activate a channel
+mutation ActivateChannel($id: ID!) {
+  channelActivate(id: $id) {
+    channel {
+      id
+      name
+      isActive
+    }
+    errors {
+      ...ChannelErrors
+    }
+  }
+}
+
+# Deactivate a channel
+mutation DeactivateChannel($id: ID!) {
+  channelDeactivate(id: $id) {
+    channel {
+      id
+      name
+      isActive
+    }
+    errors {
+      ...ChannelErrors
+    }
+  }
+}
+
+# Add warehouses to a channel
+mutation AddWarehousesToChannel($channelId: ID!, $warehouseIds: [ID!]!) {
+  channelUpdate(id: $channelId, input: { addWarehouses: $warehouseIds }) {
+    channel {
+      ...ChannelWithWarehouses
+    }
+    errors {
+      ...ChannelErrors
+    }
+  }
+}
+
+# Remove warehouses from a channel
+mutation RemoveWarehousesFromChannel($channelId: ID!, $warehouseIds: [ID!]!) {
+  channelUpdate(id: $channelId, input: { removeWarehouses: $warehouseIds }) {
+    channel {
+      ...ChannelWithWarehouses
+    }
+    errors {
+      ...ChannelErrors
+    }
+  }
+}
+
+# Reorder warehouses within a channel
+mutation ReorderChannelWarehouses($channelId: ID!, $moves: [ReorderInput!]!) {
+  channelReorderWarehouses(channelId: $channelId, moves: $moves) {
+    channel {
+      ...ChannelWithWarehouses
+    }
+    errors {
+      ...ChannelErrors
+    }
+  }
+}
+
+# Update channel order settings
+mutation UpdateChannelOrderSettings(
+  $channelId: ID!
+  $input: OrderSettingsInput!
+) {
+  channelUpdate(id: $channelId, input: { orderSettings: $input }) {
+    channel {
+      id
+      orderSettings {
+        allowUnpaidOrders
+        automaticallyConfirmAllNewOrders
+        automaticallyFulfillNonShippableGiftCard
+        expireOrdersAfter
+      }
+    }
+    errors {
+      ...ChannelErrors
+    }
+  }
+}
+
+# Update channel stock settings
+mutation UpdateChannelStockSettings(
+  $channelId: ID!
+  $input: StockSettingsInput!
+) {
+  channelUpdate(id: $channelId, input: { stockSettings: $input }) {
+    channel {
+      id
+      stockSettings {
+        allocationStrategy
+      }
+    }
+    errors {
+      ...ChannelErrors
+    }
+  }
+}
+
+# # Assign a product to a channel
+# mutation AssignProductToChannel(
+#   $productId: ID!
+#   $channelId: ID!
+#   $isPublished: Boolean = true
+#   $visibleInListings: Boolean = true
+# ) {
+#   productChannelListingUpdate(
+#     id: $productId
+#     input: {
+#       addChannels: [
+#         {
+#           channelId: $channelId
+#           isPublished: $isPublished
+#           visibleInListings: $visibleInListings
+#         }
+#       ]
+#     }
+#   ) {
+#     product {
+#       id
+#       name
+#       channelListings {
+#         channel {
+#           id
+#           name
+#         }
+#         isPublished
+#         visibleInListings
+#       }
+#     }
+#     errors {
+#       field
+#       message
+#       code
+#       channels
+#     }
+#   }
+# }
+
+# # Update product pricing in a channel
+# mutation UpdateProductPriceInChannel(
+#   $variantId: ID!
+#   $channelId: ID!
+#   $price: PositiveDecimal!
+# ) {
+#   productVariantChannelListingUpdate(
+#     id: $variantId
+#     input: { channelListings: [{ channelId: $channelId, price: $price }] }
+#   ) {
+#     productVariant {
+#       id
+#       name
+#       channelListings {
+#         channel {
+#           id
+#           name
+#         }
+#         price {
+#           amount
+#           currency
+#         }
+#       }
+#     }
+#     errors {
+#       field
+#       message
+#       code
+#       channels
+#     }
+#   }
+# }

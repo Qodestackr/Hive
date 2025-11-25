@@ -1,0 +1,163 @@
+fragment CheckoutErrorFragment on CheckoutError {
+  message
+  field
+  code
+}
+
+fragment GiftCardFragment on GiftCard {
+  displayCode
+  id
+  currentBalance {
+    ...Money
+  }
+}
+
+fragment ValidationRulesFragment on AddressValidationData {
+  addressFormat
+  allowedFields
+  requiredFields
+  countryAreaType
+  postalCodeType
+  cityType
+  countryAreaChoices {
+    raw
+    verbose
+  }
+}
+
+fragment PaymentGatewayFragment on PaymentGateway {
+  id
+  name
+  currencies
+  config {
+    field
+    value
+  }
+}
+
+fragment CheckoutFragment on Checkout {
+  id
+  email
+  discount {
+    ...Money
+  }
+  voucherCode
+  discountName
+  translatedDiscountName
+  giftCards {
+    ...GiftCardFragment
+  }
+  channel {
+    id
+    slug
+  }
+  shippingAddress {
+    ...AddressFragment
+  }
+  billingAddress {
+    ...AddressFragment
+  }
+  authorizeStatus
+  chargeStatus
+  isShippingRequired
+  user {
+    id
+    email
+  }
+  availablePaymentGateways {
+    ...PaymentGatewayFragment
+  }
+  deliveryMethod {
+    ... on ShippingMethod {
+      id
+    }
+    ... on Warehouse {
+      id
+    }
+  }
+  shippingMethods {
+    id
+    name
+    price {
+      ...Money
+    }
+    maximumDeliveryDays
+    minimumDeliveryDays
+  }
+  totalPrice {
+    gross {
+      ...Money
+    }
+    tax {
+      ...Money
+    }
+  }
+  shippingPrice {
+    gross {
+      ...Money
+    }
+  }
+  subtotalPrice {
+    gross {
+      ...Money
+    }
+  }
+  lines {
+    ...CheckoutLineFragment
+  }
+}
+
+fragment CheckoutLineFragment on CheckoutLine {
+  id
+  quantity
+  totalPrice {
+    gross {
+      ...Money
+    }
+  }
+  unitPrice {
+    gross {
+      ...Money
+    }
+  }
+  undiscountedUnitPrice {
+    ...Money
+  }
+  variant {
+    attributes(variantSelection: ALL) {
+      values {
+        name
+        dateTime
+        boolean
+        translation(languageCode: $languageCode) {
+          name
+        }
+      }
+    }
+    id
+    name
+    translation(languageCode: $languageCode) {
+      name
+    }
+    product {
+      name
+      translation(languageCode: $languageCode) {
+        language {
+          code
+        }
+        id
+        name
+      }
+      media {
+        alt
+        type
+        url(size: 72)
+      }
+    }
+    media {
+      alt
+      type
+      url(size: 72)
+    }
+  }
+}

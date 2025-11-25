@@ -1,0 +1,110 @@
+# Get all shipping methods for a specific channel via shipping zones
+query GetChannelShippingMethods($channel: String!) {
+  shippingZones(channel: $channel, first: 10) {
+    edges {
+      node {
+        id
+        name
+        shippingMethods {
+          id
+          name
+          type
+          minimumOrderWeight {
+            unit
+            value
+          }
+          maximumOrderWeight {
+            unit
+            value
+          }
+          channelListings {
+            price {
+              amount
+              currency
+            }
+            minimumOrderPrice {
+              amount
+              currency
+            }
+            maximumOrderPrice {
+              amount
+              currency
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+# Get shipping zones with their methods (if you need zone-based queries)
+query GetShippingZoneWithMethods($id: ID!, $channel: String!) {
+  shippingZone(id: $id, channel: $channel) {
+    id
+    name
+    shippingMethods {
+      id
+      name
+      type
+      minimumOrderWeight {
+        unit
+        value
+      }
+      maximumOrderWeight {
+        unit
+        value
+      }
+      channelListings {
+        price {
+          amount
+          currency
+        }
+        minimumOrderPrice {
+          amount
+          currency
+        }
+        maximumOrderPrice {
+          amount
+          currency
+        }
+      }
+    }
+  }
+}
+
+# Get all shipping zones for a channel
+query GetShippingZones($channel: String!) {
+  shippingZones(channel: $channel) {
+    edges {
+      node {
+        id
+        name
+        shippingMethods {
+          id
+          name
+          type
+          channelListings {
+            price {
+              amount
+              currency
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+query GetCheckoutShippingMethods($id: ID!) {
+  checkout(id: $id) {
+    id
+    isShippingRequired
+    availableShippingMethods {
+      id
+      name
+      price { amount currency }
+      type
+    }
+  }
+}

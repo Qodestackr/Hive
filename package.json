@@ -1,0 +1,33 @@
+{
+  "name": "promco",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "test:ui": "cd apps/web && vitest --ui",
+    "test:frontend": "cd apps/web && vitest",
+    "test:all": "bun test && cd apps/web && vitest run"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.3",
+    "prettier": "^3.6.2",
+    "turbo": "^2.6.1",
+    "typescript": "5.9.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.3.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "effect": "^3.19.6"
+  }
+}

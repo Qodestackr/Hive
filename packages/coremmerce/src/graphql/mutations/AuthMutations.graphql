@@ -1,0 +1,55 @@
+mutation CreateToken($email: String!, $password: String!) {
+  tokenCreate(email: $email, password: $password) {
+    token
+    user {
+      id
+      email
+      isStaff
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+mutation WebhookCreate($input: WebhookCreateInput!) {
+  webhookCreate(input: $input) {
+    webhook {
+      id
+      name
+      isActive
+      targetUrl
+      asyncEvents {
+        name
+        eventType
+      }
+    }
+    errors {
+      field
+      message
+      code
+    }
+  }
+}
+
+mutation AppCreate {
+  appCreate(
+    input: {
+      name: "SaaS_WRAPPER_APP"
+      permissions: [MANAGE_ORDERS, MANAGE_PRODUCTS, MANAGE_USERS, MANAGE_STAFF]
+    }
+  ) {
+    app {
+      id
+      tokens {
+        authToken
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

@@ -1,0 +1,41 @@
+fragment BusinessCustomer on User {
+  id
+  email
+  firstName
+  lastName
+  isActive
+  metadata {
+    key
+    value
+  }
+  addresses {
+    id
+    firstName
+    lastName
+    companyName
+    streetAddress1
+    streetAddress2
+    city
+    cityArea
+    postalCode
+    country {
+      code
+      country
+    }
+    phone
+    isDefaultShippingAddress
+    isDefaultBillingAddress
+  }
+}
+
+fragment ChannelInfo on Channel {
+  id
+  name
+  slug
+  currencyCode
+  isActive
+  defaultCountry {
+    code
+    country
+  }
+}

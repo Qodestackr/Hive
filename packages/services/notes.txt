@@ -1,0 +1,19 @@
+✅ Pure calculators for all business logic (testable without DB)
+✅ Mutation builders that separate "what to change" from "how to change it"
+✅ Clean architecture following fetch → calculate → build → apply pattern
+✅ Removed excessive comments - code is now self-documenting
+✅ Proper error handling using your established patterns
+
+
+ERROR HANDLING:
+Every Service is a reusable primitive. The next feature composes existing services not rewrite same logic 10 times across endpoints.
+
+Error Handling Compounds:
+Typed errors like (`PromoCodeNotFound`, `InsufficientInventory`, `NoCostData`) + Effect-based flows = errors become knowledge, not noise.
+
+Why it matters:
+- When a `PromoCodeExpired` error hits production, you know exactly where it came from, what context it had, and how to prevent it
+- When you add a new error type (`CampaignPausedError`), it propagates through the type system. Compiler forces you yo handle it everywhere it can occur.
+- When observability kicks in (Sentry, Datadog), errors are structured, not strings - you can query by error type, aggregate by domain layer.
+
+Leverage: You fix classes of bugs, not individual bugs. One fix eliminates 100 future failures.

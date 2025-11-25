@@ -1,0 +1,337 @@
+# ##############
+query ProductList($first: Int = 9, $channel: String!) {
+  products(first: $first, channel: $channel) {
+    edges {
+      node {
+        productType {
+          id
+          name
+        }
+        ...ProductListItem
+      }
+    }
+  }
+}
+
+# ##############
+
+# Get products list with pagination
+query GetProducts(
+  $first: Int!
+  $after: String
+  $channel: String!
+  $filter: ProductFilterInput
+) {
+  products(first: $first, after: $after, channel: $channel, filter: $filter) {
+    edges {
+      node {
+        ...ProductBasic
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    totalCount
+  }
+}
+
+# WORKING EXAMPLE
+# query FindProductsByChannel {
+#   products(filter: {channel: "Q2hhbm5lbDoz"}, first: 10) {
+#     edges {
+#       node {
+#         id
+#         name
+#       }
+#     }
+#   }
+# }
+
+# Get detailed product information
+query GetProductDetails($id: ID!, $channel: String!) {
+  product(id: $id, channel: $channel) {
+    ...ProductDetails
+  }
+}
+
+# Get product by SKU or other attribute
+query SearchProductsBasic($search: String!, $first: Int!, $channel: String!) {
+  products(first: $first, filter: { search: $search }, channel: $channel) {
+    edges {
+      node {
+        ...ProductBasic
+        variants {
+          id
+          name
+          sku
+        }
+      }
+    }
+  }
+}
+
+# Get product inventory across warehouses
+query GetProductInventory($id: ID!) {
+  product(id: $id) {
+    ...ProductInventory
+  }
+}
+
+####################################################
+####################################################
+query GetAllCategories {
+  categories(first: 50) {
+    edges {
+      node {
+        id
+        name
+        slug
+      }
+    }
+  }
+}
+
+####################################################
+####################################################
+query GetProductsByCategory($categoryId: ID!) {
+  category(id: $categoryId) {
+    id
+    name
+    products(first: 100, channel: "Q2hhbm5lbDoz") {
+      edges {
+        node {
+          ...ProductBasic
+        }
+      }
+    }
+  }
+}
+
+query ProductListByCategory($slug: String!, $channel: String!) {
+  category(slug: $slug) {
+    name
+    description
+    seoDescription
+    seoTitle
+    products(first: 100, channel: $channel) {
+      edges {
+        node {
+          ...ProductListItem
+        }
+      }
+    }
+  }
+}
+
+# Get all categories
+query GetCategories($first: Int!) {
+  categories(first: $first) {
+    edges {
+      node {
+        id
+        name
+        slug
+        products(first: $first) {
+          totalCount
+        }
+      }
+    }
+  }
+}
+
+# BETTER!
+query SearchProductsSorted(
+  $search: String!
+  $sortBy: ProductOrderField!
+  $sortDirection: OrderDirection!
+  $first: Int!
+  $after: String
+  $channel: String!
+) {
+  products(
+    first: $first
+    after: $after
+    channel: $channel
+    sortBy: { field: $sortBy, direction: $sortDirection }
+    filter: { search: $search }
+  ) {
+    totalCount
+    edges {
+      node {
+        ...ProductListItem
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+
+query ProductListPaginated($first: Int!, $after: String, $channel: String!) {
+  products(first: $first, after: $after, channel: $channel) {
+    totalCount
+    edges {
+      node {
+        ...ProductListItem
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+
+query ProductListByCollection($slug: String!, $channel: String!) {
+  collection(slug: $slug, channel: $channel) {
+    name
+    description
+    seoDescription
+    seoTitle
+    products(first: 100) {
+      edges {
+        node {
+          ...ProductListItem
+        }
+      }
+    }
+  }
+}
+
+# Get product type by slug
+query GetProductTypeBySlug($slug: String!) {
+  productTypes(filter: { search: $slug }, first: 1) {
+    edges {
+      node {
+        id
+        name
+        slug
+        productAttributes {
+          id
+          name
+        }
+        variantAttributes {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+
+####
+query GetAttributeBySlug($slug: String!) {
+  attributes(filter: { slugs: [$slug] }, first: 1) {
+    edges {
+      node {
+        id
+        name
+        slug
+        inputType
+        type
+      }
+    }
+  }
+}
+
+# ###################################
+query GetProductsForMeiliSearch(
+  $first: Int!
+  $after: String
+  $channel: String!
+) {
+  products(first: $first, after: $after, channel: $channel) {
+    edges {
+      node {
+        id
+        name
+        slug
+        variants {
+          id
+          name
+          sku
+          quantityAvailable
+          channelListings {
+            costPrice {
+              currency
+              amount
+            }
+          }
+          pricing {
+            price {
+              gross {
+                currency
+                amount
+              }
+            }
+          }
+        }
+        pricing {
+          priceRange {
+            start {
+              gross {
+                currency
+                amount
+              }
+            }
+            stop {
+              gross {
+                currency
+                amount
+              }
+            }
+          }
+        }
+        category {
+          id
+          name
+        }
+        thumbnail {
+          url
+          alt
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    totalCount
+  }
+}
+
+# ###################################
+query GetProductBySlug($slug: String!) {
+  product(slug: $slug) {
+    id
+    name
+    slug
+    variants {
+      id
+      name
+      sku
+    }
+  }
+}
+
+
+################
+# STORE RELATED
+################
+query ProductAvailabilityDetailsQuery(
+  $slug: String!
+  $channel: String!
+  $countryCode: CountryCode!
+) {
+  product(slug: $slug, channel: $channel) {
+    ...ProductAvailabilityDetailsFragment
+  }
+}

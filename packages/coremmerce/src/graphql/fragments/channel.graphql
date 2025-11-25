@@ -1,0 +1,77 @@
+fragment ChannelBasicData on Channel {
+  id
+  name
+  slug
+  currencyCode
+  isActive
+  defaultCountry {
+    code
+    country
+  }
+}
+
+fragment ChannelErrors on ChannelError {
+  field
+  message
+  code
+  shippingZones
+  warehouses
+}
+
+fragment ChannelWithWarehouses on Channel {
+  ...ChannelBasicData
+  warehouses {
+    id
+    name
+    slug
+  }
+}
+
+fragment ChannelWithSettings on Channel {
+  ...ChannelBasicData
+  stockSettings {
+    allocationStrategy
+  }
+  orderSettings {
+    allowUnpaidOrders
+    automaticallyConfirmAllNewOrders
+    automaticallyFulfillNonShippableGiftCard
+    expireOrdersAfter
+  }
+}
+
+## --------------------
+fragment ChannelBasicInfo on Channel {
+  id
+  name
+  slug
+  currencyCode
+  isActive
+  defaultCountry {
+    code
+    country
+  }
+}
+
+fragment ChannelDetailedInfo on Channel {
+  ...ChannelBasicInfo
+  hasOrders
+  stockSettings {
+    allocationStrategy
+  }
+  orderSettings {
+    allowUnpaidOrders
+    automaticallyConfirmAllNewOrders
+    automaticallyFulfillNonShippableGiftCard
+    expireOrdersAfter
+  }
+  warehouses {
+    id
+    name
+    slug
+  }
+  countries {
+    code
+    country
+  }
+}

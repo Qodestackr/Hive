@@ -1,0 +1,73 @@
+query CheckoutFind($id: ID!) {
+  checkout(id: $id) {
+    id
+    email
+    lines {
+      id
+      quantity
+      totalPrice {
+        gross {
+          ...Money
+        }
+      }
+      variant {
+        product {
+          id
+          name
+          slug
+          thumbnail {
+            url
+            alt
+          }
+          category {
+            name
+          }
+        }
+        pricing {
+          price {
+            gross {
+              ...Money
+            }
+          }
+        }
+        name
+        id
+      }
+    }
+    totalPrice {
+      gross {
+        ...Money
+      }
+    }
+  }
+}
+
+query GetCheckoutChannel($id: ID!) {
+  checkout(id: $id) {
+    id
+    channel {
+      id
+      slug
+    }
+  }
+}
+
+query checkout($id: ID!, $languageCode: LanguageCodeEnum!) {
+  checkout(id: $id) {
+    ...CheckoutFragment
+  }
+}
+
+query channel($slug: String!) {
+  channel(slug: $slug) {
+    countries {
+      code
+    }
+  }
+}
+
+query addressValidationRules($countryCode: CountryCode!) {
+  addressValidationRules(countryCode: $countryCode) {
+    ...ValidationRulesFragment
+  }
+}
