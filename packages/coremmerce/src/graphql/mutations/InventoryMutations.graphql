@@ -1,75 +1,75 @@
 # Create a warehouse
 mutation CreateWarehouse($input: WarehouseCreateInput!) {
-  createWarehouse(input: $input) {
-    errors {
-      field
-      message
-      code
-    }
-    warehouse {
-      id
-      name
-      slug
-    }
-  }
+	createWarehouse(input: $input) {
+		errors {
+			field
+			message
+			code
+		}
+		warehouse {
+			id
+			name
+			slug
+		}
+	}
 }
 
 # Update a warehouse
 mutation UpdateWarehouse($id: ID!, $input: WarehouseUpdateInput!) {
-  updateWarehouse(id: $id, input: $input) {
-    errors {
-      field
-      message
-      code
-    }
-    warehouse {
-      id
-      name
-      slug
-    }
-  }
+	updateWarehouse(id: $id, input: $input) {
+		errors {
+			field
+			message
+			code
+		}
+		warehouse {
+			id
+			name
+			slug
+		}
+	}
 }
 
 mutation ChannelUpdateWarehouses($channelId: ID!, $warehouseIds: [ID!]!) {
-  channelUpdate(id: $channelId, input: { addWarehouses: $warehouseIds }) {
-    channel {
-      id
-      name
-      warehouses {
-        id
-        name
-      }
-    }
-    errors {
-      field
-      message
-    }
-  }
+	channelUpdate(id: $channelId, input: { addWarehouses: $warehouseIds }) {
+		channel {
+			id
+			name
+			warehouses {
+				id
+				name
+			}
+		}
+		errors {
+			field
+			message
+		}
+	}
 }
 
 # Delete a warehouse
 mutation DeleteWarehouse($id: ID!) {
-  deleteWarehouse(id: $id) {
-    errors {
-      field
-      message
-      code
-    }
-  }
+	deleteWarehouse(id: $id) {
+		errors {
+			field
+			message
+			code
+		}
+	}
 }
 
 # Update product variant
 mutation UpdateProductVariant($id: ID!, $input: ProductVariantInput!) {
-  productVariantUpdate(id: $id, input: $input) {
-    errors {
-      field
-      message
-      code
-    }
-    productVariant {
-      id
-      name
-      sku
-    }
-  }
+	productVariantUpdate(id: $id, input: $input) {
+		errors {
+			field
+			message
+			code
+		}
+		productVariant {
+			id
+			name
+			sku
+		}
+	}
 }

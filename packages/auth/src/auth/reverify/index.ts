@@ -1,11 +1,10 @@
-import { logger, type BetterAuthPlugin } from "better-auth";
+import { tryCatch, z } from "@repo/utils";
+import { type BetterAuthPlugin, logger } from "better-auth";
 import {
 	APIError,
 	createAuthEndpoint,
 	sessionMiddleware,
 } from "better-auth/api";
-import { z } from "@repo/utils";
-import { tryCatch } from "@repo/utils";
 
 export const reverify = () => {
 	return {
@@ -28,10 +27,7 @@ export const reverify = () => {
 					);
 
 					if (error) {
-						logger.error(
-							`[Promco: Reverify] Error checking password`,
-							error,
-						);
+						logger.error(`[Promco: Reverify] Error checking password`, error);
 						if (
 							error instanceof APIError &&
 							error?.body?.code === "INVALID_PASSWORD"

@@ -1,50 +1,41 @@
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
 import {
-    AlertSettingsUpdateSchema,
-    AlertSettingsResponseSchema,
+	AlertSettingsResponseSchema,
+	AlertSettingsUpdateSchema,
 } from "@repo/schema";
 import { profitAlertService } from "@repo/services";
 import { z } from "@repo/utils";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const GET = createWorkspaceRoute({
-    inputSchema: z.void(),
-    outputSchema: AlertSettingsResponseSchema,
+export const GET = createWorkspaceRouteEffect({
+	inputSchema: z.void(),
+	outputSchema: AlertSettingsResponseSchema,
 
-    handler: async (_, { workspace, params }) => {
-        return await profitAlertService.getAlertSettings(
-            params.id!,
-            workspace.id
-        );
-    },
+	handler: (_data, context) =>
+		profitAlertService.getAlertSettingsEffect(context.params.id!),
 
-    options: {
-        operationName: "getAlertSettings",
-        requiredPermissions: ["campaigns.view"],
-        errorContext: {
-            feature: "profit-alerts",
-            action: "get-settings",
-        },
-    },
+	options: {
+		operationName: "getAlertSettings",
+		requiredPermissions: ["campaigns.view"],
+		errorContext: {
+			feature: "profit-alerts",
+			action: "get-settings",
+		},
+	},
 });
 
-export const PUT = createWorkspaceRoute({
-    inputSchema: AlertSettingsUpdateSchema,
-    outputSchema: AlertSettingsResponseSchema,
+export const PATCH = createWorkspaceRouteEffect({
+	inputSchema: AlertSettingsUpdateSchema,
+	outputSchema: AlertSettingsResponseSchema,
 
-    handler: async (data, { workspace, params }) => {
-        return await profitAlertService.updateAlertSettings(
-            params.id!,
-            data,
-            workspace.id
-        );
-    },
+	handler: (data, context) =>
+		profitAlertService.updateAlertSettingsEffect(context.params.id!, data),
 
-    options: {
-        operationName: "updateAlertSettings",
-        requiredPermissions: ["campaigns.update"],
-        errorContext: {
-            feature: "profit-alerts",
-            action: "update-settings",
-        },
-    },
+	options: {
+		operationName: "updateAlertSettings",
+		requiredPermissions: ["campaigns.manage"],
+		errorContext: {
+			feature: "profit-alerts",
+			action: "update-settings",
+		},
+	},
 });

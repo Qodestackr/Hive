@@ -1,31 +1,21 @@
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
 import { AutoPauseActionResponseSchema } from "@repo/schema";
 import { profitAlertService } from "@repo/services";
+import { z } from "@repo/utils";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-/**
- * Manually trigger auto-pause check
- * 
- * This allows:
- * - Manual execution from dashboard
- * - AI agent automation
- * - Testing the alert system
- */
-export const POST = createWorkspaceRoute({
-    outputSchema: AutoPauseActionResponseSchema,
+export const POST = createWorkspaceRouteEffect({
+	inputSchema: z.void(),
+	outputSchema: AutoPauseActionResponseSchema,
 
-    handler: async (_, { workspace, params }) => {
-        return await profitAlertService.autoPauseCampaign(
-            params.id!,
-            workspace.id
-        );
-    },
+	handler: (_data, context) =>
+		profitAlertService.autoPauseCampaignEffect(context.params.id!),
 
-    options: {
-        operationName: "autoPauseCampaign",
-        requiredPermissions: ["campaigns.update"],
-        errorContext: {
-            feature: "profit-alerts",
-            action: "auto-pause",
-        },
-    },
+	options: {
+		operationName: "autoPauseCampaign",
+		requiredPermissions: ["campaigns.manage"],
+		errorContext: {
+			feature: "profit-alerts",
+			action: "auto-pause",
+		},
+	},
 });

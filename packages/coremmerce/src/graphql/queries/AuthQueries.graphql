@@ -1,10 +1,10 @@
 query GetApps($first: Int = 10) {
-  apps(first: $first) {
-    edges {
-      node {
-        id
-        name
-      }
-    }
-  }
+	apps(first: $first) {
+		edges {
+			node {
+				id
+				name
+			}
+		}
+	}
 }

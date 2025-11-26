@@ -1,419 +1,491 @@
-import { createError } from "@repo/utils";
 import db, {
-    withDbOperation,
-    products,
-    inventoryMovements,
-    eq, and, or, sql, count, sum, desc, asc, ilike
+	and,
+	asc,
+	count,
+	desc,
+	eq,
+	ilike,
+	inventoryMovements,
+	or,
+	products,
+	sql,
+	withDrizzleErrors,
 } from "@repo/db";
-
 import type {
-    ProductCreate,
-    ProductUpdate,
-    ProductListQuery,
-    ProductResponse,
-    ProductListResponse,
-    ProductPriceUpdate,
-    BulkProductPriceUpdate,
+	BulkProductPriceUpdate,
+	ProductCreate,
+	ProductListQuery,
+	ProductListResponse,
+	ProductPriceUpdate,
+	ProductResponse,
+	ProductUpdate,
 } from "@repo/schema";
+import { OrganizationContext } from "@repo/utils";
+import {
+	type DatabaseError,
+	GenericDatabaseError,
+	ProductNotFound,
+} from "@repo/utils/errors/domain";
+import { Effect } from "effect";
 
 export const productService = {
-    /**
-     * Create a product
-     * 
-     * @param data - Product creation data
-     * @param organizationId - Organization context
-     * @returns Created product
-     */
-    async createProduct(
-        data: ProductCreate,
-        organizationId: string
-    ): Promise<ProductResponse> {
-        // Check for duplicate SKU in this organization
-        const existing = await withDbOperation({
-            operation: "findUnique",
-            table: "product",
-            context: { organizationId, sku: data.sku }
-        }, () => db
-            .select()
-            .from(products)
-            .where(and(
-                eq(products.sku, data.sku),
-                eq(products.organizationId, organizationId)
-            ))
-            .limit(1)
-            .then(rows => rows[0])
-        );
+	/**
+	 * Create a product
+	 *
+	 * @param data - Product creation data
+	 * @returns Created product
+	 */
+	createProductEffect(
+		data: ProductCreate,
+	): Effect.Effect<
+		ProductResponse,
+		DatabaseError | GenericDatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
 
-        if (existing) {
-            throw createError.businessRule("duplicate_sku", {
-                sku: data.sku,
-                message: "Product with this SKU already exists"
-            });
-        }
+			// Check for duplicate SKU in this organization
+			const existingRows = yield* withDrizzleErrors(
+				"product",
+				"findUnique",
+				() =>
+					db
+						.select()
+						.from(products)
+						.where(
+							and(
+								eq(products.sku, data.sku),
+								eq(products.organizationId, organizationId),
+							),
+						)
+						.limit(1),
+			);
 
-        // Create product
-        const [product] = await withDbOperation({
-            operation: "create",
-            table: "product",
-            context: { organizationId }
-        }, () => db
-            .insert(products)
-            .values({
-                organizationId,
-                name: data.name,
-                sku: data.sku,
-                category: data.category ?? null,
-                description: data.description ?? null,
-                basePrice: data.basePrice,
-                saleorProductId: data.saleorProductId ?? null,
-                saleorVariantId: data.saleorVariantId ?? null,
-                alcoholContent: data.alcoholContent ?? null,
-                requiresAgeVerification: data.requiresAgeVerification ?? true,
-                images: data.images ?? null,
-                tags: data.tags ?? [],
-                isActive: true,
-            })
-            .returning()
-        );
+			if (existingRows.length > 0) {
+				return yield* Effect.fail(
+					new GenericDatabaseError({
+						operation: "create",
+						table: "products",
+						pgCode: "23505",
+						detail: `Product with SKU ${data.sku} already exists`,
+						originalError: new Error("Duplicate SKU"),
+					}),
+				);
+			}
 
-        return product as ProductResponse;
-    },
+			// Create product
+			const productRows = yield* withDrizzleErrors("product", "create", () =>
+				db
+					.insert(products)
+					.values({
+						organizationId,
+						name: data.name,
+						sku: data.sku,
+						category: data.category ?? null,
+						description: data.description ?? null,
+						basePrice: data.basePrice,
+						saleorProductId: data.saleorProductId ?? null,
+						saleorVariantId: data.saleorVariantId ?? null,
+						alcoholContent: data.alcoholContent ?? null,
+						requiresAgeVerification: data.requiresAgeVerification ?? true,
+						images: data.images ?? null,
+						tags: data.tags ?? [],
+						isActive: true,
+					})
+					.returning(),
+			);
 
-    /**
-     * Get product by ID
-     * 
-     * @param productId - Product ID
-     * @param organizationId - Organization context
-     * @returns Product data
-     */
-    async getById(
-        productId: string,
-        organizationId: string
-    ): Promise<ProductResponse> {
-        const product = await withDbOperation({
-            operation: "findUnique",
-            table: "product",
-            context: { organizationId, productId }
-        }, () => db
-            .select()
-            .from(products)
-            .where(and(
-                eq(products.id, productId),
-                eq(products.organizationId, organizationId)
-            ))
-            .limit(1)
-            .then(rows => rows[0])
-        );
+			return productRows[0] as ProductResponse;
+		});
+	},
 
-        if (!product) {
-            throw createError.notFound("Product", { productId, organizationId });
-        }
+	/**
+	 * Get product by ID
+	 *
+	 * @param productId - Product ID
+	 * @returns Product data
+	 */
+	getByIdEffect(
+		productId: string,
+	): Effect.Effect<
+		ProductResponse,
+		ProductNotFound | DatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
 
-        return product as ProductResponse;
-    },
+			const productRows = yield* withDrizzleErrors(
+				"product",
+				"findUnique",
+				() =>
+					db
+						.select()
+						.from(products)
+						.where(
+							and(
+								eq(products.id, productId),
+								eq(products.organizationId, organizationId),
+							),
+						)
+						.limit(1),
+			);
 
-    /**
-     * Update product
-     * 
-     * @param productId - Product ID
-     * @param data - Update data
-     * @param organizationId - Organization context
-     * @returns Updated product
-     */
-    async updateProduct(
-        productId: string,
-        data: ProductUpdate,
-        organizationId: string
-    ): Promise<ProductResponse> {
-        // Verify product exists
-        await this.getById(productId, organizationId);
+			const product = productRows[0];
+			if (!product) {
+				return yield* Effect.fail(
+					new ProductNotFound({ productId, organizationId }),
+				);
+			}
 
-        // If SKU is being updated, check for duplicates
-        if (data.sku) {
-            const existing = await db
-                .select()
-                .from(products)
-                .where(and(
-                    eq(products.sku, data.sku),
-                    eq(products.organizationId, organizationId),
-                    sql`${products.id} != ${productId}`
-                ))
-                .limit(1)
-                .then(rows => rows[0]);
+			return product as ProductResponse;
+		});
+	},
 
-            if (existing) {
-                throw createError.businessRule("duplicate_sku", {
-                    sku: data.sku,
-                    message: "Product with this SKU already exists"
-                });
-            }
-        }
+	/**
+	 * Update product
+	 *
+	 * @param productId - Product ID
+	 * @param data - Update data
+	 * @returns Updated product
+	 */
+	updateProductEffect(
+		productId: string,
+		data: ProductUpdate,
+	): Effect.Effect<
+		ProductResponse,
+		ProductNotFound | DatabaseError | GenericDatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
 
-        const [updated] = await withDbOperation({
-            operation: "update",
-            table: "product",
-            context: { organizationId, productId }
-        }, () => db
-            .update(products)
-            .set({
-                ...data,
-                updatedAt: new Date(),
-            })
-            .where(and(
-                eq(products.id, productId),
-                eq(products.organizationId, organizationId)
-            ))
-            .returning()
-        );
+			// Verify product exists
+			yield* productService.getByIdEffect(productId);
 
-        return updated as ProductResponse;
-    },
+			// If SKU is being updated, check for duplicates
+			if (data.sku) {
+				const existingRows = yield* withDrizzleErrors(
+					"product",
+					"findUnique",
+					() =>
+						db
+							.select()
+							.from(products)
+							.where(
+								and(
+									eq(products.sku, data.sku),
+									eq(products.organizationId, organizationId),
+									sql`${products.id} != ${productId}`,
+								),
+							)
+							.limit(1),
+				);
 
-    /**
-     * Delete product (soft delete by marking inactive)
-     * 
-     * @param productId - Product ID
-     * @param organizationId - Organization context
-     */
-    async deleteProduct(
-        productId: string,
-        organizationId: string
-    ): Promise<{ success: boolean }> {
-        // Mark as inactive instead of hard delete
-        await withDbOperation({
-            operation: "update",
-            table: "product",
-            context: { organizationId, productId }
-        }, () => db
-            .update(products)
-            .set({
-                isActive: false,
-                updatedAt: new Date(),
-            })
-            .where(and(
-                eq(products.id, productId),
-                eq(products.organizationId, organizationId)
-            ))
-        );
+				if (existingRows.length > 0) {
+					return yield* Effect.fail(
+						new GenericDatabaseError({
+							operation: "update",
+							table: "products",
+							pgCode: "23505",
+							detail: `Product with SKU ${data.sku} already exists`,
+							originalError: new Error("Duplicate SKU"),
+						}),
+					);
+				}
+			}
 
-        return { success: true };
-    },
+			const updatedRows = yield* withDrizzleErrors("product", "update", () =>
+				db
+					.update(products)
+					.set({
+						...data,
+						updatedAt: new Date(),
+					})
+					.where(
+						and(
+							eq(products.id, productId),
+							eq(products.organizationId, organizationId),
+						),
+					)
+					.returning(),
+			);
 
-    /**
-     * Quick price update (for onboarding)
-     * 
-     * @param productId - Product ID
-     * @param data - Price update data
-     * @param organizationId - Organization context
-     * @returns Updated product
-     */
-    async updatePrice(
-        productId: string,
-        data: ProductPriceUpdate,
-        organizationId: string
-    ): Promise<ProductResponse> {
-        const [updated] = await withDbOperation({
-            operation: "update",
-            table: "product",
-            context: { organizationId, productId }
-        }, () => db
-            .update(products)
-            .set({
-                basePrice: data.basePrice,
-                currentStockQuantity: data.currentStockQuantity,
-                updatedAt: new Date(),
-            })
-            .where(and(
-                eq(products.id, productId),
-                eq(products.organizationId, organizationId)
-            ))
-            .returning()
-        );
+			return updatedRows[0] as ProductResponse;
+		});
+	},
 
-        if (!updated) {
-            throw createError.notFound("Product", { productId, organizationId });
-        }
+	/**
+	 * Delete product (soft delete by marking inactive)
+	 *
+	 * @param productId - Product ID
+	 */
+	deleteProductEffect(
+		productId: string,
+	): Effect.Effect<{ success: boolean }, DatabaseError, OrganizationContext> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
 
-        return updated as ProductResponse;
-    },
+			// Mark as inactive instead of hard delete
+			yield* withDrizzleErrors("product", "update", () =>
+				db
+					.update(products)
+					.set({
+						isActive: false,
+						updatedAt: new Date(),
+					})
+					.where(
+						and(
+							eq(products.id, productId),
+							eq(products.organizationId, organizationId),
+						),
+					),
+			);
 
-    /**
-     * Bulk price update
-     * 
-     * @param data - Bulk update data
-     * @param organizationId - Organization context
-     * @returns Number of updated products
-     */
-    async bulkPriceUpdate(
-        data: BulkProductPriceUpdate,
-        organizationId: string
-    ): Promise<{ updated: number }> {
-        let updated = 0;
+			return { success: true };
+		});
+	},
 
-        for (const update of data.updates) {
-            try {
-                await db
-                    .update(products)
-                    .set({
-                        basePrice: update.basePrice,
-                        currentStockQuantity: update.currentStockQuantity,
-                        updatedAt: new Date(),
-                    })
-                    .where(and(
-                        eq(products.id, update.productId),
-                        eq(products.organizationId, organizationId)
-                    ));
-                updated++;
-            } catch (error) {
-                // Continue with other updates even if one fails
-                console.error(`Failed to update product ${update.productId}:`, error);
-            }
-        }
+	/**
+	 * Quick price update (for onboarding)
+	 *
+	 * @param productId - Product ID
+	 * @param data - Price update data
+	 * @returns Updated product
+	 */
+	updatePriceEffect(
+		productId: string,
+		data: ProductPriceUpdate,
+	): Effect.Effect<
+		ProductResponse,
+		ProductNotFound | DatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
 
-        return { updated };
-    },
+			const updatedRows = yield* withDrizzleErrors("product", "update", () =>
+				db
+					.update(products)
+					.set({
+						basePrice: data.basePrice,
+						currentStockQuantity: data.currentStockQuantity,
+						updatedAt: new Date(),
+					})
+					.where(
+						and(
+							eq(products.id, productId),
+							eq(products.organizationId, organizationId),
+						),
+					)
+					.returning(),
+			);
 
-    /**
-     * List products with filters and pagination
-     * 
-     * @param query - Query parameters
-     * @param organizationId - Organization context
-     * @returns Paginated product list
-     */
-    async listProducts(
-        query: ProductListQuery,
-        organizationId: string
-    ): Promise<ProductListResponse> {
-        const {
-            page = 1,
-            limit = 20,
-            search,
-            category,
-            isActive,
-            isSlowMover,
-            sortBy = 'name',
-            sortOrder = 'asc'
-        } = query;
+			const updated = updatedRows[0];
+			if (!updated) {
+				return yield* Effect.fail(
+					new ProductNotFound({ productId, organizationId }),
+				);
+			}
 
-        // Build filters
-        const filters = [eq(products.organizationId, organizationId)];
+			return updated as ProductResponse;
+		});
+	},
 
-        if (search) {
-            filters.push(
-                or(
-                    ilike(products.name, `%${search}%`),
-                    ilike(products.sku, `%${search}%`)
-                )!
-            );
-        }
+	/**
+	 * Bulk price update
+	 *
+	 * @param data - Bulk update data
+	 * @returns Number of updated products
+	 */
+	bulkPriceUpdateEffect(
+		data: BulkProductPriceUpdate,
+	): Effect.Effect<
+		{ updated: number },
+		DatabaseError | GenericDatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
+			let updated = 0;
 
-        if (category) {
-            filters.push(eq(products.category, category));
-        }
+			for (const update of data.updates) {
+				try {
+					yield* withDrizzleErrors("product", "update", () =>
+						db
+							.update(products)
+							.set({
+								basePrice: update.basePrice,
+								currentStockQuantity: update.currentStockQuantity,
+								updatedAt: new Date(),
+							})
+							.where(
+								and(
+									eq(products.id, update.productId),
+									eq(products.organizationId, organizationId),
+								),
+							),
+					);
+					updated++;
+				} catch (error) {
+					// Continue with other updates even if one fails
+					console.error(`Failed to update product ${update.productId}:`, error);
+				}
+			}
 
-        if (isActive !== undefined) {
-            filters.push(eq(products.isActive, isActive));
-        }
+			return { updated };
+		});
+	},
 
-        if (isSlowMover !== undefined) {
-            filters.push(eq(products.isSlowMover, isSlowMover));
-        }
+	/**
+	 * List products with filters and pagination
+	 *
+	 * @param query - Query parameters
+	 * @returns Paginated product list
+	 */
+	listProductsEffect(
+		query: ProductListQuery,
+	): Effect.Effect<ProductListResponse, DatabaseError, OrganizationContext> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
 
-        // Get total count
-        const totalResult = await withDbOperation({
-            operation: "count",
-            table: "product",
-            context: { organizationId }
-        }, () => db
-            .select({ count: count() })
-            .from(products)
-            .where(and(...filters))
-            .then(rows => rows[0])
-        );
+			const {
+				page = 1,
+				limit = 20,
+				search,
+				category,
+				isActive,
+				isSlowMover,
+				sortBy = "name",
+				sortOrder = "asc",
+			} = query;
 
-        const total = totalResult?.count || 0;
+			// Build filters
+			const filters = [eq(products.organizationId, organizationId)];
 
-        // Get paginated data
-        const offset = (page - 1) * limit;
-        const orderFn = sortOrder === 'asc' ? asc : desc;
+			if (search) {
+				filters.push(
+					or(
+						ilike(products.name, `%${search}%`),
+						ilike(products.sku, `%${search}%`),
+					)!,
+				);
+			}
 
-        // Map sortBy to column
-        let orderByColumn = products.name;
-        if (sortBy === 'sku') orderByColumn = products.sku;
-        else if (sortBy === 'basePrice') orderByColumn = products.basePrice;
-        else if (sortBy === 'currentStockQuantity') orderByColumn = products.currentStockQuantity;
-        else if (sortBy === 'createdAt') orderByColumn = products.createdAt;
+			if (category) {
+				filters.push(eq(products.category, category));
+			}
 
-        const data = await withDbOperation({
-            operation: "findMany",
-            table: "product",
-            context: { organizationId }
-        }, () => db
-            .select()
-            .from(products)
-            .where(and(...filters))
-            .orderBy(orderFn(orderByColumn))
-            .limit(limit)
-            .offset(offset)
-        );
+			if (isActive !== undefined) {
+				filters.push(eq(products.isActive, isActive));
+			}
 
-        return {
-            data: data as ProductResponse[],
-            pagination: {
-                page,
-                limit,
-                total,
-                totalPages: Math.ceil(total / limit)
-            }
-        };
-    },
+			if (isSlowMover !== undefined) {
+				filters.push(eq(products.isSlowMover, isSlowMover));
+			}
 
-    /**
-     * Get FIFO batches for a product (debugging)
-     * 
-     * Shows inventory movements for a product.
-     * Useful for understanding inventory flow.
-     * 
-     * @param productId - Product ID
-     * @param organizationId - Organization context
-     * @returns Inventory movements
-     */
-    async getFIFOBatches(
-        productId: string,
-        organizationId: string
-    ) {
-        // Verify product exists
-        await this.getById(productId, organizationId);
+			// Get total count
+			const totalRows = yield* withDrizzleErrors("product", "count", () =>
+				db
+					.select({ count: count() })
+					.from(products)
+					.where(and(...filters)),
+			);
 
-        // Get all IN movements
-        const batches = await withDbOperation({
-            operation: "findMany",
-            table: "inventory_movement",
-            context: { organizationId, productId }
-        }, () => db
-            .select({
-                id: inventoryMovements.id,
-                movementType: inventoryMovements.movementType,
-                quantity: inventoryMovements.quantity,
-                unitCostAtMovement: inventoryMovements.unitCostAtMovement,
-                totalCost: inventoryMovements.totalCost,
-                fifoBatchId: inventoryMovements.fifoBatchId,
-                stockAfterMovement: inventoryMovements.stockAfterMovement,
-                createdAt: inventoryMovements.createdAt,
-            })
-            .from(inventoryMovements)
-            .where(and(
-                eq(inventoryMovements.productId, productId),
-                eq(inventoryMovements.organizationId, organizationId),
-                eq(inventoryMovements.movementType, 'IN')
-            ))
-            .orderBy(asc(inventoryMovements.createdAt)) // FIFO order
-        );
+			const total = totalRows[0]?.count || 0;
 
-        return {
-            productId,
-            batches,
-            totalQuantity: batches.reduce((sum, b) => sum + (b.quantity || 0), 0)
-        };
-    },
+			// Get paginated data
+			const offset = (page - 1) * limit;
+			const orderFn = sortOrder === "asc" ? asc : desc;
+
+			// Map sortBy to column
+			// Map sortBy to column (use type-safe column references)
+			let orderByColumn: any = products.name;
+			if (sortBy === "sku") orderByColumn = products.sku;
+			else if (sortBy === "basePrice") orderByColumn = products.basePrice;
+			else if (sortBy === "currentStockQuantity")
+				orderByColumn = products.currentStockQuantity;
+			else if (sortBy === "createdAt") orderByColumn = products.createdAt;
+
+			const data = yield* withDrizzleErrors("product", "findMany", () =>
+				db
+					.select()
+					.from(products)
+					.where(and(...filters))
+					.orderBy(orderFn(orderByColumn))
+					.limit(limit)
+					.offset(offset),
+			);
+
+			return {
+				data: data as ProductResponse[],
+				pagination: {
+					page,
+					limit,
+					total,
+					totalPages: Math.ceil(total / limit),
+				},
+			};
+		});
+	},
+
+	/**
+	 * Get FIFO batches for a product (debugging)
+	 *
+	 * Shows inventory movements for a product.
+	 * Useful for understanding inventory flow.
+	 *
+	 * @param productId - Product ID
+	 * @returns Inventory movements
+	 */
+	getFIFOBatchesEffect(productId: string): Effect.Effect<
+		{
+			productId: string;
+			batches: any[];
+			totalQuantity: number;
+		},
+		ProductNotFound | DatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
+
+			// Verify product exists
+			yield* productService.getByIdEffect(productId);
+
+			// Get all IN movements
+			const batches = yield* withDrizzleErrors(
+				"inventory_movement",
+				"findMany",
+				() =>
+					db
+						.select({
+							id: inventoryMovements.id,
+							movementType: inventoryMovements.movementType,
+							quantity: inventoryMovements.quantity,
+							unitCostAtMovement: inventoryMovements.unitCostAtMovement,
+							totalCost: inventoryMovements.totalCost,
+							fifoBatchId: inventoryMovements.fifoBatchId,
+							stockAfterMovement: inventoryMovements.stockAfterMovement,
+							createdAt: inventoryMovements.createdAt,
+						})
+						.from(inventoryMovements)
+						.where(
+							and(
+								eq(inventoryMovements.productId, productId),
+								eq(inventoryMovements.organizationId, organizationId),
+								eq(inventoryMovements.movementType, "IN"),
+							),
+						)
+						.orderBy(asc(inventoryMovements.createdAt)), // FIFO order
+			);
+
+			return {
+				productId,
+				batches,
+				totalQuantity: batches.reduce((sum, b) => sum + (b.quantity || 0), 0),
+			};
+		});
+	},
 };

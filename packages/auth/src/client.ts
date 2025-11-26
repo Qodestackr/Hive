@@ -1,21 +1,21 @@
-export { generateId as generateAuthId } from "better-auth"
+export { generateId as generateAuthId } from "better-auth";
 
 export {
-    signOut,
-    useSession,
-    signUp,
-    signIn,
-    client,
-    forgetPassword,
-    organization,
-    useActiveOrganization,
-    useListOrganizations,
-    $fetch,
-    admin,
-    getSession,
-} from './auth/auth-client'
+	$fetch,
+	admin,
+	client,
+	forgetPassword,
+	getSession,
+	organization,
+	signIn,
+	signOut,
+	signUp,
+	useActiveOrganization,
+	useListOrganizations,
+	useSession,
+} from "./auth/auth-client";
 
 export type {
-    Session,
-    ActiveOrganization
-} from './auth/auth-types'
+	ActiveOrganization,
+	Session,
+} from "./auth/auth-types";

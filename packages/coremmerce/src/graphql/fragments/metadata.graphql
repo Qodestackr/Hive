@@ -1,10 +1,10 @@
 fragment MetadataItemFragment on MetadataItem {
-  key
-  value
+	key
+	value
 }
 
 fragment MetadataErrorFragment on MetadataError {
-  field
-  code
-  message
+	field
+	code
+	message
 }

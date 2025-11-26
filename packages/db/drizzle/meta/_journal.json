@@ -1,62 +1,62 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1763645743469,
-      "tag": "0000_tiresome_lilith",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1763652762037,
-      "tag": "0001_chemical_jane_foster",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1763653995685,
-      "tag": "0002_late_frank_castle",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1763761257168,
-      "tag": "0003_amazing_wendigo",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1763799865391,
-      "tag": "0004_large_ikaris",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1763824289085,
-      "tag": "0005_wealthy_martin_li",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1763930913244,
-      "tag": "0006_tidy_alex_power",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1764151454420,
-      "tag": "0007_smiling_mephisto",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "postgresql",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "7",
+			"when": 1763645743469,
+			"tag": "0000_tiresome_lilith",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "7",
+			"when": 1763652762037,
+			"tag": "0001_chemical_jane_foster",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1763653995685,
+			"tag": "0002_late_frank_castle",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1763761257168,
+			"tag": "0003_amazing_wendigo",
+			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "7",
+			"when": 1763799865391,
+			"tag": "0004_large_ikaris",
+			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "7",
+			"when": 1763824289085,
+			"tag": "0005_wealthy_martin_li",
+			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "7",
+			"when": 1763930913244,
+			"tag": "0006_tidy_alex_power",
+			"breakpoints": true
+		},
+		{
+			"idx": 7,
+			"version": "7",
+			"when": 1764151454420,
+			"tag": "0007_smiling_mephisto",
+			"breakpoints": true
+		}
+	]
 }

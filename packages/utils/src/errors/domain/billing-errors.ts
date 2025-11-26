@@ -1,9 +1,9 @@
 import { Data } from "effect";
 
 export class InvoiceNotFound extends Data.TaggedError("InvoiceNotFound")<{
-    invoiceId: string;
+	invoiceId: string;
 }> {
-    get message() {
-        return `Invoice not found: ${this.invoiceId}`;
-    }
+	get message() {
+		return `Invoice not found: ${this.invoiceId}`;
+	}
 }

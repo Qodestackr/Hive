@@ -1,60 +1,63 @@
 # StockProductVariant... used for stock recieving too
 mutation UpdateStock($variantId: ID!, $warehouseId: ID!, $quantity: Int!) {
-  productVariantStocksUpdate(
-    variantId: $variantId
-    stocks: [{ warehouse: $warehouseId, quantity: $quantity }]
-  ) {
-    productVariant {
-      stocks {
-        warehouse {
-          name
-        }
-        quantity
-      }
-    }
-    errors {
-      message
-    }
-  }
+	productVariantStocksUpdate(
+		variantId: $variantId
+		stocks: [{ warehouse: $warehouseId, quantity: $quantity }]
+	) {
+		productVariant {
+			stocks {
+				warehouse {
+					name
+				}
+				quantity
+			}
+		}
+		errors {
+			message
+		}
+	}
 }
 
 mutation CreateStock($variantId: ID!, $input: [StockInput!]!) {
-  productVariantStocksCreate(variantId: $variantId, stocks: $input) {
-    productVariant {
-      stocks {
-        warehouse {
-          id
-          name
-        }
-        quantity
-      }
-    }
-    errors {
-      message
-      field
-      code
-    }
-  }
+	productVariantStocksCreate(variantId: $variantId, stocks: $input) {
+		productVariant {
+			stocks {
+				warehouse {
+					id
+					name
+				}
+				quantity
+			}
+		}
+		errors {
+			message
+			field
+			code
+		}
+	}
 }
 # E.g Expired
 mutation DeleteProduct($productId: ID!) {
-  productDelete(id: $productId) {
-    errors {
-      message
-    }
-  }
+	productDelete(id: $productId) {
+		errors {
+			message
+		}
+	}
 }
 
 # (optional) UpdateProductPrivateMetadata.graphql - fallback for product-level metadata
-mutation UpdateProductPrivateMetadata($id: ID!, $privateMetadata: [MetadataInput!]!) {
-  productUpdate(id: $id, input: { privateMetadata: $privateMetadata }) {
-    product {
-      id
-    }
-    errors {
-      field
-      message
-      code
-    }
-  }
+mutation UpdateProductPrivateMetadata(
+	$id: ID!
+	$privateMetadata: [MetadataInput!]!
+) {
+	productUpdate(id: $id, input: { privateMetadata: $privateMetadata }) {
+		product {
+			id
+		}
+		errors {
+			field
+			message
+			code
+		}
+	}
 }

@@ -1,33 +1,33 @@
 {
-  "name": "@repo/utils",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
-  "exports": {
-    ".": "./src/index.ts",
-    "./errors/error-handler": "./src/errors/error-handler.ts",
-    "./errors/effect-handler": "./src/errors/effect-handler.ts",
-    "./errors/domain": "./src/errors/domain/index.ts"
-  },
-  "scripts": {
-    "dev": "echo 'Add dev script here'",
-    "build": "echo 'Add build script here'",
-    "test": "echo 'Add test script here'",
-    "lint": "echo 'Add lint script here'"
-  },
-  "dependencies": {
-    "effect": "^3.10.16",
-    "@opentelemetry/api": "^1.9.0",
-    "@opentelemetry/api-logs": "^0.208.0",
-    "@opentelemetry/auto-instrumentations-node": "^0.67.0",
-    "@opentelemetry/resources": "^2.2.0",
-    "@opentelemetry/sdk-node": "^0.208.0",
-    "@opentelemetry/sdk-trace-base": "^2.2.0",
-    "@opentelemetry/semantic-conventions": "^1.38.0",
-    "date-fns": "^4.1.0",
-    "nanoid": "^5.1.6",
-    "query-string": "^9.3.1",
-    "zod": "^4.1.12"
-  }
+	"name": "@repo/utils",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts",
+		"./errors/error-handler": "./src/errors/error-handler.ts",
+		"./errors/effect-handler": "./src/errors/effect-handler.ts",
+		"./errors/domain": "./src/errors/domain/index.ts"
+	},
+	"scripts": {
+		"dev": "echo 'Add dev script here'",
+		"build": "echo 'Add build script here'",
+		"test": "echo 'Add test script here'",
+		"lint": "echo 'Add lint script here'"
+	},
+	"dependencies": {
+		"effect": "^3.10.16",
+		"@opentelemetry/api": "^1.9.0",
+		"@opentelemetry/api-logs": "^0.208.0",
+		"@opentelemetry/auto-instrumentations-node": "^0.67.0",
+		"@opentelemetry/resources": "^2.2.0",
+		"@opentelemetry/sdk-node": "^0.208.0",
+		"@opentelemetry/sdk-trace-base": "^2.2.0",
+		"@opentelemetry/semantic-conventions": "^1.38.0",
+		"date-fns": "^4.1.0",
+		"nanoid": "^5.1.6",
+		"query-string": "^9.3.1",
+		"zod": "^4.1.12"
+	}
 }

@@ -1,279 +1,283 @@
 # Get a single channel by ID
 query GetChannelById($id: ID!) {
-  channel(id: $id) {
-    ...ChannelDetailedInfo
-  }
+	channel(id: $id) {
+		...ChannelDetailedInfo
+	}
 }
 
 # Get a single channel by slug
 query GetChannelBySlug($slug: String!) {
-  channel(slug: $slug) {
-    ...ChannelDetailedInfo
-  }
+	channel(slug: $slug) {
+		...ChannelDetailedInfo
+	}
 }
 
 # List all channels
 query ListChannels {
-  channels {
-    ...ChannelBasicInfo
-  }
+	channels {
+		...ChannelBasicInfo
+	}
 }
 
 # Get channel with warehouses
 query GetChannelWithWarehouses($id: ID!) {
-  channel(id: $id) {
-    id
-    name
-    slug
-    warehouses {
-      id
-      name
-      slug
-      address {
-        streetAddress1
-        streetAddress2
-        city
-        country {
-          code
-          country
-        }
-      }
-    }
-  }
+	channel(id: $id) {
+		id
+		name
+		slug
+		warehouses {
+			id
+			name
+			slug
+			address {
+				streetAddress1
+				streetAddress2
+				city
+				country {
+					code
+					country
+				}
+			}
+		}
+	}
 }
 
 # Get channel with shipping zones
 query GetChannelWithShippingZones($id: ID!) {
-  channel(id: $id) {
-    id
-    name
-    slug
-    availableShippingMethodsPerCountry {
-      countryCode
-      shippingMethods {
-        id
-        name
-        minimumOrderPrice {
-          ...Money
-        }
-        maximumOrderPrice {
-          ...Money
-        }
-        minimumOrderWeight {
-          unit
-          value
-        }
-        maximumOrderWeight {
-          unit
-          value
-        }
-      }
-    }
-  }
+	channel(id: $id) {
+		id
+		name
+		slug
+		availableShippingMethodsPerCountry {
+			countryCode
+			shippingMethods {
+				id
+				name
+				minimumOrderPrice {
+					...Money
+				}
+				maximumOrderPrice {
+					...Money
+				}
+				minimumOrderWeight {
+					unit
+					value
+				}
+				maximumOrderWeight {
+					unit
+					value
+				}
+			}
+		}
+	}
 }
 
 ## WE WILL GET-OR-CREATE SHIPPING METHODS FOR SEAMLESS FLOW!
 query GetShippingMethods {
-  checkout(id: "Q2hlY2tvdXQ6YjcwZWFiZGEtMTZiNi00MzY0LThkYWUtODRiNzJhYzc2MzVi") {
-    availableShippingMethods {
-      id
-      name
-      price {
-        amount
-        currency
-      }
-    }
-    shippingMethods {
-      id
-      name
-    }
-  }
+	checkout(id: "Q2hlY2tvdXQ6YjcwZWFiZGEtMTZiNi00MzY0LThkYWUtODRiNzJhYzc2MzVi") {
+		availableShippingMethods {
+			id
+			name
+			price {
+				amount
+				currency
+			}
+		}
+		shippingMethods {
+			id
+			name
+		}
+	}
 }
 
 query GetAvailableShippingMethods($id: ID!) {
-  order(id: $id) {  # Drafts are queryable as orders
-    isShippingRequired
-    availableShippingMethods {
-      id  # Correct ShippingMethod ID (e.g., U2hpcHBpbmdNZXRob2Q6something)
-      name
-      price { amount currency }  # Optional: For sorting cheapest
-    }
-  }
+	order(id: $id) {
+		# Drafts are queryable as orders
+		isShippingRequired
+		availableShippingMethods {
+			id # Correct ShippingMethod ID (e.g., U2hpcHBpbmdNZXRob2Q6something)
+			name
+			price {
+				amount
+				currency
+			} # Optional: For sorting cheapest
+		}
+	}
 }
 
 # Get channel stock settings
 query GetChannelStockSettings($id: ID!) {
-  channel(id: $id) {
-    id
-    name
-    stockSettings {
-      allocationStrategy
-    }
-    warehouses {
-      id
-      name
-      slug
-    }
-  }
+	channel(id: $id) {
+		id
+		name
+		stockSettings {
+			allocationStrategy
+		}
+		warehouses {
+			id
+			name
+			slug
+		}
+	}
 }
 
 # Get channel order settings
 query GetChannelOrderSettings($id: ID!) {
-  channel(id: $id) {
-    id
-    name
-    orderSettings {
-      allowUnpaidOrders
-      automaticallyConfirmAllNewOrders
-      automaticallyFulfillNonShippableGiftCard
-      expireOrdersAfter
-    }
-  }
+	channel(id: $id) {
+		id
+		name
+		orderSettings {
+			allowUnpaidOrders
+			automaticallyConfirmAllNewOrders
+			automaticallyFulfillNonShippableGiftCard
+			expireOrdersAfter
+		}
+	}
 }
 
 # Check product availability in channel
 query CheckProductInChannel($productId: ID!, $channelSlug: String!) {
-  product(id: $productId, channel: $channelSlug) {
-    id
-    name
-    isAvailableForPurchase
-    isAvailable
-    channelListings {
-      channel {
-        id
-        slug
-      }
-      isPublished
-      visibleInListings
-      publishedAt
-      availableForPurchaseAt
-    }
-    variants {
-      id
-      name
-      sku
-      channelListings {
-        channel {
-          id
-          slug
-        }
-        price {
-          ...Money
-        }
-        costPrice {
-          ...Money
-        }
-        preorderThreshold {
-          quantity
-        }
-      }
-      stocks {
-        warehouse {
-          id
-          name
-        }
-        quantity
-        quantityAllocated
-      }
-    }
-  }
+	product(id: $productId, channel: $channelSlug) {
+		id
+		name
+		isAvailableForPurchase
+		isAvailable
+		channelListings {
+			channel {
+				id
+				slug
+			}
+			isPublished
+			visibleInListings
+			publishedAt
+			availableForPurchaseAt
+		}
+		variants {
+			id
+			name
+			sku
+			channelListings {
+				channel {
+					id
+					slug
+				}
+				price {
+					...Money
+				}
+				costPrice {
+					...Money
+				}
+				preorderThreshold {
+					quantity
+				}
+			}
+			stocks {
+				warehouse {
+					id
+					name
+				}
+				quantity
+				quantityAllocated
+			}
+		}
+	}
 }
 
 # List products in channel
 query ListProductsInChannel(
-  $channelSlug: String!
-  $first: Int = 100
-  $after: String
-  $filter: ProductFilterInput
+	$channelSlug: String!
+	$first: Int = 100
+	$after: String
+	$filter: ProductFilterInput
 ) {
-  products(
-    channel: $channelSlug
-    first: $first
-    after: $after
-    filter: $filter
-  ) {
-    edges {
-      node {
-        id
-        name
-        thumbnail {
-          url
-          alt
-        }
-        category {
-          id
-          name
-        }
-        channelListings {
-          channel {
-            id
-            slug
-          }
-          isPublished
-          visibleInListings
-        }
-        variants {
-          id
-          name
-          sku
-          channelListings {
-            channel {
-              id
-              slug
-            }
-            price {
-              ...Money
-            }
-          }
-          stocks {
-            warehouse {
-              id
-              name
-            }
-            quantity
-            quantityAllocated
-          }
-        }
-      }
-    }
-  }
+	products(
+		channel: $channelSlug
+		first: $first
+		after: $after
+		filter: $filter
+	) {
+		edges {
+			node {
+				id
+				name
+				thumbnail {
+					url
+					alt
+				}
+				category {
+					id
+					name
+				}
+				channelListings {
+					channel {
+						id
+						slug
+					}
+					isPublished
+					visibleInListings
+				}
+				variants {
+					id
+					name
+					sku
+					channelListings {
+						channel {
+							id
+							slug
+						}
+						price {
+							...Money
+						}
+					}
+					stocks {
+						warehouse {
+							id
+							name
+						}
+						quantity
+						quantityAllocated
+					}
+				}
+			}
+		}
+	}
 }
 
 # Get products with low stock in channel
 query GetLowStockProductsInChannel(
-  $channelSlug: String!
-  $threshold: Int = 10
-  $first: Int = 100
+	$channelSlug: String!
+	$threshold: Int = 10
+	$first: Int = 100
 ) {
-  products(channel: $channelSlug, first: $first) {
-    edges {
-      node {
-        id
-        name
-        variants {
-          id
-          name
-          sku
-          channelListings {
-            channel {
-              id
-              slug
-            }
-            price {
-              ...Money
-            }
-          }
-          stocks {
-            warehouse {
-              id
-              name
-            }
-            quantity
-            quantityAllocated
-          }
-        }
-      }
-    }
-  }
-  # Note: Client-side filtering will be needed to filter products below threshold
+	products(channel: $channelSlug, first: $first) {
+		edges {
+			node {
+				id
+				name
+				variants {
+					id
+					name
+					sku
+					channelListings {
+						channel {
+							id
+							slug
+						}
+						price {
+							...Money
+						}
+					}
+					stocks {
+						warehouse {
+							id
+							name
+						}
+						quantity
+						quantityAllocated
+					}
+				}
+			}
+		}
+	}
+	# Note: Client-side filtering will be needed to filter products below threshold
 }

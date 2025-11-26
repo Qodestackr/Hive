@@ -1,1 +1,1 @@
-export { toast, Toaster } from 'sonner';
+export { Toaster, toast } from "sonner";

@@ -1,14 +1,14 @@
 export interface IdempotencyKey {
-    key: string;
-    expiresAt: Date;
+	key: string;
+	expiresAt: Date;
 }
 
 export interface IdempotencyResult<T> {
-    isNew: boolean;        // true if first execution
-    result?: T;            // cached result if duplicate
+	isNew: boolean; // true if first execution
+	result?: T; // cached result if duplicate
 }
 
 export interface IdempotencyOptions {
-    ttlMs?: number;
-    namespace?: string;    // e.g., 'promo_redemption', 'webhook', 'payment'
+	ttlMs?: number;
+	namespace?: string; // e.g., 'promo_redemption', 'webhook', 'payment'
 }

@@ -5,79 +5,79 @@ import { z } from "zod";
 // ============================================================================
 
 export const BusinessType = z.enum([
-    "retailer",
-    "wholesaler",
-    "distributor",
-    "brand_owner",
+	"retailer",
+	"wholesaler",
+	"distributor",
+	"brand_owner",
 ]);
 
 export const SubscriptionStatus = z.enum([
-    "active",
-    "trialing",
-    "past_due",
-    "unpaid",
-    "canceled",
-    "paused",
+	"active",
+	"trialing",
+	"past_due",
+	"unpaid",
+	"canceled",
+	"paused",
 ]);
 
 export const PaymentProvider = z.enum([
-    "mpesa",
-    "coop_bank",
-    "stripe",
-    "paystack",
+	"mpesa",
+	"coop_bank",
+	"stripe",
+	"paystack",
 ]);
 
 export const CampaignStatus = z.enum([
-    "draft",
-    "scheduled",
-    "active",
-    "paused",
-    "completed",
-    "cancelled",
+	"draft",
+	"scheduled",
+	"active",
+	"paused",
+	"completed",
+	"cancelled",
 ]);
 
 export const CampaignType = z.enum([
-    "flash_sale",
-    "loyalty_nudge",
-    "restock_alert",
-    "event_promo",
-    "dead_hour_boost",
-    "product_launch",
-    "reactivation",
+	"flash_sale",
+	"loyalty_nudge",
+	"restock_alert",
+	"event_promo",
+	"dead_hour_boost",
+	"product_launch",
+	"reactivation",
 ]);
 
 export const Platform = z.enum(["whatsapp", "sms", "email"]);
 
 export const VerificationMethod = z.enum([
-    "id_upload",
-    "show_at_pickup",
-    "manual_verification",
+	"id_upload",
+	"show_at_pickup",
+	"manual_verification",
 ]);
 
 export const InventoryMovementType = z.enum([
-    "purchase",
-    "sale",
-    "adjustment",
-    "promo_redemption",
-    "return",
-    "damage",
-    "theft",
+	"purchase",
+	"sale",
+	"adjustment",
+	"promo_redemption",
+	"return",
+	"damage",
+	"theft",
 ]);
 
 export const PurchaseOrderStatus = z.enum([
-    "draft",
-    "ordered",
-    "received",
-    "cancelled",
+	"draft",
+	"ordered",
+	"received",
+	"cancelled",
 ]);
 
 export const PromoCodeDiscountType = z.enum(["percentage", "fixed_amount"]);
 
 export const AlertType = z.enum([
-    "negative_margin",
-    "low_stock",
-    "cost_spike",
-    "profit_threshold_breach",
+	"negative_margin",
+	"low_stock",
+	"cost_spike",
+	"profit_threshold_breach",
 ]);
 
 export const AlertSeverity = z.enum(["critical", "warning", "info"]);

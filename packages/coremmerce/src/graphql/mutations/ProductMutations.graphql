@@ -1,172 +1,172 @@
 # Attribute Management
 mutation CreateProductAttributes($attributes: [AttributeCreateInput!]!) {
-  attributeBulkCreate(attributes: $attributes) {
-    results {
-      attribute {
-        id
-        name
-        slug
-      }
-      errors {
-        ...AttributeBulkCreateError
-      }
-    }
-  }
+	attributeBulkCreate(attributes: $attributes) {
+		results {
+			attribute {
+				id
+				name
+				slug
+			}
+			errors {
+				...AttributeBulkCreateError
+			}
+		}
+	}
 }
 
 # Product Type Management
 mutation CreateProductType(
-  $name: String!
-  $slug: String!
-  $productAttributes: [ID!]!
-  $variantAttributes: [ID!]!
-  $kind: ProductTypeKindEnum!
-  $isShippingRequired: Boolean!
+	$name: String!
+	$slug: String!
+	$productAttributes: [ID!]!
+	$variantAttributes: [ID!]!
+	$kind: ProductTypeKindEnum!
+	$isShippingRequired: Boolean!
 ) {
-  productTypeCreate(
-    input: {
-      name: $name
-      slug: $slug
-      kind: $kind
-      isShippingRequired: $isShippingRequired
-      hasVariants: true
-      productAttributes: $productAttributes
-      variantAttributes: $variantAttributes
-    }
-  ) {
-    productType {
-      id
-      name
-      productAttributes {
-        id
-        name
-      }
-      variantAttributes {
-        id
-        name
-      }
-    }
-    errors {
-      ...ProductError
-    }
-  }
+	productTypeCreate(
+		input: {
+			name: $name
+			slug: $slug
+			kind: $kind
+			isShippingRequired: $isShippingRequired
+			hasVariants: true
+			productAttributes: $productAttributes
+			variantAttributes: $variantAttributes
+		}
+	) {
+		productType {
+			id
+			name
+			productAttributes {
+				id
+				name
+			}
+			variantAttributes {
+				id
+				name
+			}
+		}
+		errors {
+			...ProductError
+		}
+	}
 }
 # Product Creation
 mutation CreateProduct($input: ProductCreateInput!) {
-  productCreate(input: $input) {
-    product {
-      id
-      name
-      slug
-      variants {
-        id
-        sku
-        name
-      }
-    }
-    errors {
-      ...ProductError
-    }
-  }
+	productCreate(input: $input) {
+		product {
+			id
+			name
+			slug
+			variants {
+				id
+				sku
+				name
+			}
+		}
+		errors {
+			...ProductError
+		}
+	}
 }
 
 # Product Publishing
 mutation PublishProductToChannel($productId: ID!, $channelId: ID!) {
-  productChannelListingUpdate(
-    id: $productId
-    input: {
-      updateChannels: [
-        {
-          channelId: $channelId
-          isPublished: true
-          isAvailableForPurchase: true
-          visibleInListings: true
-        }
-      ]
-    }
-  ) {
-    product {
-      id
-      name
-      channelListings {
-        channel {
-          id
-          name
-          currencyCode
-        }
-      }
-    }
-    errors {
-      code
-      message
-      field
-    }
-  }
+	productChannelListingUpdate(
+		id: $productId
+		input: {
+			updateChannels: [
+				{
+					channelId: $channelId
+					isPublished: true
+					isAvailableForPurchase: true
+					visibleInListings: true
+				}
+			]
+		}
+	) {
+		product {
+			id
+			name
+			channelListings {
+				channel {
+					id
+					name
+					currencyCode
+				}
+			}
+		}
+		errors {
+			code
+			message
+			field
+		}
+	}
 }
 
 # Variant Management
 mutation CreateProductVariant($input: ProductVariantCreateInput!) {
-  productVariantCreate(input: $input) {
-    productVariant {
-      id
-      sku
-      name
-      pricing {
-        price {
-          gross {
-            ...Money
-          }
-        }
-      }
-    }
-    errors {
-      ...ProductError
-    }
-  }
+	productVariantCreate(input: $input) {
+		productVariant {
+			id
+			sku
+			name
+			pricing {
+				price {
+					gross {
+						...Money
+					}
+				}
+			}
+		}
+		errors {
+			...ProductError
+		}
+	}
 }
 
 mutation SetProductVariantPrice(
-  $id: ID!
-  $input: [ProductVariantChannelListingAddInput!]!
+	$id: ID!
+	$input: [ProductVariantChannelListingAddInput!]!
 ) {
-  productVariantChannelListingUpdate(id: $id, input: $input) {
-    variant {
-      id
-      channelListings {
-        channel {
-          name
-        }
-        price {
-          amount
-          currency
-        }
-        costPrice {
-          amount
-          currency
-        }
-      }
-    }
-    errors {
-      field
-      message
-      code
-    }
-  }
+	productVariantChannelListingUpdate(id: $id, input: $input) {
+		variant {
+			id
+			channelListings {
+				channel {
+					name
+				}
+				price {
+					amount
+					currency
+				}
+				costPrice {
+					amount
+					currency
+				}
+			}
+		}
+		errors {
+			field
+			message
+			code
+		}
+	}
 }
 
 # ##########
 mutation UpdateProduct($id: ID!, $input: ProductInput!) {
-  productUpdate(id: $id, input: $input) {
-    product {
-      id
-      name
-    }
-    errors {
-      field
-      message
-      code
-    }
-  }
+	productUpdate(id: $id, input: $input) {
+		product {
+			id
+			name
+		}
+		errors {
+			field
+			message
+			code
+		}
+	}
 }
 
 # ========================================
@@ -175,65 +175,58 @@ mutation UpdateProduct($id: ID!, $input: ProductInput!) {
 
 # Update variant cost price (when purchase orders arrive)
 mutation UpdateVariantCostPrice(
-  $id: ID!
-  $input: [ProductVariantChannelListingAddInput!]!
+	$id: ID!
+	$input: [ProductVariantChannelListingAddInput!]!
 ) {
-  productVariantChannelListingUpdate(
-    id: $id
-    input: $input
-  ) {
-    variant {
-      id
-      sku
-      channelListings {
-        channel {
-          id
-          slug
-        }
-        costPrice {
-          amount
-          currency
-        }
-        price {
-          amount
-          currency
-        }
-      }
-    }
-    errors {
-      field
-      message
-      code
-    }
-  }
+	productVariantChannelListingUpdate(id: $id, input: $input) {
+		variant {
+			id
+			sku
+			channelListings {
+				channel {
+					id
+					slug
+				}
+				costPrice {
+					amount
+					currency
+				}
+				price {
+					amount
+					currency
+				}
+			}
+		}
+		errors {
+			field
+			message
+			code
+		}
+	}
 }
-
 
 # Bulk update variant cost prices
 mutation BulkUpdateVariantCostPrices(
-  $productId: ID!
-  $variants: [ProductVariantBulkUpdateInput!]!
+	$productId: ID!
+	$variants: [ProductVariantBulkUpdateInput!]!
 ) {
-  productVariantBulkUpdate(
-    product: $productId
-    variants: $variants
-  ) {
-    results {
-      productVariant {
-        id
-        sku
-        channelListings {
-          costPrice {
-            amount
-          }
-        }
-      }
-      errors {
-        field
-        message
-        code
-      }
-    }
-    count
-  }
+	productVariantBulkUpdate(product: $productId, variants: $variants) {
+		results {
+			productVariant {
+				id
+				sku
+				channelListings {
+					costPrice {
+						amount
+					}
+				}
+			}
+			errors {
+				field
+				message
+				code
+			}
+		}
+		count
+	}
 }

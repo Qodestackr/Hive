@@ -2,126 +2,126 @@
 
 # Get promotion with complete rule configuration
 query GetPromotionWithRules($id: ID!) {
-  promotion(id: $id) {
-    id
-    name
-    type
-    startDate
-    endDate
-    description
-    
-    rules {
-      id
-      name
-      description
-      
-      channels {
-        id
-        slug
-        name
-      }
-      
-      rewardValueType
-      rewardValue
-      rewardType
-      
-      # Predicates (JSON)
-      cataloguePredicate
-      orderPredicate
-      
-      # For gift promotions
-      giftIds
-    }
-    
-    events {
-      ... on PromotionEventInterface {
-        type
-        date
-        createdBy {
-          ... on User {
-            id
-            email
-          }
-        }
-      }
-      ... on PromotionRuleEventInterface {
-        ruleId
-      }
-    }
-    
-    # Metadata for linking to Promco campaigns
-    metadata {
-      key
-      value
-    }
-  }
+	promotion(id: $id) {
+		id
+		name
+		type
+		startDate
+		endDate
+		description
+
+		rules {
+			id
+			name
+			description
+
+			channels {
+				id
+				slug
+				name
+			}
+
+			rewardValueType
+			rewardValue
+			rewardType
+
+			# Predicates (JSON)
+			cataloguePredicate
+			orderPredicate
+
+			# For gift promotions
+			giftIds
+		}
+
+		events {
+			... on PromotionEventInterface {
+				type
+				date
+				createdBy {
+					... on User {
+						id
+						email
+					}
+				}
+			}
+			... on PromotionRuleEventInterface {
+				ruleId
+			}
+		}
+
+		# Metadata for linking to Promco campaigns
+		metadata {
+			key
+			value
+		}
+	}
 }
 
 # Get active promotions (filter by date client-side)
 query GetActivePromotions($first: Int!, $after: String) {
-  promotions(first: $first, after: $after) {
-    edges {
-      node {
-        id
-        name
-        type
-        startDate
-        endDate
-        
-        rules {
-          id
-          name
-          channels {
-            slug
-          }
-          rewardValueType
-          rewardValue
-          rewardType
-        }
-        
-        metadata {
-          key
-          value
-        }
-      }
-      cursor
-    }
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-    totalCount
-  }
+	promotions(first: $first, after: $after) {
+		edges {
+			node {
+				id
+				name
+				type
+				startDate
+				endDate
+
+				rules {
+					id
+					name
+					channels {
+						slug
+					}
+					rewardValueType
+					rewardValue
+					rewardType
+				}
+
+				metadata {
+					key
+					value
+				}
+			}
+			cursor
+		}
+		pageInfo {
+			hasNextPage
+			endCursor
+		}
+		totalCount
+	}
 }
 
 # Get promotions by channel
 query GetPromotionsByChannel($first: Int!) {
-  # NOTE: No channel filter at query level - Saleor doesn't support it.
-  # Filter client-side by checking if target channel exists in rules[].channels[]
-  promotions(first: $first) {
-    edges {
-      node {
-        id
-        name
-        type
-        startDate
-        endDate
-        
-        rules {
-          id
-          channels {
-            id
-            slug  # <- Filter by this on the client side
-          }
-          rewardValueType
-          rewardValue
-        }
-        
-        metadata {
-          key
-          value
-        }
-      }
-    }
-  }
+	# NOTE: No channel filter at query level - Saleor doesn't support it.
+	# Filter client-side by checking if target channel exists in rules[].channels[]
+	promotions(first: $first) {
+		edges {
+			node {
+				id
+				name
+				type
+				startDate
+				endDate
+
+				rules {
+					id
+					channels {
+						id
+						slug # <- Filter by this on the client side
+					}
+					rewardValueType
+					rewardValue
+				}
+
+				metadata {
+					key
+					value
+				}
+			}
+		}
+	}
 }

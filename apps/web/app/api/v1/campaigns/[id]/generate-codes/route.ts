@@ -1,29 +1,29 @@
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
 import {
-    CampaignGenerateCodesSchema,
-    CampaignGenerateCodesResponseSchema
+	CampaignGenerateCodesResponseSchema,
+	CampaignGenerateCodesSchema,
 } from "@repo/schema";
 import { campaignStatsService } from "@repo/services";
+import { createWorkspaceRoute } from "@/lib/api/create-api-route";
 
-/**
- * POST /api/v1/campaigns/:id/generate-codes
- * Generate bulk promo codes
- */
 export const POST = createWorkspaceRoute({
-    inputSchema: CampaignGenerateCodesSchema,
-    outputSchema: CampaignGenerateCodesResponseSchema,
+	inputSchema: CampaignGenerateCodesSchema,
+	outputSchema: CampaignGenerateCodesResponseSchema,
 
-    handler: async (data, { workspace, params }) => {
-        const { count } = data as { count: number };
-        return await campaignStatsService.generateCodes(params.id!, count, workspace.id);
-    },
+	handler: async (data, { workspace, params }) => {
+		const { count } = data as { count: number };
+		return await campaignStatsService.generateCodes(
+			params.id!,
+			count,
+			workspace.id,
+		);
+	},
 
-    options: {
-        operationName: "generateCampaignCodes",
-        requiredPermissions: ["campaigns.update"],
-        errorContext: {
-            feature: "campaign-management",
-            action: "generate-codes",
-        },
-    },
+	options: {
+		operationName: "generateCampaignCodes",
+		requiredPermissions: ["campaigns.update"],
+		errorContext: {
+			feature: "campaign-management",
+			action: "generate-codes",
+		},
+	},
 });

@@ -1,140 +1,168 @@
-/**
- * Audit Log Service
- * 
- * Service for logging and querying immutable audit events.
- * Used for trust-critical operations (profit calculations, billing).
- */
-
-import db, {
-    withDbOperation,
-    auditEvents,
-    eq, and, desc
-} from "@repo/db";
 import { createId } from "@paralleldrive/cuid2";
+import db, { and, auditEvents, desc, eq, withDrizzleErrors } from "@repo/db";
+import { OrganizationContext } from "@repo/utils";
+import type { DatabaseError } from "@repo/utils/errors/domain";
+import { Effect } from "effect";
 
 export interface AuditLogParams {
-    organizationId: string;
-    eventType: string;
-    aggregateType: 'promo_code' | 'campaign' | 'customer' | 'product' | 'purchase_order';
-    aggregateId: string;
-    eventData: Record<string, any>;
-    createdBy?: string;
+	eventType: string;
+	aggregateType:
+		| "promo_code"
+		| "campaign"
+		| "customer"
+		| "product"
+		| "purchase_order";
+	aggregateId: string;
+	eventData: Record<string, any>;
+	createdBy?: string;
 }
 
 export interface AuditEventQueryParams {
-    organizationId: string;
-    eventType?: string;
-    aggregateType?: string;
-    aggregateId?: string;
-    limit?: number;
+	eventType?: string;
+	aggregateType?: string;
+	aggregateId?: string;
+	limit?: number;
 }
 
+// logging and querying immutable audit events.
+// for trust-critical operations (profit calculations, billing).
 export const auditLogService = {
-    /**
-     * Log an audit event
-     * 
-     * IMMUTABLE - Events are never updated or deleted.
-     * 
-     * @param params - Event parameters
-     * @returns Created audit event
-     */
-    async log(params: AuditLogParams) {
-        const event = await withDbOperation({
-            operation: "create",
-            table: "audit_events",
-            context: { organizationId: params.organizationId }
-        }, () => db
-            .insert(auditEvents)
-            .values({
-                id: createId(),
-                organizationId: params.organizationId,
-                eventType: params.eventType,
-                aggregateType: params.aggregateType,
-                aggregateId: params.aggregateId,
-                eventData: params.eventData,
-                createdBy: params.createdBy || null,
-                createdAt: new Date(),
-            })
-            .returning()
-            .then(rows => rows[0])
-        );
+	/**
+	 * Log an audit event
+	 *
+	 * IMMUTABLE - Events are never updated or deleted.
+	 *
+	 * @param params - Event parameters
+	 * @returns Created audit event
+	 */
+	logEffect(
+		params: AuditLogParams,
+	): Effect.Effect<any, DatabaseError, OrganizationContext> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
 
-        return event;
-    },
+			const eventRows = yield* withDrizzleErrors("audit_events", "create", () =>
+				db
+					.insert(auditEvents)
+					.values({
+						id: createId(),
+						organizationId,
+						eventType: params.eventType,
+						aggregateType: params.aggregateType,
+						aggregateId: params.aggregateId,
+						eventData: params.eventData,
+						createdBy: params.createdBy || null,
+						createdAt: new Date(),
+					})
+					.returning(),
+			);
 
-    /**
-     * Get audit history for a specific aggregate
-     * 
-     * @param aggregateId - ID of aggregate to get history for
-     * @param organizationId - Organization context
-     * @returns Ordered list of events (newest first)
-     */
-    async getHistory(aggregateId: string, organizationId: string) {
-        return await withDbOperation({
-            operation: "findMany",
-            table: "audit_events",
-            context: { organizationId, aggregateId }
-        }, () => db
-            .select()
-            .from(auditEvents)
-            .where(and(
-                eq(auditEvents.aggregateId, aggregateId),
-                eq(auditEvents.organizationId, organizationId)
-            ))
-            .orderBy(desc(auditEvents.createdAt))
-        );
-    },
+			return eventRows[0];
+		});
+	},
 
-    /**
-     * Query audit events with filters
-     * 
-     * @param params - Query parameters
-     * @returns Filtered events
-     */
-    async query(params: AuditEventQueryParams) {
-        const filters = [eq(auditEvents.organizationId, params.organizationId)];
+	/**
+	 * Get audit history for a specific aggregate
+	 *
+	 * @param aggregateId - ID of aggregate to get history for
+	 * @returns Ordered list of events (newest first)
+	 */
+	getHistoryEffect(
+		aggregateId: string,
+	): Effect.Effect<any[], DatabaseError, OrganizationContext> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
 
-        if (params.eventType) {
-            filters.push(eq(auditEvents.eventType, params.eventType));
-        }
+			return yield* withDrizzleErrors("audit_events", "findMany", () =>
+				db
+					.select()
+					.from(auditEvents)
+					.where(
+						and(
+							eq(auditEvents.aggregateId, aggregateId),
+							eq(auditEvents.organizationId, organizationId),
+						),
+					)
+					.orderBy(desc(auditEvents.createdAt)),
+			);
+		});
+	},
 
-        if (params.aggregateType) {
-            filters.push(eq(auditEvents.aggregateType, params.aggregateType));
-        }
+	/**
+	 * Query audit events with filters
+	 *
+	 * @param params - Query parameters
+	 * @returns Filtered events
+	 */
+	queryEffect(
+		params: AuditEventQueryParams,
+	): Effect.Effect<any[], DatabaseError, OrganizationContext> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
 
-        if (params.aggregateId) {
-            filters.push(eq(auditEvents.aggregateId, params.aggregateId));
-        }
+			const filters = [eq(auditEvents.organizationId, organizationId)];
 
-        return await withDbOperation({
-            operation: "findMany",
-            table: "audit_events",
-            context: { organizationId: params.organizationId }
-        }, () => {
-            let query = db
-                .select()
-                .from(auditEvents)
-                .where(and(...filters))
-                .orderBy(desc(auditEvents.createdAt));
+			if (params.eventType) {
+				filters.push(eq(auditEvents.eventType, params.eventType));
+			}
 
-            if (params.limit) {
-                query = query.limit(params.limit) as any;
-            }
+			if (params.aggregateType) {
+				filters.push(eq(auditEvents.aggregateType, params.aggregateType));
+			}
 
-            return query;
-        });
-    },
+			if (params.aggregateId) {
+				filters.push(eq(auditEvents.aggregateId, params.aggregateId));
+			}
 
-    /**
-     * Get events by type
-     * 
-     * Useful for querying specific event streams (e.g., all 'promo.redeemed')
-     */
-    async getEventsByType(eventType: string, organizationId: string, limit = 100) {
-        return await this.query({
-            organizationId,
-            eventType,
-            limit,
-        });
-    },
+			return yield* withDrizzleErrors("audit_events", "findMany", () => {
+				let query = db
+					.select()
+					.from(auditEvents)
+					.where(and(...filters))
+					.orderBy(desc(auditEvents.createdAt));
+
+				if (params.limit) {
+					query = query.limit(params.limit) as any;
+				}
+
+				return query;
+			});
+		});
+	},
+
+	/**
+	 * Get events by type
+	 *
+	 * Useful for querying specific event streams (e.g., all 'promo.redeemed')
+	 */
+	getEventsByTypeEffect(
+		eventType: string,
+		limit = 100,
+	): Effect.Effect<any[], DatabaseError, OrganizationContext> {
+		return auditLogService.queryEffect({
+			eventType,
+			limit,
+		});
+	},
+
+	// Legacy Promise-based method for backward compatibility
+	// Will be removed once all callers are updated
+	async log(params: AuditLogParams & { organizationId: string }) {
+		const event = await db
+			.insert(auditEvents)
+			.values({
+				id: createId(),
+				organizationId: params.organizationId,
+				eventType: params.eventType,
+				aggregateType: params.aggregateType,
+				aggregateId: params.aggregateId,
+				eventData: params.eventData,
+				createdBy: params.createdBy || null,
+				createdAt: new Date(),
+			})
+			.returning()
+			.then((rows) => rows[0]);
+
+		return event;
+	},
 };

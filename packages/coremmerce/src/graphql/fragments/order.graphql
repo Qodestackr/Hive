@@ -1,271 +1,274 @@
 fragment Money on Money {
-  currency
-  amount
+	currency
+	amount
 }
 
 fragment TaxedMoney on TaxedMoney {
-  net {
-    ...Money
-  }
-  gross {
-    ...Money
-  }
-  tax {
-    ...Money
-  }
+	net {
+		...Money
+	}
+	gross {
+		...Money
+	}
+	tax {
+		...Money
+	}
 }
-
 
 # --------------------------------------
 fragment OrderLineFragment on OrderLine {
-  id
-  quantity
-  variant {
-    id  # ← ADDED: Critical for linking to Promco DB
-    sku  # ← ADDED: For product lookup
-    name
-    attributes(variantSelection: ALL) {
-      values {
-        name
-        dateTime
-        boolean
-        translation(languageCode: $languageCode) {
-          name
-        }
-      }
-    }
-  }
-  totalPrice {
-    gross {
-      ...Money
-    }
-  }
-  undiscountedTotalPrice {  # ← ADDED: For profit calculation
-    gross {
-      ...Money
-    }
-  }
-  undiscountedUnitPrice {
-    gross {
-      ...Money
-    }
-  }
-  unitPrice {
-    gross {
-      ...Money
-    }
-  }
-  unitDiscount {  # ← ADDED: Per-unit discount amount
-    amount
-  }
-  isGift  # ← ADDED: For gift promotions
-  productName
-  variantName
-  thumbnail(size: 128, format: WEBP) {
-    alt
-    url
-  }
+	id
+	quantity
+	variant {
+		id # ← ADDED: Critical for linking to Promco DB
+		sku # ← ADDED: For product lookup
+		name
+		attributes(variantSelection: ALL) {
+			values {
+				name
+				dateTime
+				boolean
+				translation(languageCode: $languageCode) {
+					name
+				}
+			}
+		}
+	}
+	totalPrice {
+		gross {
+			...Money
+		}
+	}
+	undiscountedTotalPrice {
+		# ← ADDED: For profit calculation
+		gross {
+			...Money
+		}
+	}
+	undiscountedUnitPrice {
+		gross {
+			...Money
+		}
+	}
+	unitPrice {
+		gross {
+			...Money
+		}
+	}
+	unitDiscount {
+		# ← ADDED: Per-unit discount amount
+		amount
+	}
+	isGift # ← ADDED: For gift promotions
+	productName
+	variantName
+	thumbnail(size: 128, format: WEBP) {
+		alt
+		url
+	}
 }
 
 fragment ShippingFragment on ShippingMethod {
-  name
-  minimumDeliveryDays
-  maximumDeliveryDays
+	name
+	minimumDeliveryDays
+	maximumDeliveryDays
 }
 
 fragment OrderFragment on Order {
-  id
-  number
-  status
-  created
-  userEmail
-  isPaid
-  discounts {
-    type
-    name
-    amount {
-      ...Money
-    }
-  }
-  chargeStatus
-  authorizeStatus
-  shippingAddress {
-    ...AddressFragment
-  }
-  billingAddress {
-    ...AddressFragment
-  }
-  deliveryMethod {
-    ...ShippingFragment
-  }
-  total {
-    gross {
-      ...Money
-    }
-    tax {
-      ...Money
-    }
-  }
-  undiscountedTotal {  # ← ADDED: For total discount calculation
-    gross {
-      ...Money
-    }
-  }
-  voucher {
-    code
-  }
-  shippingPrice {
-    gross {
-      ...Money
-    }
-  }
-  subtotal {
-    gross {
-      ...Money
-    }
-  }
-  lines {
-    ...OrderLineFragment
-  }
-  totalBalance {
-    ...Money
-  }
-  totalCaptured {
-    ...Money
-  }
-  metadata {  # ← ADDED: To link to Promco campaigns
-    key
-    value
-  }
+	id
+	number
+	status
+	created
+	userEmail
+	isPaid
+	discounts {
+		type
+		name
+		amount {
+			...Money
+		}
+	}
+	chargeStatus
+	authorizeStatus
+	shippingAddress {
+		...AddressFragment
+	}
+	billingAddress {
+		...AddressFragment
+	}
+	deliveryMethod {
+		...ShippingFragment
+	}
+	total {
+		gross {
+			...Money
+		}
+		tax {
+			...Money
+		}
+	}
+	undiscountedTotal {
+		# ← ADDED: For total discount calculation
+		gross {
+			...Money
+		}
+	}
+	voucher {
+		code
+	}
+	shippingPrice {
+		gross {
+			...Money
+		}
+	}
+	subtotal {
+		gross {
+			...Money
+		}
+	}
+	lines {
+		...OrderLineFragment
+	}
+	totalBalance {
+		...Money
+	}
+	totalCaptured {
+		...Money
+	}
+	metadata {
+		# ← ADDED: To link to Promco campaigns
+		key
+		value
+	}
 }
 # --------------------------------------
 fragment OrderBasic on Order {
-  id
-  number
-  created
-  status
-  total {
-    gross {
-      ...Money
-    }
-  }
+	id
+	number
+	created
+	status
+	total {
+		gross {
+			...Money
+		}
+	}
 }
 
 # Detailed order information
 fragment OrderDetails on Order {
-  ...OrderBasic
+	...OrderBasic
 
-  shippingAddress {
-    firstName
-    lastName
-    companyName
-    streetAddress1
-    streetAddress2
-    city
-    cityArea
-    postalCode
-    country {
-      code
-      country
-    }
-    phone
-  }
-  billingAddress {
-    firstName
-    lastName
-    companyName
-    streetAddress1
-    streetAddress2
-    city
-    cityArea
-    postalCode
-    country {
-      code
-      country
-    }
-    phone
-  }
-  userEmail
-  lines {
-    id
-    productName
-    variantName
-    quantity
-    unitPrice {
-      gross {
-        ...Money
-      }
-    }
-    totalPrice {
-      gross {
-        ...Money
-      }
-    }
-    thumbnail {
-      url
-    }
-  }
+	shippingAddress {
+		firstName
+		lastName
+		companyName
+		streetAddress1
+		streetAddress2
+		city
+		cityArea
+		postalCode
+		country {
+			code
+			country
+		}
+		phone
+	}
+	billingAddress {
+		firstName
+		lastName
+		companyName
+		streetAddress1
+		streetAddress2
+		city
+		cityArea
+		postalCode
+		country {
+			code
+			country
+		}
+		phone
+	}
+	userEmail
+	lines {
+		id
+		productName
+		variantName
+		quantity
+		unitPrice {
+			gross {
+				...Money
+			}
+		}
+		totalPrice {
+			gross {
+				...Money
+			}
+		}
+		thumbnail {
+			url
+		}
+	}
 
-  # 	lines {
-  # 	# variant {
-  # 	# 	id
-  # 	# 	name
-  # 	# 	product {
-  # 	# 		id
-  # 	# 		name
-  # 	# 		description
-  # 	# 		slug
-  # 	# 		thumbnail {
-  # 	# 			url
-  # 	# 			alt
-  # 	# 		}
-  # 	# 		category {
-  # 	# 			id
-  # 	# 			name
-  # 	# 		}
-  # 	# 	}
-  # 	# 	pricing {
-  # 	# 		price {
-  # 	# 			gross {
-  # 	# 				amount
-  # 	# 				currency
-  # 	# 			}
-  # 	# 		}
-  # 	# 	}
-  # 	# }
-  # 	quantity
-  # }
-  subtotal {
-    gross {
-      ...Money
-    }
-  }
-  shippingPrice {
-    gross {
-      ...Money
-    }
-  }
+	# 	lines {
+	# 	# variant {
+	# 	# 	id
+	# 	# 	name
+	# 	# 	product {
+	# 	# 		id
+	# 	# 		name
+	# 	# 		description
+	# 	# 		slug
+	# 	# 		thumbnail {
+	# 	# 			url
+	# 	# 			alt
+	# 	# 		}
+	# 	# 		category {
+	# 	# 			id
+	# 	# 			name
+	# 	# 		}
+	# 	# 	}
+	# 	# 	pricing {
+	# 	# 		price {
+	# 	# 			gross {
+	# 	# 				amount
+	# 	# 				currency
+	# 	# 			}
+	# 	# 		}
+	# 	# 	}
+	# 	# }
+	# 	quantity
+	# }
+	subtotal {
+		gross {
+			...Money
+		}
+	}
+	shippingPrice {
+		gross {
+			...Money
+		}
+	}
 
-  paymentStatus
+	paymentStatus
 }
 
 # Order fulfillment information
 fragment OrderFulfillment on Order {
-  id
-  number
-  fulfillments {
-    id
-    status
-    trackingNumber
-    created
-    lines {
-      id
-      quantity
-      orderLine {
-        id
-        productName
-        variantName
-      }
-    }
-  }
+	id
+	number
+	fulfillments {
+		id
+		status
+		trackingNumber
+		created
+		lines {
+			id
+			quantity
+			orderLine {
+				id
+				productName
+				variantName
+			}
+		}
+	}
 }

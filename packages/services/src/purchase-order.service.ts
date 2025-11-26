@@ -1,65 +1,96 @@
-import { createError } from "@repo/utils";
 import db, {
-    withDbOperation,
-    withTransaction,
-    eq, and,
-    products,
+	and,
+	eq,
+	products,
+	withDrizzleErrors,
+	withTransaction,
 } from "@repo/db";
+import type { PurchaseOrderResponse, QuickStockArrival } from "@repo/schema";
+import { OrganizationContext } from "@repo/utils";
+import {
+	type DatabaseError,
+	GenericDatabaseError,
+	ProductNotFound,
+} from "@repo/utils/errors/domain";
+import { Effect } from "effect";
 import { fifoService } from "./fifo.service";
-import { buildStockArrivalMutations, applyStockArrivalMutations } from "./mutations";
-import type { QuickStockArrival, PurchaseOrderResponse } from "@repo/schema";
+import {
+	applyStockArrivalMutations,
+	buildStockArrivalMutations,
+} from "./mutations";
 
 export const purchaseOrderService = {
-    async quickStockArrival(
-        data: QuickStockArrival,
-        organizationId: string
-    ): Promise<PurchaseOrderResponse> {
-        const product = await withDbOperation({
-            operation: "findUnique",
-            table: "product",
-            context: { organizationId, productId: data.productId }
-        }, () => db
-            .select()
-            .from(products)
-            .where(and(
-                eq(products.id, data.productId),
-                eq(products.organizationId, organizationId)
-            ))
-            .limit(1)
-            .then(rows => rows[0])
-        );
+	quickStockArrivalEffect(
+		data: QuickStockArrival,
+	): Effect.Effect<
+		PurchaseOrderResponse,
+		ProductNotFound | DatabaseError | GenericDatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
 
-        if (!product) {
-            throw createError.notFound("Product", {
-                productId: data.productId,
-                organizationId
-            });
-        }
+			const productRows = yield* withDrizzleErrors(
+				"product",
+				"findUnique",
+				() =>
+					db
+						.select()
+						.from(products)
+						.where(
+							and(
+								eq(products.id, data.productId),
+								eq(products.organizationId, organizationId),
+							),
+						)
+						.limit(1),
+			);
 
-        const newFIFOCost = await fifoService.calculateWeightedAverageCost(
-            data.productId,
-            organizationId
-        );
+			const product = productRows[0];
+			if (!product) {
+				return yield* Effect.fail(
+					new ProductNotFound({
+						productId: data.productId,
+						organizationId,
+					}),
+				);
+			}
 
-        const mutations = buildStockArrivalMutations({
-            productId: data.productId,
-            organizationId,
-            quantity: data.quantity,
-            unitCost: data.unitCost,
-            supplierName: data.supplierName || "Quick Entry",
-            batchNumber: data.batchNumber,
-            expiryDate: data.expiryDate,
-            currentStock: product.currentStockQuantity || 0,
-            newFIFOCost,
-        });
+			const newFIFOCost = yield* fifoService.calculateWeightedAverageCostEffect(
+				data.productId,
+			);
 
-        await withTransaction(async (tx) => {
-            await applyStockArrivalMutations(tx, mutations);
-        });
+			const mutations = buildStockArrivalMutations({
+				productId: data.productId,
+				organizationId,
+				quantity: data.quantity,
+				unitCost: data.unitCost,
+				supplierName: data.supplierName || "Quick Entry",
+				batchNumber: data.batchNumber,
+				expiryDate: data.expiryDate,
+				currentStock: product.currentStockQuantity || 0,
+				newFIFOCost,
+			});
 
-        return {
-            ...mutations.purchaseOrder,
-            items: [mutations.purchaseOrderItem],
-        } as PurchaseOrderResponse;
-    },
+			yield* Effect.tryPromise({
+				try: () =>
+					withTransaction(async (tx) => {
+						await applyStockArrivalMutations(tx, mutations);
+					}),
+				catch: (error) =>
+					new GenericDatabaseError({
+						operation: "applyStockArrivalMutations",
+						table: "purchase_orders",
+						pgCode: undefined,
+						detail: String(error),
+						originalError: error,
+					}),
+			});
+
+			return {
+				...mutations.purchaseOrder,
+				items: [mutations.purchaseOrderItem],
+			} as PurchaseOrderResponse;
+		});
+	},
 };

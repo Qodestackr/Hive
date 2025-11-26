@@ -1,1 +1,4 @@
-export { OrganizationContext, type OrganizationContext as OrganizationContextType } from "./organization";
+export {
+	OrganizationContext,
+	type OrganizationContext as OrganizationContextType,
+} from "./organization";

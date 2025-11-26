@@ -1,8 +1,8 @@
 fragment VariantPricingInfoFragment on VariantPricingInfo {
-  price {
-    ...TaxedMoney
-  }
-  priceUndiscounted {
-    ...TaxedMoney
-  }
+	price {
+		...TaxedMoney
+	}
+	priceUndiscounted {
+		...TaxedMoney
+	}
 }

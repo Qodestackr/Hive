@@ -1,117 +1,93 @@
 # Generic metadata mutation (existing)
 mutation MetadataUpdateMutation($id: ID!, $input: [MetadataInput!]!) {
-  updateMetadata(id: $id, input: $input) {
-    item {
-      metadata {
-        ...MetadataItemFragment
-      }
-    }
-    errors {
-      ...MetadataErrorFragment
-    }
-  }
+	updateMetadata(id: $id, input: $input) {
+		item {
+			metadata {
+				...MetadataItemFragment
+			}
+		}
+		errors {
+			...MetadataErrorFragment
+		}
+	}
 }
 
 # Product-specific metadata
-mutation UpdateProductMetadata(
-  $id: ID!
-  $metadata: [MetadataInput!]!
-) {
-  updateMetadata(
-    id: $id
-    input: $metadata
-  ) {
-    item {
-      ... on Product {
-        id
-        metadata {
-          key
-          value
-        }
-      }
-    }
-    errors {
-      field
-      message
-      code
-    }
-  }
+mutation UpdateProductMetadata($id: ID!, $metadata: [MetadataInput!]!) {
+	updateMetadata(id: $id, input: $metadata) {
+		item {
+			... on Product {
+				id
+				metadata {
+					key
+					value
+				}
+			}
+		}
+		errors {
+			field
+			message
+			code
+		}
+	}
 }
 
 # Variant-specific metadata (for FIFO cost tracking)
-mutation UpdateVariantMetadata(
-  $id: ID!
-  $metadata: [MetadataInput!]!
-) {
-  updateMetadata(
-    id: $id
-    input: $metadata
-  ) {
-    item {
-      ... on ProductVariant {
-        id
-        metadata {
-          key
-          value
-        }
-      }
-    }
-    errors {
-      field
-      message
-      code
-    }
-  }
+mutation UpdateVariantMetadata($id: ID!, $metadata: [MetadataInput!]!) {
+	updateMetadata(id: $id, input: $metadata) {
+		item {
+			... on ProductVariant {
+				id
+				metadata {
+					key
+					value
+				}
+			}
+		}
+		errors {
+			field
+			message
+			code
+		}
+	}
 }
 
 # Order-specific metadata (for campaign tracking)
-mutation UpdateOrderMetadata(
-  $id: ID!
-  $metadata: [MetadataInput!]!
-) {
-  updateMetadata(
-    id: $id
-    input: $metadata
-  ) {
-    item {
-      ... on Order {
-        id
-        metadata {
-          key
-          value
-        }
-      }
-    }
-    errors {
-      field
-      message
-      code
-    }
-  }
+mutation UpdateOrderMetadata($id: ID!, $metadata: [MetadataInput!]!) {
+	updateMetadata(id: $id, input: $metadata) {
+		item {
+			... on Order {
+				id
+				metadata {
+					key
+					value
+				}
+			}
+		}
+		errors {
+			field
+			message
+			code
+		}
+	}
 }
 
 # Private metadata for sensitive data (staff/app only)
-mutation UpdateVariantPrivateMetadata(
-  $id: ID!
-  $metadata: [MetadataInput!]!
-) {
-  updatePrivateMetadata(
-    id: $id
-    input: $metadata
-  ) {
-    item {
-      ... on ProductVariant {
-        id
-        privateMetadata {
-          key
-          value
-        }
-      }
-    }
-    errors {
-      field
-      message
-      code
-    }
-  }
+mutation UpdateVariantPrivateMetadata($id: ID!, $metadata: [MetadataInput!]!) {
+	updatePrivateMetadata(id: $id, input: $metadata) {
+		item {
+			... on ProductVariant {
+				id
+				privateMetadata {
+					key
+					value
+				}
+			}
+		}
+		errors {
+			field
+			message
+			code
+		}
+	}
 }

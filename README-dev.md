@@ -42,3 +42,5 @@ When you wake up excited to build — not obligated to grind — you've won. Rep
 - Start a new feature without a customer name attached
 - Think "I'll reach out after I finish X"
 - Research a new tool/framework "for fun"
+
+> **Build solutions to pain, not features**

@@ -1,7 +1,7 @@
 import { Context } from "effect";
 
 export interface OrganizationContext {
-    readonly organizationId: string;
+	readonly organizationId: string;
 }
 
 /**
@@ -11,5 +11,5 @@ export interface OrganizationContext {
  * Injected once at API boundary, available everywhere.
  */
 export const OrganizationContext = Context.GenericTag<OrganizationContext>(
-    "@repo/context/OrganizationContext"
+	"@repo/context/OrganizationContext",
 );

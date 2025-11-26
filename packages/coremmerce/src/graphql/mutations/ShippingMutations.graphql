@@ -1,23 +1,23 @@
 mutation ShippingZoneCreate($input: ShippingZoneCreateInput!) {
-  shippingZoneCreate(input: $input) {
-    shippingZone {
-      ...ShippingZoneDetails
-    }
-    errors {
-      ...ShippingZoneError
-    }
-  }
+	shippingZoneCreate(input: $input) {
+		shippingZone {
+			...ShippingZoneDetails
+		}
+		errors {
+			...ShippingZoneError
+		}
+	}
 }
 
 mutation ShippingZoneUpdate($id: ID!, $input: ShippingZoneUpdateInput!) {
-  shippingZoneUpdate(id: $id, input: $input) {
-    shippingZone {
-      ...ShippingZoneDetails
-    }
-    errors {
-      ...ShippingZoneError
-    }
-  }
+	shippingZoneUpdate(id: $id, input: $input) {
+		shippingZone {
+			...ShippingZoneDetails
+		}
+		errors {
+			...ShippingZoneError
+		}
+	}
 }
 
 ###################
@@ -25,62 +25,62 @@ mutation ShippingZoneUpdate($id: ID!, $input: ShippingZoneUpdateInput!) {
 ##################
 
 mutation ShippingPriceCreate($input: ShippingPriceInput!) {
-  shippingPriceCreate(input: $input) {
-    errors {
-      field
-      code
-      message
-    }
-    shippingMethod {
-      id
-      name
-      type
-      minimumOrderWeight {
-        value
-        unit
-      }
-      maximumOrderWeight {
-        value
-        unit
-      }
-      channelListings {
-        channel {
-          id
-          name
-        }
-        price {
-          amount
-          currency
-        }
-        minimumOrderPrice {
-          amount
-          currency
-        }
-        maximumOrderPrice {
-          amount
-          currency
-        }
-      }
-    }
-  }
+	shippingPriceCreate(input: $input) {
+		errors {
+			field
+			code
+			message
+		}
+		shippingMethod {
+			id
+			name
+			type
+			minimumOrderWeight {
+				value
+				unit
+			}
+			maximumOrderWeight {
+				value
+				unit
+			}
+			channelListings {
+				channel {
+					id
+					name
+				}
+				price {
+					amount
+					currency
+				}
+				minimumOrderPrice {
+					amount
+					currency
+				}
+				maximumOrderPrice {
+					amount
+					currency
+				}
+			}
+		}
+	}
 }
 
 mutation ShippingMethodChannelListingUpdate(
-  $id: ID!
-  $input: ShippingMethodChannelListingInput!
+	$id: ID!
+	$input: ShippingMethodChannelListingInput!
 ) {
-  shippingMethodChannelListingUpdate(id: $id, input: $input) {
-    errors {
-      field
-      message
-      code
-    }
-    shippingMethod {
-      id
-      name
-      channelListings {
-        ...ShippingMethodChannelListingFields
-      }
-    }
-  }
+	shippingMethodChannelListingUpdate(id: $id, input: $input) {
+		errors {
+			field
+			message
+			code
+		}
+		shippingMethod {
+			id
+			name
+			channelListings {
+				...ShippingMethodChannelListingFields
+			}
+		}
+	}
 }

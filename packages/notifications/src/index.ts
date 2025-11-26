@@ -1,17 +1,16 @@
-export { resend } from './email/email'
-export { emailService } from './email/email'
-export { NotificationTemplate } from './types'
+export { emailService, resend } from "./email/email";
 export {
-    sendNotificationToUser,
-    sendNotificationToUsers,
-    sendNotificationToOrganization,
-    markNotificationAsRead,
-    cleanupInvalidTokens,
-} from './fcm-notification-service'
+	cleanupInvalidTokens,
+	markNotificationAsRead,
+	sendNotificationToOrganization,
+	sendNotificationToUser,
+	sendNotificationToUsers,
+} from "./fcm-notification-service";
 export {
-    sendEmail,
-    sendWhatsAppMessage,
-    sendSMS,
-    sendPush,
-    notifyUser,
-} from './notification-service'
+	notifyUser,
+	sendEmail,
+	sendPush,
+	sendSMS,
+	sendWhatsAppMessage,
+} from "./notification-service";
+export { NotificationTemplate } from "./types";
