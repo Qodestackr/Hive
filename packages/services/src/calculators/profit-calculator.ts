@@ -33,9 +33,7 @@ export interface BreakEvenCalculationResult {
 export class ProfitCalculator {
 	/**
 	 * Calculate profit for a promo code redemption
-	 *
-	 * PURE FUNCTION - No side effects, deterministic
-	 *
+	 * 
 	 * @example
 	 * const result = ProfitCalculator.calculate({
 	 *   basePrice: 11000,

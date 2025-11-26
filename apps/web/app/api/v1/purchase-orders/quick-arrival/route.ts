@@ -19,18 +19,7 @@ export const POST = createWorkspaceRouteEffect({
 	inputSchema: QuickStockArrivalSchema,
 	outputSchema: PurchaseOrderResponseSchema,
 
-	handler: (data, { workspace }) =>
-		Effect.tryPromise({
-			try: () => purchaseOrderService.quickStockArrival(data, workspace.id),
-			catch: (error) =>
-				new GenericDatabaseError({
-					operation: "quickStockArrival",
-					table: "purchase_orders",
-					pgCode: undefined,
-					detail: String(error),
-					originalError: error,
-				}),
-		}),
+	handler: (data) => purchaseOrderService.quickStockArrivalEffect(data),
 
 	options: {
 		operationName: "quickStockArrival",

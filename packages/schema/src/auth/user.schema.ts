@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { ID, Timestamps } from "../shared/base.schema.js";
 
-// Schema with OpenAPI metadata
 export const UserCreateSchema = z
 	.object({
 		email: z.string().email().openapi({
@@ -17,7 +16,7 @@ export const UserCreateSchema = z
 			description: "Password (minimum 8 characters)",
 		}),
 	})
-	.openapi("UserCreate"); // Register it!
+	.openapi("UserCreate");
 
 export const UserUpdateSchema = z
 	.object({

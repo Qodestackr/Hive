@@ -1,9 +1,5 @@
 import { z } from "zod";
 
-// ============================================================================
-// BUSINESS ENUMS (matching DB enums)
-// ============================================================================
-
 export const BusinessType = z.enum([
 	"retailer",
 	"wholesaler",
@@ -81,10 +77,6 @@ export const AlertType = z.enum([
 ]);
 
 export const AlertSeverity = z.enum(["critical", "warning", "info"]);
-
-// ============================================================================
-// TYPE EXPORTS
-// ============================================================================
 
 export type BusinessType = z.infer<typeof BusinessType>;
 export type SubscriptionStatus = z.infer<typeof SubscriptionStatus>;

@@ -5,15 +5,13 @@ import {
 } from "@repo/schema";
 import { customerService } from "@repo/services";
 import { z } from "@repo/utils";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const GET = createWorkspaceRoute({
+export const GET = createWorkspaceRouteEffect({
 	inputSchema: z.void(),
 	outputSchema: CustomerResponseSchema,
 
-	handler: async (_, { workspace, params }) => {
-		return await customerService.getById(params.id!, workspace.id);
-	},
+	handler: (_, { params }) => customerService.getByIdEffect(params.id!),
 
 	options: {
 		operationName: "getCustomer",
@@ -25,13 +23,12 @@ export const GET = createWorkspaceRoute({
 	},
 });
 
-export const PATCH = createWorkspaceRoute({
+export const PATCH = createWorkspaceRouteEffect({
 	inputSchema: CustomerUpdateSchema,
 	outputSchema: CustomerResponseSchema,
 
-	handler: async (data, { workspace, params }) => {
-		return await customerService.updateCustomer(params.id!, data, workspace.id);
-	},
+	handler: (data, { params }) =>
+		customerService.updateCustomerEffect(params.id!, data),
 
 	options: {
 		operationName: "updateCustomer",
@@ -43,13 +40,11 @@ export const PATCH = createWorkspaceRoute({
 	},
 });
 
-export const DELETE = createWorkspaceRoute({
+export const DELETE = createWorkspaceRouteEffect({
 	inputSchema: z.void(),
 	outputSchema: SuccessResponseSchema,
 
-	handler: async (_, { workspace, params }) => {
-		return await customerService.deleteCustomer(params.id!, workspace.id);
-	},
+	handler: (_, { params }) => customerService.deleteCustomerEffect(params.id!),
 
 	options: {
 		operationName: "deleteCustomer",

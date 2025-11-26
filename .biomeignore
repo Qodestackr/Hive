@@ -1,0 +1,6 @@
+packages/ui/src/styles/globals.css
+**/globals.css
+node_modules
+dist
+build
+.next

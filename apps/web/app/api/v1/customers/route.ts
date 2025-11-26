@@ -5,15 +5,13 @@ import {
 	CustomerResponseSchema,
 } from "@repo/schema";
 import { customerService } from "@repo/services";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const POST = createWorkspaceRoute({
+export const POST = createWorkspaceRouteEffect({
 	inputSchema: CustomerCreateSchema,
 	outputSchema: CustomerResponseSchema,
 
-	handler: async (data, { workspace }) => {
-		return await customerService.createCustomer(data, workspace.id);
-	},
+	handler: (data) => customerService.createCustomerEffect(data),
 
 	options: {
 		operationName: "createCustomer",
@@ -25,12 +23,10 @@ export const POST = createWorkspaceRoute({
 	},
 });
 
-export const GET = createWorkspaceRoute({
+export const GET = createWorkspaceRouteEffect({
 	inputSchema: CustomerListQuerySchema,
 	outputSchema: CustomerListResponseSchema,
-	handler: async (query, { workspace }) => {
-		return await customerService.listCustomers(query, workspace.id);
-	},
+	handler: (query) => customerService.listCustomersEffect(query),
 
 	options: {
 		operationName: "listCustomers",

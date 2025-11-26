@@ -6,6 +6,7 @@ node_modules
 .pnp.js
 docs
 
+types-docs.ts
 # Local env files
 .env
 .env.local

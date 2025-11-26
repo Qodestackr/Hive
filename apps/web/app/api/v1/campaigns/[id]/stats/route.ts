@@ -1,18 +1,13 @@
 import { CampaignStatsSchema } from "@repo/schema";
-import { campaignStatsService } from "@repo/services";
+import { campaignService } from "@repo/services";
 import { z } from "@repo/utils";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const GET = createWorkspaceRoute({
+export const GET = createWorkspaceRouteEffect({
 	inputSchema: z.void(),
 	outputSchema: CampaignStatsSchema,
 
-	handler: async (_, { workspace, params }) => {
-		return await campaignStatsService.getCampaignStats(
-			params.id!,
-			workspace.id,
-		);
-	},
+	handler: (_, { params }) => campaignService.getCampaignStatsEffect(params.id!),
 
 	options: {
 		operationName: "getCampaignStats",

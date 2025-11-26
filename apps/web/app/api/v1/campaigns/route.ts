@@ -4,16 +4,14 @@ import {
 	CampaignListResponseSchema,
 	CampaignResponseSchema,
 } from "@repo/schema";
-import { campaignStatsService } from "@repo/services";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { campaignService } from "@repo/services";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const POST = createWorkspaceRoute({
+export const POST = createWorkspaceRouteEffect({
 	inputSchema: CampaignCreateSchema,
 	outputSchema: CampaignResponseSchema,
 
-	handler: async (data, { workspace }) => {
-		return await campaignStatsService.createCampaign(data, workspace.id);
-	},
+	handler: (data) => campaignService.createCampaignEffect(data),
 
 	options: {
 		operationName: "createCampaign",
@@ -26,12 +24,10 @@ export const POST = createWorkspaceRoute({
 });
 
 // List campaigns with filters
-export const GET = createWorkspaceRoute({
+export const GET = createWorkspaceRouteEffect({
 	inputSchema: CampaignListQuerySchema,
 	outputSchema: CampaignListResponseSchema,
-	handler: async (query, { workspace }) => {
-		return await campaignStatsService.listCampaigns(query, workspace.id);
-	},
+	handler: (query) => campaignService.listCampaignsEffect(query),
 
 	options: {
 		operationName: "listCampaigns",

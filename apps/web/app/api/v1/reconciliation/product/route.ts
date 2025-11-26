@@ -1,9 +1,10 @@
 import {
+	type ReconcileProduct,
 	ReconcileProductSchema,
 	ReconciliationResultSchema,
 } from "@repo/schema";
 import { reconciliationService } from "@repo/services/src/reconciliation.service";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
 /**
  * POST /api/v1/reconciliation/product
@@ -11,22 +12,15 @@ import { createWorkspaceRoute } from "@/lib/api/create-api-route";
  * Reconcile stock for a single product
  * THE TRUST ENGINE: Compares ledger (inventory_movements) vs actual stock
  */
-export const POST = createWorkspaceRoute({
+export const POST = createWorkspaceRouteEffect({
 	inputSchema: ReconcileProductSchema,
 	outputSchema: ReconciliationResultSchema,
 
-	handler: async (data, { workspace }) => {
-		// Destructure with Type Assertion
-		const { productId, actualPhysicalCount } = data as {
-			productId: string;
-			actualPhysicalCount: number;
-		};
-		return await reconciliationService.reconcileProductStock(
-			productId,
-			workspace.id,
-			actualPhysicalCount,
-		);
-	},
+	handler: (data: ReconcileProduct) =>
+		reconciliationService.reconcileProductStockEffect(
+			data.productId,
+			data.actualPhysicalCount,
+		),
 
 	options: {
 		operationName: "reconcileProduct",

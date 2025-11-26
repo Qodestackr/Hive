@@ -1,15 +1,13 @@
 import { CampaignExportCodesResponseSchema } from "@repo/schema";
-import { campaignStatsService } from "@repo/services";
+import { campaignService } from "@repo/services";
 import { z } from "@repo/utils";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const POST = createWorkspaceRoute({
+export const POST = createWorkspaceRouteEffect({
 	inputSchema: z.void(),
 	outputSchema: CampaignExportCodesResponseSchema,
 
-	handler: async (_, { workspace, params }) => {
-		return await campaignStatsService.exportCodes(params.id!, workspace.id);
-	},
+	handler: (_, { params }) => campaignService.exportCodesEffect(params.id!),
 
 	options: {
 		operationName: "exportCampaignCodes",

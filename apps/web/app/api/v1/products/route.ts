@@ -5,15 +5,13 @@ import {
 	ProductResponseSchema,
 } from "@repo/schema";
 import { productService } from "@repo/services";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const POST = createWorkspaceRoute({
+export const POST = createWorkspaceRouteEffect({
 	inputSchema: ProductCreateSchema,
 	outputSchema: ProductResponseSchema,
 
-	handler: async (data, { workspace }) => {
-		return await productService.createProduct(data, workspace.id);
-	},
+	handler: (data) => productService.createProductEffect(data),
 
 	options: {
 		operationName: "createProduct",
@@ -25,12 +23,10 @@ export const POST = createWorkspaceRoute({
 	},
 });
 
-export const GET = createWorkspaceRoute({
+export const GET = createWorkspaceRouteEffect({
 	inputSchema: ProductListQuerySchema,
 	outputSchema: ProductListResponseSchema,
-	handler: async (query, { workspace }) => {
-		return await productService.listProducts(query, workspace.id);
-	},
+	handler: (query) => productService.listProductsEffect(query),
 
 	options: {
 		operationName: "listProducts",

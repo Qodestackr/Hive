@@ -14,17 +14,6 @@ import type { DatabaseError } from "@repo/utils/errors/domain";
 import { Effect } from "effect";
 
 export const dashboardService = {
-	/**
-	 * Get dashboard overview
-	 *
-	 * Provides high-level metrics for the distributor:
-	 * - Campaign counts (total, active)
-	 * - Profit and revenue totals
-	 * - Customer counts (total, verified)
-	 * - Lifetime value
-	 *
-	 * @returns Dashboard overview
-	 */
 	getOverviewEffect(): Effect.Effect<
 		{
 			totalCampaigns: number;
@@ -44,7 +33,6 @@ export const dashboardService = {
 		return Effect.gen(function* () {
 			const { organizationId } = yield* OrganizationContext;
 
-			// Get campaign stats
 			const campaignStatsRows = yield* withDrizzleErrors(
 				"campaign",
 				"findMany",
@@ -89,7 +77,6 @@ export const dashboardService = {
 
 			const promoStats = promoStatsRows[0];
 
-			// Get customer stats
 			const customerStatsRows = yield* withDrizzleErrors(
 				"customer",
 				"findMany",

@@ -20,7 +20,7 @@ export const OutcomeInvoiceSchema = z
 		profitShareCharge: z.number().nonnegative(),
 		totalAmount: z.number().nonnegative(),
 		tax: z.number().nonnegative().default(0),
-		amountDue: z.number().nonnegative(), // Total amount to be paid (totalAmount + tax)
+		amountDue: z.number().nonnegative(), // (totalAmount + tax)
 
 		// Outcome metrics
 		capturesCount: z.number().int().nonnegative(),

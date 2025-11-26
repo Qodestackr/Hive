@@ -5,15 +5,13 @@ import {
 } from "@repo/schema";
 import { productService } from "@repo/services";
 import { z } from "@repo/utils";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const GET = createWorkspaceRoute({
+export const GET = createWorkspaceRouteEffect({
 	inputSchema: z.void(),
 	outputSchema: ProductResponseSchema,
 
-	handler: async (_, { workspace, params }) => {
-		return await productService.getById(params.id!, workspace.id);
-	},
+	handler: (_, { params }) => productService.getByIdEffect(params.id!),
 
 	options: {
 		operationName: "getProduct",
@@ -25,13 +23,12 @@ export const GET = createWorkspaceRoute({
 	},
 });
 
-export const PATCH = createWorkspaceRoute({
+export const PATCH = createWorkspaceRouteEffect({
 	inputSchema: ProductUpdateSchema,
 	outputSchema: ProductResponseSchema,
 
-	handler: async (data, { workspace, params }) => {
-		return await productService.updateProduct(params.id!, data, workspace.id);
-	},
+	handler: (data, { params }) =>
+		productService.updateProductEffect(params.id!, data),
 
 	options: {
 		operationName: "updateProduct",
@@ -43,13 +40,11 @@ export const PATCH = createWorkspaceRoute({
 	},
 });
 
-export const DELETE = createWorkspaceRoute({
+export const DELETE = createWorkspaceRouteEffect({
 	inputSchema: z.void(),
 	outputSchema: SuccessResponseSchema,
 
-	handler: async (_, { workspace, params }) => {
-		return await productService.deleteProduct(params.id!, workspace.id);
-	},
+	handler: (_, { params }) => productService.deleteProductEffect(params.id!),
 
 	options: {
 		operationName: "deleteProduct",

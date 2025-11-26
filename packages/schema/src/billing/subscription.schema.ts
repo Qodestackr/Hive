@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { ID, Timestamps } from "../shared/base.schema";
-import { SubscriptionStatus } from "../shared/enums.schema";
+import { ID, Timestamps } from "../shared/base.schema.js";
+import { SubscriptionStatus } from "../shared/enums.schema.js";
 
 export const SubscriptionSchema = z
 	.object({

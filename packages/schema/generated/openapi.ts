@@ -4,3979 +4,3859 @@
  */
 
 export interface paths {
-	"/api/users": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/** Create a new user */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["UserCreate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["UserResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/users/{id}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/** Get user by ID */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["UserResponse"];
-					};
-				};
-				/** @description User not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		/** Update user */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["UserUpdate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["UserResponse"];
-					};
-				};
-				/** @description Invalid input */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description User not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/api/v1/purchase-orders/quick-arrival": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Quick stock arrival entry
-		 * @description Simplified stock entry for onboarding. Creates PO and updates FIFO batches in one step.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["QuickStockArrival"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PurchaseOrderResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Product not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/purchase-orders": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List purchase orders
-		 * @description Get paginated list of purchase orders with filtering.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					page?: number;
-					limit?: number;
-					status?: "draft" | "ordered" | "received" | "cancelled";
-					supplierName?: string;
-					startDate?: string;
-					endDate?: string;
-					sortBy?:
-						| "poNumber"
-						| "orderDate"
-						| "receivedDate"
-						| "totalCost"
-						| "createdAt";
-					sortOrder?: "asc" | "desc";
-				};
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PurchaseOrderListResponse"];
-					};
-				};
-				/** @description Invalid query parameters */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create purchase order
-		 * @description Create a full purchase order with multiple line items.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["PurchaseOrderCreate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PurchaseOrderResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Product not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/purchase-orders/{id}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get purchase order by ID
-		 * @description Get full purchase order details including line items.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PurchaseOrderResponse"];
-					};
-				};
-				/** @description Purchase order not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		/**
-		 * Update purchase order
-		 * @description Update purchase order status or details.
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["PurchaseOrderUpdate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PurchaseOrderResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Purchase order not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/api/v1/inventory/movements": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List inventory movements
-		 * @description Get paginated inventory movement history with FIFO cost tracking.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					page?: number;
-					limit?: number;
-					productId?: string;
-					movementType?:
-						| "purchase"
-						| "sale"
-						| "adjustment"
-						| "promo_redemption"
-						| "return"
-						| "damage"
-						| "theft";
-					campaignId?: string;
-					startDate?: string;
-					endDate?: string;
-					sortBy?: "createdAt" | "quantity" | "totalCost";
-					sortOrder?: "asc" | "desc";
-				};
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["InventoryMovementListResponse"];
-					};
-				};
-				/** @description Invalid query parameters */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/inventory/fifo-batches/{productId}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get FIFO batches for product
-		 * @description Show all FIFO batches for a product, ordered by purchase date (FIFO order). Transparency for profit calculations.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					productId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ProductFIFOBatchesResponse"];
-					};
-				};
-				/** @description Product not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/campaigns/profit-check": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Pre-flight profitability check
-		 * @description Check if a discount will be profitable based on current FIFO costs. Returns recommendations if not profitable.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["CampaignProfitabilityCheck"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CampaignProfitabilityResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Product not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/campaigns": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List campaigns
-		 * @description Get paginated list of campaigns with filtering.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					page?: number;
-					limit?: number;
-					status?:
-						| "draft"
-						| "scheduled"
-						| "active"
-						| "paused"
-						| "completed"
-						| "cancelled";
-					type?:
-						| "flash_sale"
-						| "loyalty_nudge"
-						| "restock_alert"
-						| "event_promo"
-						| "dead_hour_boost"
-						| "product_launch"
-						| "reactivation";
-					isLosingMoney?: boolean | null;
-					startDate?: string;
-					endDate?: string;
-					sortBy?:
-						| "name"
-						| "status"
-						| "actualProfit"
-						| "capturesCount"
-						| "createdAt";
-					sortOrder?: "asc" | "desc";
-				};
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CampaignListResponse"];
-					};
-				};
-				/** @description Invalid query parameters */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create campaign
-		 * @description Create a new promotional campaign.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["CampaignCreate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CampaignResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/campaigns/{id}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get campaign by ID
-		 * @description Get full campaign details.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CampaignResponse"];
-					};
-				};
-				/** @description Campaign not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		/**
-		 * Update campaign
-		 * @description Update campaign details or status.
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["CampaignUpdate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CampaignResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Campaign not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/api/v1/campaigns/{id}/stats": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get campaign statistics
-		 * @description Get real-time campaign performance stats including profit metrics.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CampaignStats"];
-					};
-				};
-				/** @description Campaign not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/promo-codes/redeem": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Redeem promo code
-		 * @description Redeem a promo code and calculate actual profit using FIFO cost at time of redemption.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["PromoCodeRedeem"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PromoCodeRedemptionResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Promo code not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Promo code expired or already redeemed */
-				410: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/promo-codes/validate": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Validate promo code
-		 * @description Check if a promo code is valid without redeeming it.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["PromoCodeValidate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PromoCodeValidationResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/promo-codes/bulk": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Bulk create promo codes
-		 * @description Generate multiple promo codes for a campaign.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["BulkPromoCodeCreate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["BulkPromoCodeResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Campaign not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/promo-codes": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List promo codes
-		 * @description Get paginated list of promo codes with filtering.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					page?: number;
-					limit?: number;
-					campaignId?: string;
-					customerId?: string;
-					productId?: string;
-					isRedeemed?: boolean | null;
-					isProfitable?: boolean | null;
-					sortBy?: "code" | "createdAt" | "redeemedAt" | "actualProfit";
-					sortOrder?: "asc" | "desc";
-				};
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PromoCodeListResponse"];
-					};
-				};
-				/** @description Invalid query parameters */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create promo code
-		 * @description Create a single promo code.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["PromoCodeCreate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PromoCodeResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Promo code already exists */
-				409: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/promo-codes/{id}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get promo code by ID
-		 * @description Get promo code details.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PromoCodeResponse"];
-					};
-				};
-				/** @description Promo code not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/products": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List products
-		 * @description Get paginated list of products with filtering and sorting.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					page?: number;
-					limit?: number;
-					search?: string;
-					category?: string;
-					isActive?: boolean | null;
-					isSlowMover?: boolean | null;
-					sortBy?:
-						| "name"
-						| "sku"
-						| "basePrice"
-						| "currentStockQuantity"
-						| "createdAt";
-					sortOrder?: "asc" | "desc";
-				};
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ProductListResponse"];
-					};
-				};
-				/** @description Invalid query parameters */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create product
-		 * @description Create a new product in the catalog.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["ProductCreate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ProductResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Product with SKU already exists */
-				409: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/products/{id}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get product by ID
-		 * @description Get full product details including current FIFO cost.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ProductResponse"];
-					};
-				};
-				/** @description Product not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		/**
-		 * Delete product
-		 * @description Soft delete a product (marks as inactive).
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": {
-							success: boolean;
-						};
-					};
-				};
-				/** @description Product not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		/**
-		 * Update product
-		 * @description Update product details.
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["ProductUpdate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ProductResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Product not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description SKU already exists */
-				409: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/api/v1/products/{id}/price": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		/**
-		 * Update product price
-		 * @description Quick update of product price and stock (for onboarding).
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["ProductPriceUpdate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ProductResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Product not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/api/v1/products/bulk-price-update": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Bulk price update
-		 * @description Update prices for multiple products at once.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["BulkProductPriceUpdate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": {
-							updated: number;
-						};
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/products/{id}/fifo-batches": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get FIFO batches
-		 * @description Get inventory movement batches for debugging FIFO calculations.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": {
-							productId: string;
-							batches: unknown[];
-							totalQuantity: number;
-						};
-					};
-				};
-				/** @description Product not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/customers": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List customers
-		 * @description Get paginated list of customers with filtering.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					page?: number;
-					limit?: number;
-					search?: string;
-					tier?: string;
-					hasOptedIn?: boolean | null;
-					isAgeVerified?: boolean | null;
-					city?: string;
-					tags?: string[];
-					minTotalSpend?: number | null;
-					lastOrderDaysAgo?: number | null;
-					sortBy?:
-						| "name"
-						| "phoneNumber"
-						| "totalSpend"
-						| "totalOrders"
-						| "createdAt"
-						| "lastOrderAt";
-					sortOrder?: "asc" | "desc";
-				};
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CustomerListResponse"];
-					};
-				};
-				/** @description Invalid query parameters */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create customer
-		 * @description Create a new customer record with phone number.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["CustomerCreate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CustomerResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Customer with phone number already exists */
-				409: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/customers/bulk-import": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Bulk import customers
-		 * @description Import multiple customers from CSV upload.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["BulkCustomerImport"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["BulkCustomerImportResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/customers/{id}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get customer by ID
-		 * @description Get full customer details.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CustomerResponse"];
-					};
-				};
-				/** @description Customer not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		/**
-		 * Delete customer
-		 * @description Soft delete a customer.
-		 */
-		delete: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": {
-							success: boolean;
-						};
-					};
-				};
-				/** @description Customer not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		options?: never;
-		head?: never;
-		/**
-		 * Update customer
-		 * @description Update customer details.
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["CustomerUpdate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CustomerResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Customer not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/api/v1/customers/{id}/verify-age": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Verify customer age
-		 * @description Record age verification for alcohol compliance (REGULATORY GOLD).
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["CustomerAgeVerification"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CustomerResponse"];
-					};
-				};
-				/** @description Invalid verification data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Customer not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/customers/{id}/opt-in": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Customer opt-in
-		 * @description Record customer consent for marketing communications.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["CustomerOptIn"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CustomerResponse"];
-					};
-				};
-				/** @description Customer not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/customers/{id}/opt-out": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Customer opt-out
-		 * @description Record customer withdrawal from marketing communications.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["CustomerOptOut"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CustomerResponse"];
-					};
-				};
-				/** @description Customer not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/customers/stats": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get customer statistics
-		 * @description Get aggregate customer statistics including LTV and verification rates.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CustomerStats"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/reconciliation/product": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Reconcile product stock
-		 * @description Verify product inventory matches expected FIFO calculations (Trust Engine).
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["ReconcileProduct"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ReconciliationResult"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Product not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/reconciliation/all": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Reconcile all products
-		 * @description Run reconciliation check across all products in the organization.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["ReconcileAllProducts"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ReconciliationSummary"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/reconciliation/correct": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Correct inventory discrepancy
-		 * @description Apply manual correction to resolve inventory discrepancy (with audit trail).
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["CorrectDiscrepancy"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["CorrectionSuccess"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Reconciliation log not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/dashboard/overview": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get dashboard overview
-		 * @description Get high-level metrics for the distributor dashboard (campaigns, profit, customers).
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": {
-							totalCampaigns: number;
-							activeCampaigns: number;
-							totalProfit: number;
-							totalRevenue: number;
-							totalRedemptions: number;
-							profitableRedemptions: number;
-							totalCustomers: number;
-							verifiedCustomers: number;
-							optedInCustomers: number;
-							lifetimeValue: number;
-						};
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/billing/invoices/generate": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Generate outcome-based invoice
-		 * @description Generate invoice based on actual value delivered (profit tracked via FIFO).
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["OutcomeInvoiceGenerate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["OutcomeInvoice"];
-					};
-				};
-				/** @description Invalid date range */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/billing/invoices/{id}": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get invoice by ID
-		 * @description Get full invoice details.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["OutcomeInvoice"];
-					};
-				};
-				/** @description Invoice not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/billing/invoices": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List invoices
-		 * @description Get paginated list of outcome-based invoices.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					page?: number;
-					limit?: number;
-					status?: "draft" | "open" | "paid" | "void";
-				};
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["OutcomeInvoiceListResponse"];
-					};
-				};
-				/** @description Invalid query parameters */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/profit-alerts/{campaignId}/check": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Check campaign profit margin
-		 * @description Calculate current profit margin from redeemed promo codes and compare against threshold.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					campaignId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["ProfitCheckRequest"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["ProfitCheckResponse"];
-					};
-				};
-				/** @description Campaign not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/profit-alerts/bulk-check": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Bulk profit check
-		 * @description Check profit margins for multiple campaigns at once.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["BulkProfitCheckRequest"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["BulkProfitCheckResponse"];
-					};
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/profit-alerts": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * List profit alerts
-		 * @description Get paginated list of profit alerts with filtering.
-		 */
-		get: {
-			parameters: {
-				query?: {
-					page?: number;
-					limit?: number;
-					campaignId?: string;
-					productId?: string;
-					alertType?:
-						| "negative_margin"
-						| "low_stock"
-						| "cost_spike"
-						| "profit_threshold_breach";
-					severity?: "critical" | "warning" | "info";
-					isResolved?: boolean | null;
-					sortBy?: "createdAt" | "severity" | "totalLoss";
-					sortOrder?: "asc" | "desc";
-				};
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PromoProfitAlertListResponse"];
-					};
-				};
-				/** @description Invalid query parameters */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		/**
-		 * Create profit alert
-		 * @description Manually create a profit alert for a campaign.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["PromoProfitAlertCreate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PromoProfitAlert"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Campaign not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/profit-alerts/summary": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get alert summary
-		 * @description Get aggregate alert statistics for the dashboard.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path?: never;
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PromoProfitAlertSummary"];
-					};
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/profit-alerts/{id}/resolve": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Resolve profit alert
-		 * @description Mark a profit alert as resolved with action taken.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					id: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["PromoProfitAlertResolve"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["PromoProfitAlert"];
-					};
-				};
-				/** @description Alert not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/api/v1/profit-alerts/{campaignId}/settings": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		/**
-		 * Get alert settings
-		 * @description Get profit alert settings for a campaign.
-		 */
-		get: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					campaignId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["AlertSettingsResponse"];
-					};
-				};
-				/** @description Campaign not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		/**
-		 * Update alert settings
-		 * @description Update profit alert settings for a campaign.
-		 */
-		patch: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					campaignId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: {
-				content: {
-					"application/json": components["schemas"]["AlertSettingsUpdate"];
-				};
-			};
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["AlertSettingsResponse"];
-					};
-				};
-				/** @description Invalid input data */
-				400: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-				/** @description Campaign not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		trace?: never;
-	};
-	"/api/v1/profit-alerts/{campaignId}/auto-pause": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		/**
-		 * Auto-pause campaign
-		 * @description Check profit margin and auto-pause campaign if below threshold.
-		 */
-		post: {
-			parameters: {
-				query?: never;
-				header?: never;
-				path: {
-					campaignId: string;
-				};
-				cookie?: never;
-			};
-			requestBody?: never;
-			responses: {
-				/** @description Successful response */
-				200: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content: {
-						"application/json": components["schemas"]["AutoPauseActionResponse"];
-					};
-				};
-				/** @description Campaign not found */
-				404: {
-					headers: {
-						[name: string]: unknown;
-					};
-					content?: never;
-				};
-			};
-		};
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
+    "/api/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a new user */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["UserCreate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get user by ID */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserResponse"];
+                    };
+                };
+                /** @description User not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update user */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["UserUpdate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserResponse"];
+                    };
+                };
+                /** @description Invalid input */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description User not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/api/v1/purchase-orders/quick-arrival": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Quick stock arrival entry
+         * @description Simplified stock entry for onboarding. Creates PO and updates FIFO batches in one step.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["QuickStockArrival"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PurchaseOrderResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Product not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/purchase-orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List purchase orders
+         * @description Get paginated list of purchase orders with filtering.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    page?: number;
+                    limit?: number;
+                    status?: "draft" | "ordered" | "received" | "cancelled";
+                    supplierName?: string;
+                    startDate?: string;
+                    endDate?: string;
+                    sortBy?: "poNumber" | "orderDate" | "receivedDate" | "totalCost" | "createdAt";
+                    sortOrder?: "asc" | "desc";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PurchaseOrderListResponse"];
+                    };
+                };
+                /** @description Invalid query parameters */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        /**
+         * Create purchase order
+         * @description Create a full purchase order with multiple line items.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["PurchaseOrderCreate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PurchaseOrderResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Product not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/purchase-orders/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get purchase order by ID
+         * @description Get full purchase order details including line items.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PurchaseOrderResponse"];
+                    };
+                };
+                /** @description Purchase order not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update purchase order
+         * @description Update purchase order status or details.
+         */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["PurchaseOrderUpdate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PurchaseOrderResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Purchase order not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/api/v1/inventory/movements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List inventory movements
+         * @description Get paginated inventory movement history with FIFO cost tracking.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    page?: number;
+                    limit?: number;
+                    productId?: string;
+                    movementType?: "purchase" | "sale" | "adjustment" | "promo_redemption" | "return" | "damage" | "theft";
+                    campaignId?: string;
+                    startDate?: string;
+                    endDate?: string;
+                    sortBy?: "createdAt" | "quantity" | "totalCost";
+                    sortOrder?: "asc" | "desc";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["InventoryMovementListResponse"];
+                    };
+                };
+                /** @description Invalid query parameters */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/inventory/fifo-batches/{productId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get FIFO batches for product
+         * @description Show all FIFO batches for a product, ordered by purchase date (FIFO order). Transparency for profit calculations.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    productId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProductFIFOBatchesResponse"];
+                    };
+                };
+                /** @description Product not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/campaigns/profit-check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Pre-flight profitability check
+         * @description Check if a discount will be profitable based on current FIFO costs. Returns recommendations if not profitable.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CampaignProfitabilityCheck"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CampaignProfitabilityResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Product not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/campaigns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List campaigns
+         * @description Get paginated list of campaigns with filtering.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    page?: number;
+                    limit?: number;
+                    status?: "draft" | "scheduled" | "active" | "paused" | "completed" | "cancelled";
+                    type?: "flash_sale" | "loyalty_nudge" | "restock_alert" | "event_promo" | "dead_hour_boost" | "product_launch" | "reactivation";
+                    isLosingMoney?: boolean | null;
+                    startDate?: string;
+                    endDate?: string;
+                    sortBy?: "name" | "status" | "actualProfit" | "capturesCount" | "createdAt";
+                    sortOrder?: "asc" | "desc";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CampaignListResponse"];
+                    };
+                };
+                /** @description Invalid query parameters */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        /**
+         * Create campaign
+         * @description Create a new promotional campaign.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CampaignCreate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CampaignResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/campaigns/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get campaign by ID
+         * @description Get full campaign details.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CampaignResponse"];
+                    };
+                };
+                /** @description Campaign not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update campaign
+         * @description Update campaign details or status.
+         */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CampaignUpdate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CampaignResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Campaign not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/api/v1/campaigns/{id}/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get campaign statistics
+         * @description Get real-time campaign performance stats including profit metrics.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CampaignStats"];
+                    };
+                };
+                /** @description Campaign not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/promo-codes/redeem": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Redeem promo code
+         * @description Redeem a promo code and calculate actual profit using FIFO cost at time of redemption.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["PromoCodeRedeem"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PromoCodeRedemptionResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Promo code not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Promo code expired or already redeemed */
+                410: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/promo-codes/validate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Validate promo code
+         * @description Check if a promo code is valid without redeeming it.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["PromoCodeValidate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PromoCodeValidationResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/promo-codes/bulk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Bulk create promo codes
+         * @description Generate multiple promo codes for a campaign.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["BulkPromoCodeCreate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BulkPromoCodeResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Campaign not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/promo-codes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List promo codes
+         * @description Get paginated list of promo codes with filtering.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    page?: number;
+                    limit?: number;
+                    campaignId?: string;
+                    customerId?: string;
+                    productId?: string;
+                    isRedeemed?: boolean | null;
+                    isProfitable?: boolean | null;
+                    sortBy?: "code" | "createdAt" | "redeemedAt" | "actualProfit";
+                    sortOrder?: "asc" | "desc";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PromoCodeListResponse"];
+                    };
+                };
+                /** @description Invalid query parameters */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        /**
+         * Create promo code
+         * @description Create a single promo code.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["PromoCodeCreate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PromoCodeResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Promo code already exists */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/promo-codes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get promo code by ID
+         * @description Get promo code details.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PromoCodeResponse"];
+                    };
+                };
+                /** @description Promo code not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List products
+         * @description Get paginated list of products with filtering and sorting.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    page?: number;
+                    limit?: number;
+                    search?: string;
+                    category?: string;
+                    isActive?: boolean | null;
+                    isSlowMover?: boolean | null;
+                    sortBy?: "name" | "sku" | "basePrice" | "currentStockQuantity" | "createdAt";
+                    sortOrder?: "asc" | "desc";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProductListResponse"];
+                    };
+                };
+                /** @description Invalid query parameters */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        /**
+         * Create product
+         * @description Create a new product in the catalog.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["ProductCreate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProductResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Product with SKU already exists */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/products/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get product by ID
+         * @description Get full product details including current FIFO cost.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProductResponse"];
+                    };
+                };
+                /** @description Product not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        /**
+         * Delete product
+         * @description Soft delete a product (marks as inactive).
+         */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success: boolean;
+                        };
+                    };
+                };
+                /** @description Product not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        /**
+         * Update product
+         * @description Update product details.
+         */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["ProductUpdate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProductResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Product not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description SKU already exists */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/api/v1/products/{id}/price": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update product price
+         * @description Quick update of product price and stock (for onboarding).
+         */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["ProductPriceUpdate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProductResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Product not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/api/v1/products/bulk-price-update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Bulk price update
+         * @description Update prices for multiple products at once.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["BulkProductPriceUpdate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            updated: number;
+                        };
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/products/{id}/fifo-batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get FIFO batches
+         * @description Get inventory movement batches for debugging FIFO calculations.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            productId: string;
+                            batches: unknown[];
+                            totalQuantity: number;
+                        };
+                    };
+                };
+                /** @description Product not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/customers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List customers
+         * @description Get paginated list of customers with filtering.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    page?: number;
+                    limit?: number;
+                    search?: string;
+                    tier?: string;
+                    hasOptedIn?: boolean | null;
+                    isAgeVerified?: boolean | null;
+                    city?: string;
+                    tags?: string[];
+                    minTotalSpend?: number | null;
+                    lastOrderDaysAgo?: number | null;
+                    sortBy?: "name" | "phoneNumber" | "totalSpend" | "totalOrders" | "createdAt" | "lastOrderAt";
+                    sortOrder?: "asc" | "desc";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CustomerListResponse"];
+                    };
+                };
+                /** @description Invalid query parameters */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        /**
+         * Create customer
+         * @description Create a new customer record with phone number.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CustomerCreate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CustomerResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Customer with phone number already exists */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/customers/bulk-import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Bulk import customers
+         * @description Import multiple customers from CSV upload.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["BulkCustomerImport"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BulkCustomerImportResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/customers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get customer by ID
+         * @description Get full customer details.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CustomerResponse"];
+                    };
+                };
+                /** @description Customer not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        /**
+         * Delete customer
+         * @description Soft delete a customer.
+         */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success: boolean;
+                        };
+                    };
+                };
+                /** @description Customer not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        /**
+         * Update customer
+         * @description Update customer details.
+         */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CustomerUpdate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CustomerResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Customer not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/api/v1/customers/{id}/verify-age": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Verify customer age
+         * @description Record age verification for alcohol compliance (REGULATORY GOLD).
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CustomerAgeVerification"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CustomerResponse"];
+                    };
+                };
+                /** @description Invalid verification data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Customer not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/customers/{id}/opt-in": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Customer opt-in
+         * @description Record customer consent for marketing communications.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CustomerOptIn"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CustomerResponse"];
+                    };
+                };
+                /** @description Customer not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/customers/{id}/opt-out": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Customer opt-out
+         * @description Record customer withdrawal from marketing communications.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CustomerOptOut"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CustomerResponse"];
+                    };
+                };
+                /** @description Customer not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/customers/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get customer statistics
+         * @description Get aggregate customer statistics including LTV and verification rates.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CustomerStats"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reconciliation/product": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reconcile product stock
+         * @description Verify product inventory matches expected FIFO calculations (Trust Engine).
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["ReconcileProduct"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReconciliationResult"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Product not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reconciliation/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reconcile all products
+         * @description Run reconciliation check across all products in the organization.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["ReconcileAllProducts"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ReconciliationSummary"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reconciliation/correct": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Correct inventory discrepancy
+         * @description Apply manual correction to resolve inventory discrepancy (with audit trail).
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CorrectDiscrepancy"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CorrectionSuccess"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Reconciliation log not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/dashboard/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get dashboard overview
+         * @description Get high-level metrics for the distributor dashboard (campaigns, profit, customers).
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            totalCampaigns: number;
+                            activeCampaigns: number;
+                            totalProfit: number;
+                            totalRevenue: number;
+                            totalRedemptions: number;
+                            profitableRedemptions: number;
+                            totalCustomers: number;
+                            verifiedCustomers: number;
+                            optedInCustomers: number;
+                            lifetimeValue: number;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/invoices/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Generate outcome-based invoice
+         * @description Generate invoice based on actual value delivered (profit tracked via FIFO).
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["OutcomeInvoiceGenerate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["OutcomeInvoice"];
+                    };
+                };
+                /** @description Invalid date range */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/invoices/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get invoice by ID
+         * @description Get full invoice details.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["OutcomeInvoice"];
+                    };
+                };
+                /** @description Invoice not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/billing/invoices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List invoices
+         * @description Get paginated list of outcome-based invoices.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    page?: number;
+                    limit?: number;
+                    status?: "draft" | "open" | "paid" | "void";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["OutcomeInvoiceListResponse"];
+                    };
+                };
+                /** @description Invalid query parameters */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/profit-alerts/{campaignId}/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check campaign profit margin
+         * @description Calculate current profit margin from redeemed promo codes and compare against threshold.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    campaignId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["ProfitCheckRequest"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProfitCheckResponse"];
+                    };
+                };
+                /** @description Campaign not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/profit-alerts/bulk-check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Bulk profit check
+         * @description Check profit margins for multiple campaigns at once.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["BulkProfitCheckRequest"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["BulkProfitCheckResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/profit-alerts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List profit alerts
+         * @description Get paginated list of profit alerts with filtering.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    page?: number;
+                    limit?: number;
+                    campaignId?: string;
+                    productId?: string;
+                    alertType?: "negative_margin" | "low_stock" | "cost_spike" | "profit_threshold_breach";
+                    severity?: "critical" | "warning" | "info";
+                    isResolved?: boolean | null;
+                    sortBy?: "createdAt" | "severity" | "totalLoss";
+                    sortOrder?: "asc" | "desc";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PromoProfitAlertListResponse"];
+                    };
+                };
+                /** @description Invalid query parameters */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        /**
+         * Create profit alert
+         * @description Manually create a profit alert for a campaign.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["PromoProfitAlertCreate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PromoProfitAlert"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Campaign not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/profit-alerts/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get alert summary
+         * @description Get aggregate alert statistics for the dashboard.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PromoProfitAlertSummary"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/profit-alerts/{id}/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Resolve profit alert
+         * @description Mark a profit alert as resolved with action taken.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["PromoProfitAlertResolve"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PromoProfitAlert"];
+                    };
+                };
+                /** @description Alert not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/profit-alerts/{campaignId}/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get alert settings
+         * @description Get profit alert settings for a campaign.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    campaignId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["AlertSettingsResponse"];
+                    };
+                };
+                /** @description Campaign not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update alert settings
+         * @description Update profit alert settings for a campaign.
+         */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    campaignId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["AlertSettingsUpdate"];
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["AlertSettingsResponse"];
+                    };
+                };
+                /** @description Invalid input data */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Campaign not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/api/v1/profit-alerts/{campaignId}/auto-pause": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Auto-pause campaign
+         * @description Check profit margin and auto-pause campaign if below threshold.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    campaignId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["AutoPauseActionResponse"];
+                    };
+                };
+                /** @description Campaign not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-	schemas: {
-		ID: {
-			id: string;
-		};
-		UserResponse: {
-			id: components["schemas"]["ID"];
-			/** @example user@example.com */
-			email: string;
-			/** @example John Doe */
-			name: string;
-			/** Format: date-time */
-			createdAt: string;
-			/** Format: date-time */
-			updatedAt: string;
-		};
-		UserCreate: {
-			/**
-			 * Format: email
-			 * @description User email address
-			 * @example user@example.com
-			 */
-			email: string;
-			/**
-			 * @description Full name of the user
-			 * @example John Doe
-			 */
-			name: string;
-			/**
-			 * @description Password (minimum 8 characters)
-			 * @example SecurePass123!
-			 */
-			password: string;
-		};
-		UserUpdate: {
-			/** @example Jane Doe */
-			name?: string;
-			/** @example NewPass123! */
-			password?: string;
-		};
-		PurchaseOrderItem: {
-			id: string;
-			purchaseOrderId: string;
-			productId: string;
-			quantityOrdered: number;
-			/** @default 0 */
-			quantityReceived: number;
-			unitCost: number;
-			batchNumber: string | null;
-			/** Format: date-time */
-			expiryDate: string | null;
-			lineTotal: number;
-			/** Format: date-time */
-			createdAt: string;
-			/** Format: date-time */
-			updatedAt: string;
-		};
-		PurchaseOrderResponse: {
-			id: string;
-			organizationId: string;
-			poNumber: string;
-			supplierName: string | null;
-			supplierContact: string | null;
-			/** @enum {string} */
-			status: "draft" | "ordered" | "received" | "cancelled";
-			/** Format: date-time */
-			orderDate: string;
-			/** Format: date-time */
-			receivedDate: string | null;
-			totalCost: number;
-			/** @default KES */
-			currency: string;
-			notes: string | null;
-			metadata: {
-				[key: string]: unknown;
-			} | null;
-			items?: components["schemas"]["PurchaseOrderItem"][];
-			/** Format: date-time */
-			createdAt: string;
-			/** Format: date-time */
-			updatedAt: string;
-		};
-		QuickStockArrival: {
-			/** @example prod_123 */
-			productId: string;
-			/** @example 50 */
-			quantity: number;
-			/** @example 9200 */
-			unitCost: number;
-			/** @example ABC Distributors */
-			supplierName?: string;
-			/** @example BATCH-2025-001 */
-			batchNumber?: string;
-			/** Format: date-time */
-			expiryDate?: string;
-		};
-		PurchaseOrderItemCreate: {
-			/** @example prod_123 */
-			productId: string;
-			/** @example 50 */
-			quantityOrdered: number;
-			/** @example 50 */
-			quantityReceived?: number;
-			/** @example 9200 */
-			unitCost: number;
-			/** @example BATCH-2025-001 */
-			batchNumber?: string;
-			/** Format: date-time */
-			expiryDate?: string;
-		};
-		PurchaseOrderCreate: {
-			/** @example ABC Distributors */
-			supplierName?: string;
-			/** @example +254712345678 */
-			supplierContact?: string;
-			/** Format: date-time */
-			orderDate?: string;
-			/** Format: date-time */
-			receivedDate?: string;
-			notes?: string;
-			items: components["schemas"]["PurchaseOrderItemCreate"][];
-		};
-		PurchaseOrderListResponse: {
-			data: components["schemas"]["PurchaseOrderResponse"][];
-			pagination: {
-				page: number;
-				limit: number;
-				total: number;
-				totalPages: number;
-			};
-		};
-		PurchaseOrderUpdate: {
-			/** @enum {string} */
-			status?: "draft" | "ordered" | "received" | "cancelled";
-			/** Format: date-time */
-			receivedDate?: string;
-			notes?: string;
-		};
-		InventoryMovementResponse: {
-			id: string;
-			organizationId: string;
-			productId: string;
-			/** @enum {string} */
-			movementType:
-				| "purchase"
-				| "sale"
-				| "adjustment"
-				| "promo_redemption"
-				| "return"
-				| "damage"
-				| "theft";
-			quantity: number;
-			unitCostAtMovement: number;
-			totalCost: number;
-			fifoBatchId: string | null;
-			referenceType: string | null;
-			referenceId: string | null;
-			campaignId: string | null;
-			promoCodeId: string | null;
-			stockAfterMovement: number;
-			notes: string | null;
-			metadata: {
-				[key: string]: unknown;
-			} | null;
-			/** Format: date-time */
-			createdAt: string;
-		};
-		InventoryMovementListResponse: {
-			data: components["schemas"]["InventoryMovementResponse"][];
-			pagination: {
-				page: number;
-				limit: number;
-				total: number;
-				totalPages: number;
-			};
-		};
-		FIFOBatchInfo: {
-			batchId: string;
-			productId: string;
-			unitCost: number;
-			quantityRemaining: number;
-			/** Format: date-time */
-			purchaseDate: string;
-			batchNumber: string | null;
-			/** Format: date-time */
-			expiryDate: string | null;
-		};
-		ProductFIFOBatchesResponse: {
-			productId: string;
-			productName: string;
-			currentFIFOCost: number | null;
-			totalStockQuantity: number;
-			batches: components["schemas"]["FIFOBatchInfo"][];
-		};
-		CampaignProfitabilityResponse: {
-			isProfitable: boolean;
-			estimatedProfit: number;
-			estimatedProfitPercent: number;
-			basePrice: number;
-			discountAmount: number;
-			netRevenue: number;
-			currentFIFOCost: number;
-			recommendation?: string;
-			suggestedDiscount?: number;
-			alternativeProducts?: {
-				productId: string;
-				productName: string;
-				suggestedDiscount: number;
-				estimatedProfit: number;
-				reason: string;
-			}[];
-		};
-		CampaignProfitabilityCheck: {
-			/** @example prod_123 */
-			productId: string;
-			/** @example 20 */
-			discountPercent: number;
-			discountAmount?: number;
-		};
-		CampaignTargetSegment: {
-			tiers?: string[];
-			minSpend?: number;
-			cities?: string[];
-			tags?: string[];
-			lastOrderDaysAgo?: number;
-		} | null;
-		CampaignResponse: {
-			id: string;
-			organizationId: string;
-			name: string;
-			/** @enum {string} */
-			type:
-				| "flash_sale"
-				| "loyalty_nudge"
-				| "restock_alert"
-				| "event_promo"
-				| "dead_hour_boost"
-				| "product_launch"
-				| "reactivation";
-			/** @enum {string} */
-			status:
-				| "draft"
-				| "scheduled"
-				| "active"
-				| "paused"
-				| "completed"
-				| "cancelled";
-			messageTemplate: string;
-			/**
-			 * @default [
-			 *       "whatsapp"
-			 *     ]
-			 */
-			platforms: ("whatsapp" | "sms" | "email")[];
-			targetSegment: components["schemas"]["CampaignTargetSegment"];
-			targetRadius: number | null;
-			targetProductIds: string[] | null;
-			offerType: string;
-			offerValue: number | null;
-			minPurchaseAmount: number | null;
-			estimatedFIFOCost: number | null;
-			estimatedProfitPerRedemption: number | null;
-			minProfitThreshold: number | null;
-			saleorVoucherCode: string | null;
-			maxRedemptions: number | null;
-			/** @default 0 */
-			redemptionsUsed: number;
-			/** Format: date-time */
-			scheduledFor: string | null;
-			/** Format: date-time */
-			startsAt: string | null;
-			/** Format: date-time */
-			endsAt: string | null;
-			/** @default 0 */
-			sent: number;
-			/** @default 0 */
-			delivered: number;
-			/** @default 0 */
-			opened: number;
-			/** @default 0 */
-			clicked: number;
-			/** @default 0 */
-			capturesCount: number;
-			/** @default 0 */
-			conversions: number;
-			/** @default 0 */
-			revenue: number;
-			/** @default 0 */
-			discountCost: number;
-			/** @default 0 */
-			totalCOGS: number;
-			/** @default 0 */
-			actualProfit: number;
-			avgProfitPerRedemption: number | null;
-			/** @default false */
-			isLosingMoney: boolean;
-			budgetAmount: number | null;
-			/** @default 0 */
-			spentAmount: number;
-			metadata: {
-				[key: string]: unknown;
-			} | null;
-			/** Format: date-time */
-			createdAt: string;
-			/** Format: date-time */
-			updatedAt: string;
-		};
-		CampaignCreate: {
-			/** @example Weekend Flash Sale */
-			name: string;
-			/** @enum {string} */
-			type:
-				| "flash_sale"
-				| "loyalty_nudge"
-				| "restock_alert"
-				| "event_promo"
-				| "dead_hour_boost"
-				| "product_launch"
-				| "reactivation";
-			/** @example Get 20% off Hennessy this weekend! */
-			messageTemplate: string;
-			/**
-			 * @default [
-			 *       "whatsapp"
-			 *     ]
-			 */
-			platforms: ("whatsapp" | "sms" | "email")[];
-			targetSegment?: components["schemas"]["CampaignTargetSegment"] &
-				Record<string, never>;
-			targetRadius?: number;
-			targetProductIds?: string[];
-			/** @enum {string} */
-			offerType:
-				| "percentage_discount"
-				| "fixed_discount"
-				| "buy_x_get_y"
-				| "free_delivery";
-			/** @example 20 */
-			offerValue?: number;
-			minPurchaseAmount?: number;
-			minProfitThreshold?: number;
-			/** Format: date-time */
-			scheduledFor?: string;
-			/** Format: date-time */
-			startsAt?: string;
-			/** Format: date-time */
-			endsAt?: string;
-			/** @example 100 */
-			maxRedemptions?: number;
-			budgetAmount?: number;
-		};
-		CampaignListResponse: {
-			data: components["schemas"]["CampaignResponse"][];
-			pagination: {
-				page: number;
-				limit: number;
-				total: number;
-				totalPages: number;
-			};
-		};
-		CampaignUpdate: {
-			/** @example Weekend Flash Sale */
-			name?: string;
-			/** @enum {string} */
-			type?:
-				| "flash_sale"
-				| "loyalty_nudge"
-				| "restock_alert"
-				| "event_promo"
-				| "dead_hour_boost"
-				| "product_launch"
-				| "reactivation";
-			/** @example Get 20% off Hennessy this weekend! */
-			messageTemplate?: string;
-			/**
-			 * @default [
-			 *       "whatsapp"
-			 *     ]
-			 */
-			platforms: ("whatsapp" | "sms" | "email")[];
-			targetSegment?: components["schemas"]["CampaignTargetSegment"] &
-				Record<string, never>;
-			targetRadius?: number;
-			targetProductIds?: string[];
-			/** @enum {string} */
-			offerType?:
-				| "percentage_discount"
-				| "fixed_discount"
-				| "buy_x_get_y"
-				| "free_delivery";
-			/** @example 20 */
-			offerValue?: number;
-			minPurchaseAmount?: number;
-			minProfitThreshold?: number;
-			/** Format: date-time */
-			scheduledFor?: string;
-			/** Format: date-time */
-			startsAt?: string;
-			/** Format: date-time */
-			endsAt?: string;
-			/** @example 100 */
-			maxRedemptions?: number;
-			budgetAmount?: number;
-			/** @enum {string} */
-			status?:
-				| "draft"
-				| "scheduled"
-				| "active"
-				| "paused"
-				| "completed"
-				| "cancelled";
-		};
-		CampaignStats: {
-			campaignId: string;
-			campaignName: string;
-			/** @enum {string} */
-			status:
-				| "draft"
-				| "scheduled"
-				| "active"
-				| "paused"
-				| "completed"
-				| "cancelled";
-			sent: number;
-			delivered: number;
-			opened: number;
-			clicked: number;
-			conversions: number;
-			capturesCount: number;
-			revenue: number;
-			discountCost: number;
-			totalCOGS: number;
-			actualProfit: number;
-			avgProfitPerRedemption: number | null;
-			deliveryRate: number;
-			openRate: number;
-			clickRate: number;
-			conversionRate: number;
-			roi: number;
-		};
-		PromoCode: {
-			id: string;
-			organizationId: string;
-			campaignId: string | null;
-			customerId: string | null;
-			productId: string | null;
-			code: string;
-			/** @enum {string} */
-			discountType: "percentage" | "fixed_amount";
-			discountValue: number;
-			/** @default false */
-			isRedeemed: boolean;
-			/** Format: date-time */
-			redeemedAt: string | null;
-			saleorOrderId: string | null;
-			/** @default 1 */
-			quantityRedeemed: number;
-			originalPrice: number | null;
-			discountAmount: number | null;
-			netRevenue: number | null;
-			unitCostAtRedemption: number | null;
-			totalCOGS: number | null;
-			actualProfit: number | null;
-			isProfitable: boolean | null;
-			/** Format: date-time */
-			expiresAt: string;
-			metadata: {
-				[key: string]: unknown;
-			} | null;
-			/** Format: date-time */
-			createdAt: string;
-		};
-		PromoCodeRedemptionResponse: {
-			success: boolean;
-			promoCode: components["schemas"]["PromoCode"];
-			discountAmount: number;
-			netRevenue: number;
-			unitCostAtRedemption: number;
-			actualProfit: number;
-			isProfitable: boolean;
-			message?: string;
-		};
-		PromoCodeRedeem: {
-			/** @example HENNY20-ABC123 */
-			code: string;
-			saleorOrderId?: string;
-			/** @default 1 */
-			quantityRedeemed: number;
-			/** @example 11000 */
-			originalPrice: number;
-		};
-		PromoCodeValidationResponse: {
-			isValid: boolean;
-			promoCode?: components["schemas"]["PromoCode"];
-			reason?: string;
-		};
-		PromoCodeValidate: {
-			/** @example HENNY20-ABC123 */
-			code: string;
-			customerId?: string;
-		};
-		PromoCodeResponse: {
-			id: string;
-			organizationId: string;
-			campaignId: string | null;
-			customerId: string | null;
-			productId: string | null;
-			code: string;
-			/** @enum {string} */
-			discountType: "percentage" | "fixed_amount";
-			discountValue: number;
-			/** @default false */
-			isRedeemed: boolean;
-			/** Format: date-time */
-			redeemedAt: string | null;
-			saleorOrderId: string | null;
-			/** @default 1 */
-			quantityRedeemed: number;
-			originalPrice: number | null;
-			discountAmount: number | null;
-			netRevenue: number | null;
-			unitCostAtRedemption: number | null;
-			totalCOGS: number | null;
-			actualProfit: number | null;
-			isProfitable: boolean | null;
-			/** Format: date-time */
-			expiresAt: string;
-			metadata: {
-				[key: string]: unknown;
-			} | null;
-			/** Format: date-time */
-			createdAt: string;
-		};
-		BulkPromoCodeResponse: {
-			success: boolean;
-			codesGenerated: number;
-			codes: components["schemas"]["PromoCodeResponse"][];
-		};
-		BulkPromoCodeCreate: {
-			campaignId: string;
-			productId?: string;
-			/** @enum {string} */
-			discountType: "percentage" | "fixed_amount";
-			/** @example 20 */
-			discountValue: number;
-			/** Format: date-time */
-			expiresAt: string;
-			customerIds: string[];
-			/** @example HENNY20 */
-			codePrefix?: string;
-			/** @default 8 */
-			codeLength: number;
-		};
-		PromoCodeCreate: {
-			campaignId?: string;
-			customerId?: string;
-			productId?: string;
-			/** @example HENNY20-ABC123 */
-			code?: string;
-			/** @enum {string} */
-			discountType: "percentage" | "fixed_amount";
-			/** @example 20 */
-			discountValue: number;
-			/** Format: date-time */
-			expiresAt: string;
-			metadata?: {
-				[key: string]: unknown;
-			};
-		};
-		PromoCodeListResponse: {
-			data: components["schemas"]["PromoCodeResponse"][];
-			pagination: {
-				page: number;
-				limit: number;
-				total: number;
-				totalPages: number;
-			};
-		};
-		ProductResponse: {
-			id: string;
-			organizationId: string;
-			name: string;
-			sku: string;
-			category: string | null;
-			description: string | null;
-			saleorProductId: string | null;
-			saleorVariantId: string | null;
-			saleorChannelId: string | null;
-			basePrice: number;
-			currentFIFOCost: number | null;
-			/** @default 0 */
-			currentStockQuantity: number;
-			/** @default 0 */
-			reorderPoint: number;
-			/** @default 7 */
-			leadTimeDays: number;
-			alcoholContent: number | null;
-			/** @default true */
-			requiresAgeVerification: boolean;
-			/** @default false */
-			isSlowMover: boolean;
-			avgMarginPercent: number | null;
-			images: string[] | null;
-			/** @default [] */
-			tags: string[];
-			/** @default true */
-			isActive: boolean;
-			/** Format: date-time */
-			createdAt: string;
-			/** Format: date-time */
-			updatedAt: string;
-		};
-		ProductCreate: {
-			/** @example Hennessy XO */
-			name: string;
-			/** @example HENN-XO-750 */
-			sku: string;
-			/** @example Cognac */
-			category?: string;
-			/** @example Premium cognac aged 10+ years */
-			description?: string;
-			/** @example 11000 */
-			basePrice: number;
-			saleorProductId?: string;
-			saleorVariantId?: string;
-			/** @example 40 */
-			alcoholContent?: number;
-			/** @default true */
-			requiresAgeVerification: boolean;
-			images?: string[];
-			/** @default [] */
-			tags: string[];
-		};
-		ProductListResponse: {
-			data: components["schemas"]["ProductResponse"][];
-			pagination: {
-				page: number;
-				limit: number;
-				total: number;
-				totalPages: number;
-			};
-		};
-		ProductUpdate: {
-			/** @example Hennessy XO */
-			name?: string;
-			/** @example HENN-XO-750 */
-			sku?: string;
-			/** @example Cognac */
-			category?: string;
-			/** @example Premium cognac aged 10+ years */
-			description?: string;
-			/** @example 11000 */
-			basePrice?: number;
-			saleorProductId?: string;
-			saleorVariantId?: string;
-			/** @example 40 */
-			alcoholContent?: number;
-			/** @default true */
-			requiresAgeVerification: boolean;
-			images?: string[];
-			/** @default [] */
-			tags: string[];
-		};
-		ProductPriceUpdate: {
-			/** @example 11500 */
-			basePrice: number;
-			/** @example 50 */
-			currentStockQuantity?: number;
-		};
-		BulkProductPriceUpdate: {
-			updates: {
-				/** @example prod_123 */
-				productId: string;
-				/** @example 11500 */
-				basePrice: number;
-				/** @example 50 */
-				currentStockQuantity?: number;
-			}[];
-		};
-		CustomerResponse: {
-			id: string;
-			organizationId: string;
-			phoneNumber: string;
-			name: string | null;
-			/** Format: email */
-			email: string | null;
-			/** @default false */
-			isAgeVerified: boolean;
-			/** @enum {string|null} */
-			ageVerificationMethod:
-				| "id_upload"
-				| "show_at_pickup"
-				| "manual_verification"
-				| null;
-			/** Format: date-time */
-			ageVerifiedAt: string | null;
-			/** Format: date-time */
-			dateOfBirth: string | null;
-			/** @default false */
-			hasOptedIn: boolean;
-			optInSource: string | null;
-			optInCampaignId: string | null;
-			/** Format: date-time */
-			optedInAt: string | null;
-			/** Format: date-time */
-			optedOutAt: string | null;
-			/** @default bronze */
-			tier: string;
-			/** @default 0 */
-			totalSpend: number;
-			/** @default 0 */
-			totalOrders: number;
-			/** Format: date-time */
-			lastOrderAt: string | null;
-			city: string | null;
-			coordinates: {
-				lat: number;
-				lng: number;
-			} | null;
-			/** @default [] */
-			tags: string[];
-			customFields: {
-				[key: string]: unknown;
-			} | null;
-			/** Format: date-time */
-			createdAt: string;
-			/** Format: date-time */
-			updatedAt: string;
-		};
-		CustomerCreate: {
-			/** @example +254712345678 */
-			phoneNumber: string;
-			/** @example John Doe */
-			name?: string;
-			/**
-			 * Format: email
-			 * @example john@example.com
-			 */
-			email?: string;
-			/** @default false */
-			hasOptedIn: boolean;
-			/** @example whatsapp_campaign */
-			optInSource?: string;
-			optInCampaignId?: string;
-			/**
-			 * @default bronze
-			 * @enum {string}
-			 */
-			tier: "bronze" | "silver" | "gold" | "platinum";
-			/** @example Nairobi */
-			city?: string;
-			/** @default [] */
-			tags: string[];
-			customFields?: {
-				[key: string]: unknown;
-			};
-		};
-		BulkCustomerImportResponse: {
-			success: boolean;
-			imported: number;
-			skipped: number;
-			errors: {
-				index: number;
-				phoneNumber: string;
-				error: string;
-			}[];
-		};
-		BulkCustomerImport: {
-			customers: components["schemas"]["CustomerCreate"][];
-			/** @default true */
-			skipDuplicates: boolean;
-		};
-		CustomerListResponse: {
-			data: components["schemas"]["CustomerResponse"][];
-			pagination: {
-				page: number;
-				limit: number;
-				total: number;
-				totalPages: number;
-			};
-		};
-		CustomerUpdate: {
-			/** @example +254712345678 */
-			phoneNumber?: string;
-			/** @example John Doe */
-			name?: string;
-			/**
-			 * Format: email
-			 * @example john@example.com
-			 */
-			email?: string;
-			/** @default false */
-			hasOptedIn: boolean;
-			/** @example whatsapp_campaign */
-			optInSource?: string;
-			optInCampaignId?: string;
-			/**
-			 * @default bronze
-			 * @enum {string}
-			 */
-			tier: "bronze" | "silver" | "gold" | "platinum";
-			/** @example Nairobi */
-			city?: string;
-			/** @default [] */
-			tags: string[];
-			customFields?: {
-				[key: string]: unknown;
-			};
-		};
-		CustomerAgeVerification: {
-			/** @enum {string} */
-			verificationMethod:
-				| "id_upload"
-				| "show_at_pickup"
-				| "manual_verification";
-			/** Format: date-time */
-			dateOfBirth?: string;
-			/** Format: uri */
-			idDocumentUrl?: string;
-		};
-		CustomerOptIn: {
-			/** @example whatsapp_campaign */
-			optInSource?: string;
-			campaignId?: string;
-		};
-		CustomerOptOut: {
-			/** @example No longer interested */
-			reason?: string;
-		};
-		CustomerStats: {
-			totalCustomers: number;
-			optedInCustomers: number;
-			ageVerifiedCustomers: number;
-			activeCustomers: number;
-			customersByTier: {
-				[key: string]: number;
-			};
-			customersByCity: {
-				[key: string]: number;
-			};
-			totalLifetimeValue: number;
-			avgOrderValue: number;
-			avgOrdersPerCustomer: number;
-		};
-		ReconciliationResult: {
-			/**
-			 * @description True if ledger matches actual stock (within 1-unit tolerance)
-			 * @example false
-			 */
-			isInSync: boolean;
-			/**
-			 * @description Expected quantity from inventory_movements ledger
-			 * @example 100
-			 */
-			expectedQuantity: number;
-			/**
-			 * @description Recorded quantity in product.currentStockQuantity
-			 * @example 95
-			 */
-			recordedQuantity: number;
-			/**
-			 * @description Actual quantity (manual count or recorded)
-			 * @example 95
-			 */
-			actualQuantity: number;
-			/**
-			 * @description Difference (expected - actual)
-			 * @example 5
-			 */
-			discrepancy: number;
-			/**
-			 * @description Log ID if discrepancy was created
-			 * @example recon_123
-			 */
-			reconciliationLogId?: string;
-			/**
-			 * @description True if manual correction needed
-			 * @example true
-			 */
-			requiresAction?: boolean;
-		};
-		ReconcileProduct: {
-			productId: components["schemas"]["ID"] & unknown;
-			/**
-			 * @description Optional manual physical count override
-			 * @example 50
-			 */
-			actualPhysicalCount?: number;
-		};
-		ReconciliationSummary: {
-			/**
-			 * @description Total number of products reconciled
-			 * @example 50
-			 */
-			totalProducts: number;
-			/**
-			 * @description Number of products in sync
-			 * @example 47
-			 */
-			inSync: number;
-			/**
-			 * @description Number of products with discrepancies
-			 * @example 3
-			 */
-			outOfSync: number;
-			/**
-			 * @description List of products with discrepancies
-			 * @example [
-			 *       {
-			 *         "productId": "prod_123",
-			 *         "discrepancy": 5
-			 *       },
-			 *       {
-			 *         "productId": "prod_456",
-			 *         "discrepancy": -3
-			 *       }
-			 *     ]
-			 */
-			discrepancies: {
-				productId: components["schemas"]["ID"];
-				discrepancy: number;
-			}[];
-		};
-		ReconcileAllProducts: Record<string, never>;
-		CorrectionSuccess: {
-			/** @enum {boolean} */
-			success: true;
-			message: string;
-			reconciliationLogId: components["schemas"]["ID"];
-		};
-		CorrectDiscrepancy: {
-			reconciliationLogId: components["schemas"]["ID"] & unknown;
-			/**
-			 * @description Correction quantity (positive or negative)
-			 * @example -5
-			 */
-			correctionQty: number;
-			/**
-			 * @description Explanation for the correction
-			 * @example Physical count revealed 5 units were damaged and disposed
-			 */
-			reason: string;
-		};
-		OutcomeInvoice: {
-			id: string;
-			invoiceNumber: string;
-			/** Format: date-time */
-			periodStart: string;
-			/** Format: date-time */
-			periodEnd: string;
-			baseCharge: number;
-			captureCharge: number;
-			profitShareCharge: number;
-			totalAmount: number;
-			/** @default 0 */
-			tax: number;
-			amountDue: number;
-			capturesCount: number;
-			profitGenerated: number;
-			campaignBreakdown: {
-				campaignId: string;
-				name: string;
-				captures: number;
-				conversions: number;
-				revenue: number;
-				discountCost: number;
-				profit: number;
-			}[];
-			pricingSnapshot: {
-				pricingVersion: string;
-				basePrice: number;
-				outcomeBasePer1000Captures: number;
-				outcomeProfitSharePercent: number;
-			};
-			/** @enum {string} */
-			status: "draft" | "open" | "paid" | "void";
-			/** Format: date-time */
-			dueDate: string;
-			/** Format: date-time */
-			createdAt: string;
-		};
-		OutcomeInvoiceGenerate: {
-			/** Format: date-time */
-			periodStart: string;
-			/** Format: date-time */
-			periodEnd: string;
-		};
-		OutcomeInvoiceListResponse: {
-			data: components["schemas"]["OutcomeInvoice"][];
-			pagination: {
-				page: number;
-				limit: number;
-				total: number;
-				totalPages: number;
-			};
-		};
-		ProfitCheckResponse: {
-			campaignId: components["schemas"]["ID"];
-			/**
-			 * @description Current profit margin percentage
-			 * @example 15.5
-			 */
-			currentProfitMargin: number;
-			/**
-			 * @description Configured profit margin threshold
-			 * @example 10
-			 */
-			threshold: number;
-			/**
-			 * @description Whether current margin is above threshold
-			 * @example true
-			 */
-			isAboveThreshold: boolean;
-			totalRevenue: number;
-			totalCOGS: number;
-			actualProfit: number;
-			redemptionCount: number;
-			/**
-			 * @description Whether an alert was created during this check
-			 * @example false
-			 */
-			alertCreated?: boolean;
-			/** @description ID of alert created (if alertCreated is true) */
-			alertId?: string;
-		};
-		ProfitCheckRequest: {
-			/**
-			 * @description Automatically create alert if profit margin is below threshold
-			 * @default false
-			 * @example false
-			 */
-			createAlertIfBelowThreshold: boolean;
-		};
-		BulkProfitCheckResponse: {
-			results: components["schemas"]["ProfitCheckResponse"][];
-			totalChecked: number;
-			belowThreshold: number;
-			alertsCreated: number;
-		};
-		BulkProfitCheckRequest: {
-			/**
-			 * @description Array of campaign IDs to check (max 50)
-			 * @example [
-			 *       "camp_123",
-			 *       "camp_456"
-			 *     ]
-			 */
-			campaignIds: components["schemas"]["ID"][];
-			/** @default false */
-			createAlertsIfBelowThreshold: boolean;
-		};
-		PromoProfitAlert: {
-			id: string;
-			organizationId: string;
-			campaignId: string;
-			productId: string | null;
-			/** @enum {string} */
-			alertType:
-				| "negative_margin"
-				| "low_stock"
-				| "cost_spike"
-				| "profit_threshold_breach";
-			/** @enum {string} */
-			severity: "critical" | "warning" | "info";
-			message: string;
-			currentFIFOCost: number | null;
-			discountPercent: number | null;
-			redemptionsCount: number | null;
-			totalLoss: number | null;
-			estimatedLossPerRedemption: number | null;
-			/** @default false */
-			isResolved: boolean;
-			actionTaken: string | null;
-			/** Format: date-time */
-			resolvedAt: string | null;
-			/** Format: date-time */
-			createdAt: string;
-		};
-		PromoProfitAlertCreate: {
-			campaignId: string;
-			productId?: string;
-			/** @enum {string} */
-			alertType:
-				| "negative_margin"
-				| "low_stock"
-				| "cost_spike"
-				| "profit_threshold_breach";
-			/** @enum {string} */
-			severity: "critical" | "warning" | "info";
-			/** @example Campaign losing KES 400 per redemption */
-			message: string;
-			currentFIFOCost?: number;
-			discountPercent?: number;
-			redemptionsCount?: number;
-			totalLoss?: number;
-			estimatedLossPerRedemption?: number;
-		};
-		PromoProfitAlertResponse: {
-			id: string;
-			organizationId: string;
-			campaignId: string;
-			productId: string | null;
-			/** @enum {string} */
-			alertType:
-				| "negative_margin"
-				| "low_stock"
-				| "cost_spike"
-				| "profit_threshold_breach";
-			/** @enum {string} */
-			severity: "critical" | "warning" | "info";
-			message: string;
-			currentFIFOCost: number | null;
-			discountPercent: number | null;
-			redemptionsCount: number | null;
-			totalLoss: number | null;
-			estimatedLossPerRedemption: number | null;
-			/** @default false */
-			isResolved: boolean;
-			actionTaken: string | null;
-			/** Format: date-time */
-			resolvedAt: string | null;
-			/** Format: date-time */
-			createdAt: string;
-		};
-		PromoProfitAlertListResponse: {
-			data: components["schemas"]["PromoProfitAlertResponse"][];
-			pagination: {
-				page: number;
-				limit: number;
-				total: number;
-				totalPages: number;
-			};
-		};
-		PromoProfitAlertSummary: {
-			totalAlerts: number;
-			unresolvedAlerts: number;
-			criticalAlerts: number;
-			totalEstimatedLoss: number;
-			alertsByType: {
-				[key: string]: number;
-			};
-			alertsBySeverity: {
-				[key: string]: number;
-			};
-			recentAlerts: components["schemas"]["PromoProfitAlertResponse"][];
-		};
-		PromoProfitAlertResolve: {
-			/** @example Paused campaign and adjusted discount to 10% */
-			actionTaken: string;
-		};
-		AlertSettingsResponse: {
-			campaignId: components["schemas"]["ID"];
-			autoPauseEnabled: boolean;
-			pauseThreshold: number;
-			notificationsEnabled: boolean;
-			alertCheckInterval: number;
-		};
-		AlertSettingsUpdate: {
-			/**
-			 * @description Enable automatic campaign pause when profit margin drops below threshold
-			 * @example true
-			 */
-			autoPauseEnabled?: boolean;
-			/**
-			 * @description Profit margin percentage threshold for auto-pause (e.g., 10 = 10%)
-			 * @example 10
-			 */
-			pauseThreshold?: number;
-			/**
-			 * @description Send alerts to distributor when threshold is breached
-			 * @example true
-			 */
-			notificationsEnabled?: boolean;
-			/**
-			 * @description Seconds between profit checks (min: 60s, max: 1 hour)
-			 * @example 300
-			 */
-			alertCheckInterval?: number;
-		};
-		AutoPauseActionResponse: {
-			campaignId: components["schemas"]["ID"];
-			/**
-			 * @description Whether the campaign was paused
-			 * @example true
-			 */
-			wasPaused: boolean;
-			/**
-			 * @description Reason for pause or no-pause
-			 * @example Profit margin (8.5%) below threshold (10%)
-			 */
-			reason?: string;
-			profitCheck: components["schemas"]["ProfitCheckResponse"];
-		};
-	};
-	responses: never;
-	parameters: never;
-	requestBodies: never;
-	headers: never;
-	pathItems: never;
+    schemas: {
+        ID: {
+            id: string;
+        };
+        UserResponse: {
+            id: components["schemas"]["ID"];
+            /** @example user@example.com */
+            email: string;
+            /** @example John Doe */
+            name: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        UserCreate: {
+            /**
+             * Format: email
+             * @description User email address
+             * @example user@example.com
+             */
+            email: string;
+            /**
+             * @description Full name of the user
+             * @example John Doe
+             */
+            name: string;
+            /**
+             * @description Password (minimum 8 characters)
+             * @example SecurePass123!
+             */
+            password: string;
+        };
+        UserUpdate: {
+            /** @example Jane Doe */
+            name?: string;
+            /** @example NewPass123! */
+            password?: string;
+        };
+        PurchaseOrderItem: {
+            id: string;
+            purchaseOrderId: string;
+            productId: string;
+            quantityOrdered: number;
+            /** @default 0 */
+            quantityReceived: number;
+            unitCost: number;
+            batchNumber: string | null;
+            /** Format: date-time */
+            expiryDate: string | null;
+            lineTotal: number;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        PurchaseOrderResponse: {
+            id: string;
+            organizationId: string;
+            poNumber: string;
+            supplierName: string | null;
+            supplierContact: string | null;
+            /** @enum {string} */
+            status: "draft" | "ordered" | "received" | "cancelled";
+            /** Format: date-time */
+            orderDate: string;
+            /** Format: date-time */
+            receivedDate: string | null;
+            totalCost: number;
+            /** @default KES */
+            currency: string;
+            notes: string | null;
+            metadata: {
+                [key: string]: unknown;
+            } | null;
+            items?: components["schemas"]["PurchaseOrderItem"][];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        QuickStockArrival: {
+            /** @example prod_123 */
+            productId: string;
+            /** @example 50 */
+            quantity: number;
+            /** @example 9200 */
+            unitCost: number;
+            /** @example ABC Distributors */
+            supplierName?: string;
+            /** @example BATCH-2025-001 */
+            batchNumber?: string;
+            /** Format: date-time */
+            expiryDate?: string;
+        };
+        PurchaseOrderItemCreate: {
+            /** @example prod_123 */
+            productId: string;
+            /** @example 50 */
+            quantityOrdered: number;
+            /** @example 50 */
+            quantityReceived?: number;
+            /** @example 9200 */
+            unitCost: number;
+            /** @example BATCH-2025-001 */
+            batchNumber?: string;
+            /** Format: date-time */
+            expiryDate?: string;
+        };
+        PurchaseOrderCreate: {
+            /** @example ABC Distributors */
+            supplierName?: string;
+            /** @example +254712345678 */
+            supplierContact?: string;
+            /** Format: date-time */
+            orderDate?: string;
+            /** Format: date-time */
+            receivedDate?: string;
+            notes?: string;
+            items: components["schemas"]["PurchaseOrderItemCreate"][];
+        };
+        PurchaseOrderListResponse: {
+            data: components["schemas"]["PurchaseOrderResponse"][];
+            pagination: {
+                page: number;
+                limit: number;
+                total: number;
+                totalPages: number;
+            };
+        };
+        PurchaseOrderUpdate: {
+            /** @enum {string} */
+            status?: "draft" | "ordered" | "received" | "cancelled";
+            /** Format: date-time */
+            receivedDate?: string;
+            notes?: string;
+        };
+        InventoryMovementResponse: {
+            id: string;
+            organizationId: string;
+            productId: string;
+            /** @enum {string} */
+            movementType: "purchase" | "sale" | "adjustment" | "promo_redemption" | "return" | "damage" | "theft";
+            quantity: number;
+            unitCostAtMovement: number;
+            totalCost: number;
+            fifoBatchId: string | null;
+            referenceType: string | null;
+            referenceId: string | null;
+            campaignId: string | null;
+            promoCodeId: string | null;
+            stockAfterMovement: number;
+            notes: string | null;
+            metadata: {
+                [key: string]: unknown;
+            } | null;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        InventoryMovementListResponse: {
+            data: components["schemas"]["InventoryMovementResponse"][];
+            pagination: {
+                page: number;
+                limit: number;
+                total: number;
+                totalPages: number;
+            };
+        };
+        FIFOBatchInfo: {
+            batchId: string;
+            productId: string;
+            unitCost: number;
+            quantityRemaining: number;
+            /** Format: date-time */
+            purchaseDate: string;
+            batchNumber: string | null;
+            /** Format: date-time */
+            expiryDate: string | null;
+        };
+        ProductFIFOBatchesResponse: {
+            productId: string;
+            productName: string;
+            currentFIFOCost: number | null;
+            totalStockQuantity: number;
+            batches: components["schemas"]["FIFOBatchInfo"][];
+        };
+        CampaignProfitabilityResponse: {
+            isProfitable: boolean;
+            estimatedProfit: number;
+            estimatedProfitPercent: number;
+            basePrice: number;
+            discountAmount: number;
+            netRevenue: number;
+            currentFIFOCost: number;
+            recommendation?: string;
+            suggestedDiscount?: number;
+            alternativeProducts?: {
+                productId: string;
+                productName: string;
+                suggestedDiscount: number;
+                estimatedProfit: number;
+                reason: string;
+            }[];
+        };
+        CampaignProfitabilityCheck: {
+            /** @example prod_123 */
+            productId: string;
+            /** @example 20 */
+            discountPercent: number;
+            discountAmount?: number;
+        };
+        CampaignTargetSegment: {
+            tiers?: string[];
+            minSpend?: number;
+            cities?: string[];
+            tags?: string[];
+            lastOrderDaysAgo?: number;
+        } | null;
+        CampaignResponse: {
+            id: string;
+            organizationId: string;
+            name: string;
+            /** @enum {string} */
+            type: "flash_sale" | "loyalty_nudge" | "restock_alert" | "event_promo" | "dead_hour_boost" | "product_launch" | "reactivation";
+            /** @enum {string} */
+            status: "draft" | "scheduled" | "active" | "paused" | "completed" | "cancelled";
+            messageTemplate: string;
+            /**
+             * @default [
+             *       "whatsapp"
+             *     ]
+             */
+            platforms: ("whatsapp" | "sms" | "email")[];
+            targetSegment: components["schemas"]["CampaignTargetSegment"];
+            targetRadius: number | null;
+            targetProductIds: string[] | null;
+            offerType: string;
+            offerValue: number | null;
+            minPurchaseAmount: number | null;
+            estimatedFIFOCost: number | null;
+            estimatedProfitPerRedemption: number | null;
+            minProfitThreshold: number | null;
+            saleorVoucherCode: string | null;
+            maxRedemptions: number | null;
+            /** @default 0 */
+            redemptionsUsed: number;
+            /** Format: date-time */
+            scheduledFor: string | null;
+            /** Format: date-time */
+            startsAt: string | null;
+            /** Format: date-time */
+            endsAt: string | null;
+            /** @default 0 */
+            sent: number;
+            /** @default 0 */
+            delivered: number;
+            /** @default 0 */
+            opened: number;
+            /** @default 0 */
+            clicked: number;
+            /** @default 0 */
+            capturesCount: number;
+            /** @default 0 */
+            conversions: number;
+            /** @default 0 */
+            revenue: number;
+            /** @default 0 */
+            discountCost: number;
+            /** @default 0 */
+            totalCOGS: number;
+            /** @default 0 */
+            actualProfit: number;
+            avgProfitPerRedemption: number | null;
+            /** @default false */
+            isLosingMoney: boolean;
+            budgetAmount: number | null;
+            /** @default 0 */
+            spentAmount: number;
+            metadata: {
+                [key: string]: unknown;
+            } | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        CampaignCreate: {
+            /** @example Weekend Flash Sale */
+            name: string;
+            /** @enum {string} */
+            type: "flash_sale" | "loyalty_nudge" | "restock_alert" | "event_promo" | "dead_hour_boost" | "product_launch" | "reactivation";
+            /** @example Get 20% off Hennessy this weekend! */
+            messageTemplate: string;
+            /**
+             * @default [
+             *       "whatsapp"
+             *     ]
+             */
+            platforms: ("whatsapp" | "sms" | "email")[];
+            targetSegment?: components["schemas"]["CampaignTargetSegment"] & Record<string, never>;
+            targetRadius?: number;
+            targetProductIds?: string[];
+            /** @enum {string} */
+            offerType: "percentage_discount" | "fixed_discount" | "buy_x_get_y" | "free_delivery";
+            /** @example 20 */
+            offerValue?: number;
+            minPurchaseAmount?: number;
+            minProfitThreshold?: number;
+            /** Format: date-time */
+            scheduledFor?: string;
+            /** Format: date-time */
+            startsAt?: string;
+            /** Format: date-time */
+            endsAt?: string;
+            /** @example 100 */
+            maxRedemptions?: number;
+            budgetAmount?: number;
+        };
+        CampaignListResponse: {
+            data: components["schemas"]["CampaignResponse"][];
+            pagination: {
+                page: number;
+                limit: number;
+                total: number;
+                totalPages: number;
+            };
+        };
+        CampaignUpdate: {
+            /** @example Weekend Flash Sale */
+            name?: string;
+            /** @enum {string} */
+            type?: "flash_sale" | "loyalty_nudge" | "restock_alert" | "event_promo" | "dead_hour_boost" | "product_launch" | "reactivation";
+            /** @example Get 20% off Hennessy this weekend! */
+            messageTemplate?: string;
+            /**
+             * @default [
+             *       "whatsapp"
+             *     ]
+             */
+            platforms: ("whatsapp" | "sms" | "email")[];
+            targetSegment?: components["schemas"]["CampaignTargetSegment"] & Record<string, never>;
+            targetRadius?: number;
+            targetProductIds?: string[];
+            /** @enum {string} */
+            offerType?: "percentage_discount" | "fixed_discount" | "buy_x_get_y" | "free_delivery";
+            /** @example 20 */
+            offerValue?: number;
+            minPurchaseAmount?: number;
+            minProfitThreshold?: number;
+            /** Format: date-time */
+            scheduledFor?: string;
+            /** Format: date-time */
+            startsAt?: string;
+            /** Format: date-time */
+            endsAt?: string;
+            /** @example 100 */
+            maxRedemptions?: number;
+            budgetAmount?: number;
+            /** @enum {string} */
+            status?: "draft" | "scheduled" | "active" | "paused" | "completed" | "cancelled";
+        };
+        CampaignStats: {
+            campaignId: string;
+            campaignName: string;
+            /** @enum {string} */
+            status: "draft" | "scheduled" | "active" | "paused" | "completed" | "cancelled";
+            sent: number;
+            delivered: number;
+            opened: number;
+            clicked: number;
+            conversions: number;
+            capturesCount: number;
+            revenue: number;
+            discountCost: number;
+            totalCOGS: number;
+            actualProfit: number;
+            avgProfitPerRedemption: number | null;
+            deliveryRate: number;
+            openRate: number;
+            clickRate: number;
+            conversionRate: number;
+            roi: number;
+        };
+        PromoCode: {
+            id: string;
+            organizationId: string;
+            campaignId: string | null;
+            customerId: string | null;
+            productId: string | null;
+            code: string;
+            /** @enum {string} */
+            discountType: "percentage" | "fixed_amount";
+            discountValue: number;
+            /** @default false */
+            isRedeemed: boolean;
+            /** Format: date-time */
+            redeemedAt: string | null;
+            saleorOrderId: string | null;
+            /** @default 1 */
+            quantityRedeemed: number;
+            originalPrice: number | null;
+            discountAmount: number | null;
+            netRevenue: number | null;
+            unitCostAtRedemption: number | null;
+            totalCOGS: number | null;
+            actualProfit: number | null;
+            isProfitable: boolean | null;
+            /** Format: date-time */
+            expiresAt: string;
+            metadata: {
+                [key: string]: unknown;
+            } | null;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        PromoCodeRedemptionResponse: {
+            success: boolean;
+            promoCode: components["schemas"]["PromoCode"];
+            discountAmount: number;
+            netRevenue: number;
+            unitCostAtRedemption: number;
+            actualProfit: number;
+            isProfitable: boolean;
+            message?: string;
+        };
+        PromoCodeRedeem: {
+            /** @example HENNY20-ABC123 */
+            code: string;
+            saleorOrderId?: string;
+            /** @default 1 */
+            quantityRedeemed: number;
+            /** @example 11000 */
+            originalPrice: number;
+        };
+        PromoCodeValidationResponse: {
+            isValid: boolean;
+            promoCode?: components["schemas"]["PromoCode"];
+            reason?: string;
+        };
+        PromoCodeValidate: {
+            /** @example HENNY20-ABC123 */
+            code: string;
+            customerId?: string;
+        };
+        PromoCodeResponse: {
+            id: string;
+            organizationId: string;
+            campaignId: string | null;
+            customerId: string | null;
+            productId: string | null;
+            code: string;
+            /** @enum {string} */
+            discountType: "percentage" | "fixed_amount";
+            discountValue: number;
+            /** @default false */
+            isRedeemed: boolean;
+            /** Format: date-time */
+            redeemedAt: string | null;
+            saleorOrderId: string | null;
+            /** @default 1 */
+            quantityRedeemed: number;
+            originalPrice: number | null;
+            discountAmount: number | null;
+            netRevenue: number | null;
+            unitCostAtRedemption: number | null;
+            totalCOGS: number | null;
+            actualProfit: number | null;
+            isProfitable: boolean | null;
+            /** Format: date-time */
+            expiresAt: string;
+            metadata: {
+                [key: string]: unknown;
+            } | null;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        BulkPromoCodeResponse: {
+            success: boolean;
+            codesGenerated: number;
+            codes: components["schemas"]["PromoCodeResponse"][];
+        };
+        BulkPromoCodeCreate: {
+            campaignId: string;
+            productId?: string;
+            /** @enum {string} */
+            discountType: "percentage" | "fixed_amount";
+            /** @example 20 */
+            discountValue: number;
+            /** Format: date-time */
+            expiresAt: string;
+            customerIds: string[];
+            /** @example HENNY20 */
+            codePrefix?: string;
+            /** @default 8 */
+            codeLength: number;
+        };
+        PromoCodeCreate: {
+            campaignId?: string;
+            customerId?: string;
+            productId?: string;
+            /** @example HENNY20-ABC123 */
+            code?: string;
+            /** @enum {string} */
+            discountType: "percentage" | "fixed_amount";
+            /** @example 20 */
+            discountValue: number;
+            /** Format: date-time */
+            expiresAt: string;
+            metadata?: {
+                [key: string]: unknown;
+            };
+        };
+        PromoCodeListResponse: {
+            data: components["schemas"]["PromoCodeResponse"][];
+            pagination: {
+                page: number;
+                limit: number;
+                total: number;
+                totalPages: number;
+            };
+        };
+        ProductResponse: {
+            id: string;
+            organizationId: string;
+            name: string;
+            sku: string;
+            category: string | null;
+            description: string | null;
+            saleorProductId: string | null;
+            saleorVariantId: string | null;
+            saleorChannelId: string | null;
+            basePrice: number;
+            currentFIFOCost: number | null;
+            /** @default 0 */
+            currentStockQuantity: number;
+            /** @default 0 */
+            reorderPoint: number;
+            /** @default 7 */
+            leadTimeDays: number;
+            alcoholContent: number | null;
+            /** @default true */
+            requiresAgeVerification: boolean;
+            /** @default false */
+            isSlowMover: boolean;
+            avgMarginPercent: number | null;
+            images: string[] | null;
+            /** @default [] */
+            tags: string[];
+            /** @default true */
+            isActive: boolean;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        ProductCreate: {
+            /** @example Hennessy XO */
+            name: string;
+            /** @example HENN-XO-750 */
+            sku: string;
+            /** @example Cognac */
+            category?: string;
+            /** @example Premium cognac aged 10+ years */
+            description?: string;
+            /** @example 11000 */
+            basePrice: number;
+            saleorProductId?: string;
+            saleorVariantId?: string;
+            /** @example 40 */
+            alcoholContent?: number;
+            /** @default true */
+            requiresAgeVerification: boolean;
+            images?: string[];
+            /** @default [] */
+            tags: string[];
+        };
+        ProductListResponse: {
+            data: components["schemas"]["ProductResponse"][];
+            pagination: {
+                page: number;
+                limit: number;
+                total: number;
+                totalPages: number;
+            };
+        };
+        ProductUpdate: {
+            /** @example Hennessy XO */
+            name?: string;
+            /** @example HENN-XO-750 */
+            sku?: string;
+            /** @example Cognac */
+            category?: string;
+            /** @example Premium cognac aged 10+ years */
+            description?: string;
+            /** @example 11000 */
+            basePrice?: number;
+            saleorProductId?: string;
+            saleorVariantId?: string;
+            /** @example 40 */
+            alcoholContent?: number;
+            /** @default true */
+            requiresAgeVerification: boolean;
+            images?: string[];
+            /** @default [] */
+            tags: string[];
+        };
+        ProductPriceUpdate: {
+            /** @example 11500 */
+            basePrice: number;
+            /** @example 50 */
+            currentStockQuantity?: number;
+        };
+        BulkProductPriceUpdate: {
+            updates: {
+                /** @example prod_123 */
+                productId: string;
+                /** @example 11500 */
+                basePrice: number;
+                /** @example 50 */
+                currentStockQuantity?: number;
+            }[];
+        };
+        CustomerResponse: {
+            id: string;
+            organizationId: string;
+            phoneNumber: string;
+            name: string | null;
+            /** Format: email */
+            email: string | null;
+            /** @default false */
+            isAgeVerified: boolean;
+            /** @enum {string|null} */
+            ageVerificationMethod: "id_upload" | "show_at_pickup" | "manual_verification" | null;
+            /** Format: date-time */
+            ageVerifiedAt: string | null;
+            /** Format: date-time */
+            dateOfBirth: string | null;
+            /** @default false */
+            hasOptedIn: boolean;
+            optInSource: string | null;
+            optInCampaignId: string | null;
+            /** Format: date-time */
+            optedInAt: string | null;
+            /** Format: date-time */
+            optedOutAt: string | null;
+            /** @default bronze */
+            tier: string;
+            /** @default 0 */
+            totalSpend: number;
+            /** @default 0 */
+            totalOrders: number;
+            /** Format: date-time */
+            lastOrderAt: string | null;
+            city: string | null;
+            coordinates: {
+                lat: number;
+                lng: number;
+            } | null;
+            /** @default [] */
+            tags: string[];
+            customFields: {
+                [key: string]: unknown;
+            } | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        CustomerCreate: {
+            /** @example +254712345678 */
+            phoneNumber: string;
+            /** @example John Doe */
+            name?: string;
+            /**
+             * Format: email
+             * @example john@example.com
+             */
+            email?: string;
+            /** @default false */
+            hasOptedIn: boolean;
+            /** @example whatsapp_campaign */
+            optInSource?: string;
+            optInCampaignId?: string;
+            /**
+             * @default bronze
+             * @enum {string}
+             */
+            tier: "bronze" | "silver" | "gold" | "platinum";
+            /** @example Nairobi */
+            city?: string;
+            /** @default [] */
+            tags: string[];
+            customFields?: {
+                [key: string]: unknown;
+            };
+        };
+        BulkCustomerImportResponse: {
+            success: boolean;
+            imported: number;
+            skipped: number;
+            errors: {
+                index: number;
+                phoneNumber: string;
+                error: string;
+            }[];
+        };
+        BulkCustomerImport: {
+            customers: components["schemas"]["CustomerCreate"][];
+            /** @default true */
+            skipDuplicates: boolean;
+        };
+        CustomerListResponse: {
+            data: components["schemas"]["CustomerResponse"][];
+            pagination: {
+                page: number;
+                limit: number;
+                total: number;
+                totalPages: number;
+            };
+        };
+        CustomerUpdate: {
+            /** @example +254712345678 */
+            phoneNumber?: string;
+            /** @example John Doe */
+            name?: string;
+            /**
+             * Format: email
+             * @example john@example.com
+             */
+            email?: string;
+            /** @default false */
+            hasOptedIn: boolean;
+            /** @example whatsapp_campaign */
+            optInSource?: string;
+            optInCampaignId?: string;
+            /**
+             * @default bronze
+             * @enum {string}
+             */
+            tier: "bronze" | "silver" | "gold" | "platinum";
+            /** @example Nairobi */
+            city?: string;
+            /** @default [] */
+            tags: string[];
+            customFields?: {
+                [key: string]: unknown;
+            };
+        };
+        CustomerAgeVerification: {
+            /** @enum {string} */
+            verificationMethod: "id_upload" | "show_at_pickup" | "manual_verification";
+            /** Format: date-time */
+            dateOfBirth?: string;
+            /** Format: uri */
+            idDocumentUrl?: string;
+        };
+        CustomerOptIn: {
+            /** @example whatsapp_campaign */
+            optInSource?: string;
+            campaignId?: string;
+        };
+        CustomerOptOut: {
+            /** @example No longer interested */
+            reason?: string;
+        };
+        CustomerStats: {
+            totalCustomers: number;
+            optedInCustomers: number;
+            ageVerifiedCustomers: number;
+            activeCustomers: number;
+            customersByTier: {
+                [key: string]: number;
+            };
+            customersByCity: {
+                [key: string]: number;
+            };
+            totalLifetimeValue: number;
+            avgOrderValue: number;
+            avgOrdersPerCustomer: number;
+        };
+        ReconciliationResult: {
+            /**
+             * @description True if ledger matches actual stock (within 1-unit tolerance)
+             * @example false
+             */
+            isInSync: boolean;
+            /**
+             * @description Expected quantity from inventory_movements ledger
+             * @example 100
+             */
+            expectedQuantity: number;
+            /**
+             * @description Recorded quantity in product.currentStockQuantity
+             * @example 95
+             */
+            recordedQuantity: number;
+            /**
+             * @description Actual quantity (manual count or recorded)
+             * @example 95
+             */
+            actualQuantity: number;
+            /**
+             * @description Difference (expected - actual)
+             * @example 5
+             */
+            discrepancy: number;
+            /**
+             * @description Log ID if discrepancy was created
+             * @example recon_123
+             */
+            reconciliationLogId?: string;
+            /**
+             * @description True if manual correction needed
+             * @example true
+             */
+            requiresAction?: boolean;
+        };
+        ReconcileProduct: {
+            productId: components["schemas"]["ID"] & unknown;
+            /**
+             * @description Optional manual physical count override
+             * @example 50
+             */
+            actualPhysicalCount?: number;
+        };
+        ReconciliationSummary: {
+            /**
+             * @description Total number of products reconciled
+             * @example 50
+             */
+            totalProducts: number;
+            /**
+             * @description Number of products in sync
+             * @example 47
+             */
+            inSync: number;
+            /**
+             * @description Number of products with discrepancies
+             * @example 3
+             */
+            outOfSync: number;
+            /**
+             * @description List of products with discrepancies
+             * @example [
+             *       {
+             *         "productId": "prod_123",
+             *         "discrepancy": 5
+             *       },
+             *       {
+             *         "productId": "prod_456",
+             *         "discrepancy": -3
+             *       }
+             *     ]
+             */
+            discrepancies: {
+                productId: components["schemas"]["ID"];
+                discrepancy: number;
+            }[];
+        };
+        ReconcileAllProducts: Record<string, never>;
+        CorrectionSuccess: {
+            /** @enum {boolean} */
+            success: true;
+            message: string;
+            reconciliationLogId: components["schemas"]["ID"];
+        };
+        CorrectDiscrepancy: {
+            reconciliationLogId: components["schemas"]["ID"] & unknown;
+            /**
+             * @description Correction quantity (positive or negative)
+             * @example -5
+             */
+            correctionQty: number;
+            /**
+             * @description Explanation for the correction
+             * @example Physical count revealed 5 units were damaged and disposed
+             */
+            reason: string;
+        };
+        OutcomeInvoice: {
+            id: string;
+            invoiceNumber: string;
+            /** Format: date-time */
+            periodStart: string;
+            /** Format: date-time */
+            periodEnd: string;
+            baseCharge: number;
+            captureCharge: number;
+            profitShareCharge: number;
+            totalAmount: number;
+            /** @default 0 */
+            tax: number;
+            amountDue: number;
+            capturesCount: number;
+            profitGenerated: number;
+            campaignBreakdown: {
+                campaignId: string;
+                name: string;
+                captures: number;
+                conversions: number;
+                revenue: number;
+                discountCost: number;
+                profit: number;
+            }[];
+            pricingSnapshot: {
+                pricingVersion: string;
+                basePrice: number;
+                outcomeBasePer1000Captures: number;
+                outcomeProfitSharePercent: number;
+            };
+            /** @enum {string} */
+            status: "draft" | "open" | "paid" | "void";
+            /** Format: date-time */
+            dueDate: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        OutcomeInvoiceGenerate: {
+            /** Format: date-time */
+            periodStart: string;
+            /** Format: date-time */
+            periodEnd: string;
+        };
+        OutcomeInvoiceListResponse: {
+            data: components["schemas"]["OutcomeInvoice"][];
+            pagination: {
+                page: number;
+                limit: number;
+                total: number;
+                totalPages: number;
+            };
+        };
+        ProfitCheckResponse: {
+            campaignId: components["schemas"]["ID"];
+            /**
+             * @description Current profit margin percentage
+             * @example 15.5
+             */
+            currentProfitMargin: number;
+            /**
+             * @description Configured profit margin threshold
+             * @example 10
+             */
+            threshold: number;
+            /**
+             * @description Whether current margin is above threshold
+             * @example true
+             */
+            isAboveThreshold: boolean;
+            totalRevenue: number;
+            totalCOGS: number;
+            actualProfit: number;
+            redemptionCount: number;
+            /**
+             * @description Whether an alert was created during this check
+             * @example false
+             */
+            alertCreated?: boolean;
+            /** @description ID of alert created (if alertCreated is true) */
+            alertId?: string;
+        };
+        ProfitCheckRequest: {
+            /**
+             * @description Automatically create alert if profit margin is below threshold
+             * @default false
+             * @example false
+             */
+            createAlertIfBelowThreshold: boolean;
+        };
+        BulkProfitCheckResponse: {
+            results: components["schemas"]["ProfitCheckResponse"][];
+            totalChecked: number;
+            belowThreshold: number;
+            alertsCreated: number;
+        };
+        BulkProfitCheckRequest: {
+            /**
+             * @description Array of campaign IDs to check (max 50)
+             * @example [
+             *       "camp_123",
+             *       "camp_456"
+             *     ]
+             */
+            campaignIds: components["schemas"]["ID"][];
+            /** @default false */
+            createAlertsIfBelowThreshold: boolean;
+        };
+        PromoProfitAlert: {
+            id: string;
+            organizationId: string;
+            campaignId: string;
+            productId: string | null;
+            /** @enum {string} */
+            alertType: "negative_margin" | "low_stock" | "cost_spike" | "profit_threshold_breach";
+            /** @enum {string} */
+            severity: "critical" | "warning" | "info";
+            message: string;
+            currentFIFOCost: number | null;
+            discountPercent: number | null;
+            redemptionsCount: number | null;
+            totalLoss: number | null;
+            estimatedLossPerRedemption: number | null;
+            /** @default false */
+            isResolved: boolean;
+            actionTaken: string | null;
+            /** Format: date-time */
+            resolvedAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        PromoProfitAlertCreate: {
+            campaignId: string;
+            productId?: string;
+            /** @enum {string} */
+            alertType: "negative_margin" | "low_stock" | "cost_spike" | "profit_threshold_breach";
+            /** @enum {string} */
+            severity: "critical" | "warning" | "info";
+            /** @example Campaign losing KES 400 per redemption */
+            message: string;
+            currentFIFOCost?: number;
+            discountPercent?: number;
+            redemptionsCount?: number;
+            totalLoss?: number;
+            estimatedLossPerRedemption?: number;
+        };
+        PromoProfitAlertResponse: {
+            id: string;
+            organizationId: string;
+            campaignId: string;
+            productId: string | null;
+            /** @enum {string} */
+            alertType: "negative_margin" | "low_stock" | "cost_spike" | "profit_threshold_breach";
+            /** @enum {string} */
+            severity: "critical" | "warning" | "info";
+            message: string;
+            currentFIFOCost: number | null;
+            discountPercent: number | null;
+            redemptionsCount: number | null;
+            totalLoss: number | null;
+            estimatedLossPerRedemption: number | null;
+            /** @default false */
+            isResolved: boolean;
+            actionTaken: string | null;
+            /** Format: date-time */
+            resolvedAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        PromoProfitAlertListResponse: {
+            data: components["schemas"]["PromoProfitAlertResponse"][];
+            pagination: {
+                page: number;
+                limit: number;
+                total: number;
+                totalPages: number;
+            };
+        };
+        PromoProfitAlertSummary: {
+            totalAlerts: number;
+            unresolvedAlerts: number;
+            criticalAlerts: number;
+            totalEstimatedLoss: number;
+            alertsByType: {
+                [key: string]: number;
+            };
+            alertsBySeverity: {
+                [key: string]: number;
+            };
+            recentAlerts: components["schemas"]["PromoProfitAlertResponse"][];
+        };
+        PromoProfitAlertResolve: {
+            /** @example Paused campaign and adjusted discount to 10% */
+            actionTaken: string;
+        };
+        AlertSettingsResponse: {
+            campaignId: components["schemas"]["ID"];
+            autoPauseEnabled: boolean;
+            pauseThreshold: number;
+            notificationsEnabled: boolean;
+            alertCheckInterval: number;
+        };
+        AlertSettingsUpdate: {
+            /**
+             * @description Enable automatic campaign pause when profit margin drops below threshold
+             * @example true
+             */
+            autoPauseEnabled?: boolean;
+            /**
+             * @description Profit margin percentage threshold for auto-pause (e.g., 10 = 10%)
+             * @example 10
+             */
+            pauseThreshold?: number;
+            /**
+             * @description Send alerts to distributor when threshold is breached
+             * @example true
+             */
+            notificationsEnabled?: boolean;
+            /**
+             * @description Seconds between profit checks (min: 60s, max: 1 hour)
+             * @example 300
+             */
+            alertCheckInterval?: number;
+        };
+        AutoPauseActionResponse: {
+            campaignId: components["schemas"]["ID"];
+            /**
+             * @description Whether the campaign was paused
+             * @example true
+             */
+            wasPaused: boolean;
+            /**
+             * @description Reason for pause or no-pause
+             * @example Profit margin (8.5%) below threshold (10%)
+             */
+            reason?: string;
+            profitCheck: components["schemas"]["ProfitCheckResponse"];
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;

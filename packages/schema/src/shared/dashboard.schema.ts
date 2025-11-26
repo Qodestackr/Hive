@@ -1,13 +1,5 @@
 import { z } from "zod";
 
-// ============================================================================
-// DASHBOARD SCHEMAS
-// ============================================================================
-
-/**
- * Dashboard overview schema
- * High-level metrics for distributor dashboard
- */
 export const DashboardOverviewSchema = z
 	.object({
 		// Campaign metrics
@@ -27,9 +19,5 @@ export const DashboardOverviewSchema = z
 		lifetimeValue: z.number().nonnegative(),
 	})
 	.openapi("DashboardOverview");
-
-// ============================================================================
-// TYPE EXPORTS
-// ============================================================================
 
 export type DashboardOverview = z.infer<typeof DashboardOverviewSchema>;

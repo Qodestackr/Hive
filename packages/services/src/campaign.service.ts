@@ -1,8 +1,10 @@
 import db, {
 	and,
+	asc,
 	campaigns,
 	count,
 	customers,
+	desc,
 	eq,
 	products,
 	promoCodes,
@@ -11,9 +13,14 @@ import db, {
 	withDrizzleErrors,
 } from "@repo/db";
 import type {
+	CampaignCreate,
+	CampaignListQuery,
+	CampaignListResponse,
 	CampaignLtvAnalysisResponse,
 	CampaignProfitabilityCheck,
 	CampaignProfitabilityResponse,
+	CampaignResponse,
+	CampaignStats,
 } from "@repo/schema";
 import { OrganizationContext } from "@repo/utils";
 import {
@@ -23,6 +30,7 @@ import {
 } from "@repo/utils/errors/domain";
 import { Effect } from "effect";
 import { auditLogService } from "./audit-log.service";
+import { CampaignStatsCalculator } from "./calculators/campaign-stats-calculator";
 import { ProfitCalculator } from "./calculators/profit-calculator";
 
 export const campaignService = {
@@ -285,6 +293,522 @@ export const campaignService = {
 				averageAttributedRevenue:
 					redemptionCount > 0 ? totalCampaignRevenue / redemptionCount : 0,
 			};
+		});
+	},
+	/**
+	 * Get campaign stats from immutable promoCode ledger
+	 *
+	 * THE VALIDATION: Real metrics from actual redemptions.
+	 * Shows if FIFO profit tracking is working correctly.
+	 *
+	 * @param campaignId - Campaign ID
+	 * @returns Campaign statistics
+	 */
+	getCampaignStatsEffect(
+		campaignId: string,
+	): Effect.Effect<CampaignStats, DatabaseError | GenericDatabaseError, OrganizationContext> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
+
+			// Get campaign
+			const campaignRows = yield* withDrizzleErrors(
+				"campaign",
+				"findUnique",
+				() =>
+					db
+						.select()
+						.from(campaigns)
+						.where(
+							and(
+								eq(campaigns.id, campaignId),
+								eq(campaigns.organizationId, organizationId),
+							),
+						)
+						.limit(1),
+			);
+
+			const campaign = campaignRows[0];
+			if (!campaign) {
+				return yield* Effect.fail(
+					new GenericDatabaseError({
+						operation: "findUnique",
+						table: "campaigns",
+						pgCode: undefined,
+						detail: `Campaign ${campaignId} not found`,
+						originalError: new Error("Campaign not found"),
+					}),
+				);
+			}
+
+			// Aggregate from promoCode ledger (immutable source of truth)
+			const statsRows = yield* withDrizzleErrors(
+				"promo_code",
+				"findMany",
+				() =>
+					db
+						.select({
+							totalCodes: count(),
+							redeemedCodes: count(
+								sql`CASE WHEN ${promoCodes.isRedeemed} THEN 1 END`,
+							),
+							totalRevenue: sum(promoCodes.netRevenue),
+							totalDiscountCost: sum(promoCodes.discountAmount),
+							totalCOGS: sum(promoCodes.totalCOGS),
+							totalProfit: sum(promoCodes.actualProfit),
+							profitableCodes: count(
+								sql`CASE WHEN ${promoCodes.isProfitable} THEN 1 END`,
+							),
+						})
+						.from(promoCodes)
+						.where(
+							and(
+								eq(promoCodes.campaignId, campaignId),
+								eq(promoCodes.organizationId, organizationId),
+							),
+						),
+			);
+
+			const stats = statsRows[0];
+			const totalCodes = stats?.totalCodes || 0;
+			const redeemedCodes = stats?.redeemedCodes || 0;
+			const totalRevenue = Number(stats?.totalRevenue || 0);
+			const discountCost = Number(stats?.totalDiscountCost || 0);
+			const totalCOGS = Number(stats?.totalCOGS || 0);
+			const actualProfit = Number(stats?.totalProfit || 0);
+			const profitableCodes = stats?.profitableCodes || 0;
+
+			const metrics = CampaignStatsCalculator.calculateMetrics({
+				totalCodes,
+				redeemedCodes,
+				profitableCodes,
+				totalRevenue,
+				discountCost,
+				totalCOGS,
+				actualProfit,
+				sent: campaign.sent || 0,
+				delivered: campaign.delivered || 0,
+				opened: campaign.opened || 0,
+				clicked: campaign.clicked || 0,
+				conversions: campaign.conversions || 0,
+			});
+
+			return {
+				campaignId,
+				campaignName: campaign.name,
+				status: campaign.status as any,
+				sent: campaign.sent || 0,
+				delivered: campaign.delivered || 0,
+				opened: campaign.opened || 0,
+				clicked: campaign.clicked || 0,
+				conversions: campaign.conversions || 0,
+				capturesCount: campaign.capturesCount || 0,
+				revenue: totalRevenue,
+				discountCost,
+				totalCOGS,
+				actualProfit,
+				avgProfitPerRedemption: metrics.avgProfitPerRedemption,
+				deliveryRate: metrics.deliveryRate,
+				openRate: metrics.openRate,
+				clickRate: metrics.clickRate,
+				conversionRate: metrics.conversionRate,
+				roi: metrics.roi,
+			};
+		});
+	},
+
+	/**
+	 * Generate bulk promo codes
+	 *
+	 * @param campaignId - Campaign ID
+	 * @param count - Number of codes to generate
+	 * @returns Generated codes
+	 */
+	generateCodesEffect(
+		campaignId: string,
+		count: number,
+	): Effect.Effect<
+		{ success: boolean; generated: number; codes: string[] },
+		DatabaseError | GenericDatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
+
+			// Verify campaign exists
+			const campaignRows = yield* withDrizzleErrors(
+				"campaign",
+				"findUnique",
+				() =>
+					db
+						.select()
+						.from(campaigns)
+						.where(
+							and(
+								eq(campaigns.id, campaignId),
+								eq(campaigns.organizationId, organizationId),
+							),
+						)
+						.limit(1),
+			);
+
+			const campaign = campaignRows[0];
+			if (!campaign) {
+				return yield* Effect.fail(
+					new GenericDatabaseError({
+						operation: "findUnique",
+						table: "campaigns",
+						pgCode: undefined,
+						detail: `Campaign ${campaignId} not found`,
+						originalError: new Error("Campaign not found"),
+					}),
+				);
+			}
+
+			// Generate unique codes
+			const codes: string[] = [];
+			const prefix = campaign.name
+				.substring(0, 4)
+				.toUpperCase()
+				.replace(/\s/g, "");
+
+			for (let i = 0; i < count; i++) {
+				const randomPart = Math.random()
+					.toString(36)
+					.substring(2, 8)
+					.toUpperCase();
+				codes.push(`${prefix}-${randomPart}`);
+			}
+
+			// Insert codes
+			const defaultExpiryDate =
+				campaign.endsAt || new Date(Date.now() + 90 * 24 * 60 * 60 * 1000); // 90 days default
+
+			const insertedCodes = yield* withDrizzleErrors(
+				"promo_code",
+				"create",
+				() =>
+					db
+						.insert(promoCodes)
+						.values(
+							codes.map((code) => ({
+								organizationId,
+								campaignId,
+								code,
+								discountType: (campaign.offerType === "percentage"
+									? "percentage"
+									: "fixed") as "percentage" | "fixed",
+								discountValue: campaign.offerValue || 0,
+								expiresAt: defaultExpiryDate,
+								isRedeemed: false,
+								isProfitable: null,
+							})),
+						)
+						.returning(),
+			);
+
+			return {
+				success: true,
+				generated: insertedCodes.length,
+				codes: insertedCodes.map((c) => c.code),
+			};
+		});
+	},
+
+	/**
+	 * Export codes as CSV
+	 *
+	 * @param campaignId - Campaign ID
+	 * @returns CSV string
+	 */
+	exportCodesEffect(
+		campaignId: string,
+	): Effect.Effect<
+		{ csv: string; totalCodes: number; redeemedCodes: number },
+		DatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
+
+			const codes = yield* withDrizzleErrors(
+				"promo_code",
+				"findMany",
+				() =>
+					db
+						.select({
+							code: promoCodes.code,
+							isRedeemed: promoCodes.isRedeemed,
+							redeemedAt: promoCodes.redeemedAt,
+							customerId: promoCodes.customerId,
+						})
+						.from(promoCodes)
+						.where(
+							and(
+								eq(promoCodes.campaignId, campaignId),
+								eq(promoCodes.organizationId, organizationId),
+							),
+						)
+						.orderBy(desc(promoCodes.createdAt)),
+			);
+
+			// Generate CSV
+			const headers = "Code,Status,Redeemed At,Customer ID\n";
+			const rows = codes
+				.map(
+					(c) =>
+						`${c.code},${c.isRedeemed ? "Redeemed" : "Available"},${c.redeemedAt || ""},${c.customerId || ""}`,
+				)
+				.join("\n");
+
+			return {
+				csv: headers + rows,
+				totalCodes: codes.length,
+				redeemedCodes: codes.filter((c) => c.isRedeemed).length,
+			};
+		});
+	},
+
+	/**
+	 * Pause campaign
+	 *
+	 * @param campaignId - Campaign ID
+	 * @returns Updated campaign
+	 */
+	pauseCampaignEffect(
+		campaignId: string,
+	): Effect.Effect<
+		CampaignResponse,
+		DatabaseError | GenericDatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
+
+			const updatedRows = yield* withDrizzleErrors(
+				"campaign",
+				"update",
+				() =>
+					db
+						.update(campaigns)
+						.set({
+							status: "paused",
+							updatedAt: new Date(),
+						})
+						.where(
+							and(
+								eq(campaigns.id, campaignId),
+								eq(campaigns.organizationId, organizationId),
+							),
+						)
+						.returning(),
+			);
+
+			const updated = updatedRows[0];
+			if (!updated) {
+				return yield* Effect.fail(
+					new GenericDatabaseError({
+						operation: "update",
+						table: "campaigns",
+						pgCode: undefined,
+						detail: `Campaign ${campaignId} not found`,
+						originalError: new Error("Campaign not found"),
+					}),
+				);
+			}
+
+			return updated as CampaignResponse;
+		});
+	},
+
+	/**
+	 * Resume campaign
+	 *
+	 * @param campaignId - Campaign ID
+	 * @returns Updated campaign
+	 */
+	resumeCampaignEffect(
+		campaignId: string,
+	): Effect.Effect<
+		CampaignResponse,
+		DatabaseError | GenericDatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
+
+			const updatedRows = yield* withDrizzleErrors(
+				"campaign",
+				"update",
+				() =>
+					db
+						.update(campaigns)
+						.set({
+							status: "active",
+							updatedAt: new Date(),
+						})
+						.where(
+							and(
+								eq(campaigns.id, campaignId),
+								eq(campaigns.organizationId, organizationId),
+							),
+						)
+						.returning(),
+			);
+
+			const updated = updatedRows[0];
+			if (!updated) {
+				return yield* Effect.fail(
+					new GenericDatabaseError({
+						operation: "update",
+						table: "campaigns",
+						pgCode: undefined,
+						detail: `Campaign ${campaignId} not found`,
+						originalError: new Error("Campaign not found"),
+					}),
+				);
+			}
+
+			return updated as CampaignResponse;
+		});
+	},
+
+	/**
+	 * List campaigns with filters and pagination
+	 *
+	 * @param query - Query parameters
+	 * @returns Paginated campaign list
+	 */
+	listCampaignsEffect(
+		query: CampaignListQuery,
+	): Effect.Effect<
+		CampaignListResponse,
+		DatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
+
+			const {
+				page = 1,
+				limit = 20,
+				status,
+				type,
+				isLosingMoney,
+				sortBy = "createdAt",
+				sortOrder = "desc",
+			} = query;
+
+			// Build filters
+			const filters = [eq(campaigns.organizationId, organizationId)];
+
+			if (status) {
+				filters.push(eq(campaigns.status, status));
+			}
+
+			if (type) {
+				filters.push(eq(campaigns.type, type));
+			}
+
+			if (isLosingMoney !== undefined) {
+				filters.push(eq(campaigns.isLosingMoney, isLosingMoney));
+			}
+
+			// Get total count
+			const totalRows = yield* withDrizzleErrors("campaign", "count", () =>
+				db
+					.select({ count: count() })
+					.from(campaigns)
+					.where(and(...filters)),
+			);
+
+			const total = totalRows[0]?.count || 0;
+
+			// Get paginated data
+			const offset = (page - 1) * limit;
+			const orderFn = sortOrder === "asc" ? asc : desc;
+
+			// Map sortBy to column
+			let orderByColumn: any = campaigns.createdAt;
+			if (sortBy === "name") orderByColumn = campaigns.name;
+			else if (sortBy === "status") orderByColumn = campaigns.status;
+			else if (sortBy === "actualProfit") orderByColumn = campaigns.actualProfit;
+			else if (sortBy === "capturesCount")
+				orderByColumn = campaigns.capturesCount;
+
+			const data = yield* withDrizzleErrors(
+				"campaign",
+				"findMany",
+				() =>
+					db
+						.select()
+						.from(campaigns)
+						.where(and(...filters))
+						.orderBy(orderFn(orderByColumn))
+						.limit(limit)
+						.offset(offset),
+			);
+
+			return {
+				data: data as CampaignResponse[],
+				pagination: {
+					page,
+					limit,
+					total,
+					totalPages: Math.ceil(total / limit),
+				},
+			};
+		});
+	},
+
+	/**
+	 * Create campaign
+	 *
+	 * @param data - Campaign creation data
+	 * @returns Created campaign
+	 */
+	createCampaignEffect(
+		data: CampaignCreate,
+	): Effect.Effect<
+		CampaignResponse,
+		DatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
+
+			const campaignRows = yield* withDrizzleErrors(
+				"campaign",
+				"create",
+				() =>
+					db
+						.insert(campaigns)
+						.values({
+							organizationId,
+							name: data.name,
+							type: data.type,
+							status: "draft",
+							messageTemplate: data.messageTemplate,
+							platforms: data.platforms || ["whatsapp"],
+							targetSegment: data.targetSegment ?? null,
+							targetRadius: data.targetRadius ?? null,
+							targetProductIds: data.targetProductIds ?? null,
+							offerType: data.offerType,
+							offerValue: data.offerValue ?? null,
+							minPurchaseAmount: data.minPurchaseAmount ?? null,
+							minProfitThreshold: data.minProfitThreshold ?? null,
+							saleorVoucherCode: null,
+							maxRedemptions: data.maxRedemptions ?? null,
+							scheduledFor: data.scheduledFor
+								? new Date(data.scheduledFor)
+								: null,
+							startsAt: data.startsAt ? new Date(data.startsAt) : null,
+							endsAt: data.endsAt ? new Date(data.endsAt) : null,
+							budgetAmount: data.budgetAmount ?? null,
+						})
+						.returning(),
+			);
+
+			return campaignRows[0] as CampaignResponse;
 		});
 	},
 };

@@ -1,5 +1,7 @@
 import {
+	type PromoProfitAlertCreate,
 	PromoProfitAlertCreateSchema,
+	type PromoProfitAlertListQuery,
 	PromoProfitAlertListQuerySchema,
 	PromoProfitAlertListResponseSchema,
 	PromoProfitAlertSchema,
@@ -11,7 +13,7 @@ export const GET = createWorkspaceRouteEffect({
 	inputSchema: PromoProfitAlertListQuerySchema,
 	outputSchema: PromoProfitAlertListResponseSchema,
 
-	handler: (data, context) =>
+	handler: (data: PromoProfitAlertListQuery, context) =>
 		profitAlertService.listAlertsEffect({
 			...data,
 			campaignId: context.params.id!,
@@ -31,7 +33,7 @@ export const POST = createWorkspaceRouteEffect({
 	inputSchema: PromoProfitAlertCreateSchema,
 	outputSchema: PromoProfitAlertSchema,
 
-	handler: (data, context) =>
+	handler: (data: PromoProfitAlertCreate, context) =>
 		profitAlertService.createAlertEffect({
 			...data,
 			campaignId: context.params.id!,

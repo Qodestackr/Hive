@@ -1,10 +1,3 @@
-/**
- * Promo Code Redemption Mutations
- *
- * Pure functions for building database mutations.
- * This separates WHAT to change from HOW to change it.
- */
-
 import { createId } from "@paralleldrive/cuid2";
 import type { Campaign, Product, PromoCode } from "@repo/db";
 import type { ProfitCalculationResult } from "../calculators/profit-calculator";
@@ -17,10 +10,6 @@ export interface FifoResult {
 	expiryDate?: string | null;
 }
 
-/**
- * Mutation objects (pure data)
- * Describes what should change in the database
- */
 export interface RedemptionMutations {
 	promoCodeUpdate: {
 		id: string;
@@ -85,15 +74,6 @@ export interface RedemptionMutations {
 	};
 }
 
-/**
- * Build redemption mutations (PURE FUNCTION)
- *
- * Given current state, returns desired mutations.
- * No side effects, no database access, fully testable.
- *
- * @param params - Current state
- * @returns Mutation objects describing what to change
- */
 export function buildRedemptionMutations(params: {
 	promoCode: PromoCode;
 	product: Product;

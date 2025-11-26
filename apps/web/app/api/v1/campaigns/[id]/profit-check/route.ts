@@ -1,4 +1,5 @@
 import {
+	type ProfitCheckRequest,
 	ProfitCheckRequestSchema,
 	ProfitCheckResponseSchema,
 } from "@repo/schema";
@@ -9,7 +10,7 @@ export const POST = createWorkspaceRouteEffect({
 	inputSchema: ProfitCheckRequestSchema,
 	outputSchema: ProfitCheckResponseSchema,
 
-	handler: (data, context) =>
+	handler: (data: ProfitCheckRequest, context) =>
 		profitAlertService.checkCampaignProfitMarginEffect(
 			context.params.id!,
 			data.createAlertIfBelowThreshold,

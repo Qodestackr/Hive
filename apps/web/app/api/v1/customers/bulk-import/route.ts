@@ -3,15 +3,13 @@ import {
 	BulkCustomerImportSchema,
 } from "@repo/schema";
 import { customerService } from "@repo/services";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const POST = createWorkspaceRoute({
+export const POST = createWorkspaceRouteEffect({
 	inputSchema: BulkCustomerImportSchema,
 	outputSchema: BulkCustomerImportResponseSchema,
 
-	handler: async (data, { workspace }) => {
-		return await customerService.bulkImport(data, workspace.id);
-	},
+	handler: (data) => customerService.bulkImportEffect(data),
 
 	options: {
 		operationName: "bulkImportCustomers",

@@ -1,15 +1,13 @@
 import { CustomerStatsSchema } from "@repo/schema";
 import { customerService } from "@repo/services";
 import { z } from "@repo/utils";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const GET = createWorkspaceRoute({
+export const GET = createWorkspaceRouteEffect({
 	inputSchema: z.void(),
 	outputSchema: CustomerStatsSchema,
 
-	handler: async (_, { workspace }) => {
-		return await customerService.getStats(workspace.id);
-	},
+	handler: () => customerService.getStatsEffect(),
 
 	options: {
 		operationName: "getCustomerStats",

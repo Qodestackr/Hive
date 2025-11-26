@@ -3,15 +3,14 @@ import {
 	CustomerResponseSchema,
 } from "@repo/schema";
 import { customerService } from "@repo/services";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const POST = createWorkspaceRoute({
+export const POST = createWorkspaceRouteEffect({
 	inputSchema: CustomerAgeVerificationSchema,
 	outputSchema: CustomerResponseSchema,
 
-	handler: async (data, { workspace, params }) => {
-		return await customerService.verifyAge(params.id!, data, workspace.id);
-	},
+	handler: (data, { params }) =>
+		customerService.verifyAgeEffect(params.id!, data),
 
 	options: {
 		operationName: "verifyCustomerAge",

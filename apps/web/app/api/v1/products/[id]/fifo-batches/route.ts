@@ -1,15 +1,13 @@
 import { ProductFIFOBatchesResponseSchema } from "@repo/schema";
 import { fifoService } from "@repo/services/src/fifo.service";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
 // batch-level cost tracking for audit trail
-export const GET = createWorkspaceRoute({
+export const GET = createWorkspaceRouteEffect({
 	outputSchema: ProductFIFOBatchesResponseSchema,
 
-	handler: async (_, { workspace, params }) => {
-		const productId = params.id as string;
-		return await fifoService.getFIFOBatchesForProduct(productId, workspace.id);
-	},
+	handler: (_, { params }) =>
+		fifoService.getFIFOBatchesForProductEffect(params.id!),
 
 	options: {
 		operationName: "getFIFOBatches",

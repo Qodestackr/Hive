@@ -3,7 +3,7 @@ import {
 	ReconciliationSummarySchema,
 } from "@repo/schema";
 import { reconciliationService } from "@repo/services/src/reconciliation.service";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
 /**
  * POST `/api/v1/reconciliation/organization`
@@ -11,13 +11,11 @@ import { createWorkspaceRoute } from "@/lib/api/create-api-route";
  * Batch reconcile all products for an organization
  * Run nightly as background job to catch systemic discrepancies
  */
-export const POST = createWorkspaceRoute({
+export const POST = createWorkspaceRouteEffect({
 	inputSchema: ReconcileAllProductsSchema,
 	outputSchema: ReconciliationSummarySchema,
 
-	handler: async (_, { workspace }) => {
-		return await reconciliationService.reconcileAllProducts(workspace.id);
-	},
+	handler: () => reconciliationService.reconcileAllProductsEffect(),
 
 	options: {
 		operationName: "reconcileAllProducts",

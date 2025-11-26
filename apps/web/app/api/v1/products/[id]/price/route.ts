@@ -1,14 +1,13 @@
 import { ProductPriceUpdateSchema, ProductResponseSchema } from "@repo/schema";
 import { productService } from "@repo/services";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const PATCH = createWorkspaceRoute({
+export const PATCH = createWorkspaceRouteEffect({
 	inputSchema: ProductPriceUpdateSchema,
 	outputSchema: ProductResponseSchema,
 
-	handler: async (data, { workspace, params }) => {
-		return await productService.updatePrice(params.id!, data, workspace.id);
-	},
+	handler: (data, { params }) =>
+		productService.updatePriceEffect(params.id!, data),
 
 	options: {
 		operationName: "updateProductPrice",

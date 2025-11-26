@@ -222,6 +222,18 @@ export const profitAlertService = {
 
 			const alert = alertRows[0];
 
+			if (!alert) {
+				return yield* Effect.fail(
+					new GenericDatabaseError({
+						operation: "create",
+						table: "promo_profit_alerts",
+						pgCode: undefined,
+						detail: "Failed to create alert",
+						originalError: new Error("No rows returned from insert"),
+					}),
+				);
+			}
+
 			return {
 				id: alert.id,
 				organizationId: alert.organizationId,

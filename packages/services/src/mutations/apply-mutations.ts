@@ -1,10 +1,3 @@
-/**
- * Mutation Appliers
- *
- * Impure functions that apply mutation objects to the database.
- * This is the ONLY place that knows about Drizzle ORM specifics.
- */
-
 import {
 	campaigns,
 	customers,

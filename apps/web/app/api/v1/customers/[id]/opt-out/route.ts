@@ -1,14 +1,12 @@
 import { CustomerOptOutSchema, CustomerResponseSchema } from "@repo/schema";
 import { customerService } from "@repo/services";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const POST = createWorkspaceRoute({
+export const POST = createWorkspaceRouteEffect({
 	inputSchema: CustomerOptOutSchema,
 	outputSchema: CustomerResponseSchema,
 
-	handler: async (data, { workspace, params }) => {
-		return await customerService.optOut(params.id!, data, workspace.id);
-	},
+	handler: (data, { params }) => customerService.optOutEffect(params.id!, data),
 
 	options: {
 		operationName: "customerOptOut",

@@ -3,15 +3,13 @@ import {
 	BulkUpdateResponseSchema,
 } from "@repo/schema";
 import { productService } from "@repo/services";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const POST = createWorkspaceRoute({
+export const POST = createWorkspaceRouteEffect({
 	inputSchema: BulkProductPriceUpdateSchema,
 	outputSchema: BulkUpdateResponseSchema,
 
-	handler: async (data, { workspace }) => {
-		return await productService.bulkPriceUpdate(data, workspace.id);
-	},
+	handler: (data) => productService.bulkPriceUpdateEffect(data),
 
 	options: {
 		operationName: "bulkUpdateProductPrices",

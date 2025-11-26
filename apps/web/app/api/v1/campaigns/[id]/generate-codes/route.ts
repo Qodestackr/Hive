@@ -1,22 +1,17 @@
 import {
+	type CampaignGenerateCodes,
 	CampaignGenerateCodesResponseSchema,
 	CampaignGenerateCodesSchema,
 } from "@repo/schema";
-import { campaignStatsService } from "@repo/services";
-import { createWorkspaceRoute } from "@/lib/api/create-api-route";
+import { campaignService } from "@repo/services";
+import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
-export const POST = createWorkspaceRoute({
+export const POST = createWorkspaceRouteEffect({
 	inputSchema: CampaignGenerateCodesSchema,
 	outputSchema: CampaignGenerateCodesResponseSchema,
 
-	handler: async (data, { workspace, params }) => {
-		const { count } = data as { count: number };
-		return await campaignStatsService.generateCodes(
-			params.id!,
-			count,
-			workspace.id,
-		);
-	},
+	handler: (data: CampaignGenerateCodes, { params }) =>
+		campaignService.generateCodesEffect(params.id!, data.count),
 
 	options: {
 		operationName: "generateCampaignCodes",
