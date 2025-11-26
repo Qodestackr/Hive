@@ -33,11 +33,7 @@ export interface CampaignMetricsOutput {
 }
 
 export const CampaignStatsCalculator = {
-	/**
-	 * Calculate all campaign metrics
-	 *
-	 * Pure function - same inputs always produce same outputs
-	 */
+	/**Calculate all campaign metrics */
 	calculateMetrics(input: CampaignMetricsInput): CampaignMetricsOutput {
 		// Redemption metrics
 		const redemptionRate =
@@ -46,8 +42,8 @@ export const CampaignStatsCalculator = {
 		const lossRate =
 			input.redeemedCodes > 0
 				? ((input.redeemedCodes - input.profitableCodes) /
-						input.redeemedCodes) *
-					100
+					input.redeemedCodes) *
+				100
 				: 0;
 
 		const avgProfitPerRedemption =

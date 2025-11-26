@@ -127,25 +127,21 @@ export const campaignService = {
 			}
 
 			// Log pre-flight profit check (audit trail)
-			// Note: Will be converted to Effect when audit-log.service is refactored
-			yield* Effect.promise(() =>
-				auditLogService.log({
-					organizationId,
-					eventType: "campaign.profit_check",
-					aggregateType: "product",
-					aggregateId: data.productId,
-					eventData: {
-						productId: data.productId,
-						basePrice,
-						discountType: data.discountAmount ? "fixed" : "percentage",
-						discountValue: data.discountAmount || data.discountPercent,
-						currentFIFOCost,
-						estimatedProfit: profit.actualProfit,
-						isProfitable: profit.isProfitable,
-						recommendation,
-					},
-				}),
-			);
+			yield* auditLogService.logEffect({
+				eventType: "campaign.profit_check",
+				aggregateType: "product",
+				aggregateId: data.productId,
+				eventData: {
+					productId: data.productId,
+					basePrice,
+					discountType: data.discountAmount ? "fixed" : "percentage",
+					discountValue: data.discountAmount || data.discountPercent,
+					currentFIFOCost,
+					estimatedProfit: profit.actualProfit,
+					isProfitable: profit.isProfitable,
+					recommendation,
+				},
+			});
 
 			// TODO: Find alternative products (slow movers with better margins)
 			// Query products where:

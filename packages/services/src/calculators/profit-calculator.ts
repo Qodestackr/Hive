@@ -98,7 +98,6 @@ export class ProfitCalculator {
 	): BreakEvenCalculationResult {
 		const { basePrice, unitCost, targetMarginPercent = 10 } = params;
 
-		// Break-even price (no profit, no loss)
 		const breakEvenPrice = unitCost;
 
 		// Maximum discount to break even
@@ -120,20 +119,11 @@ export class ProfitCalculator {
 		};
 	}
 
-	/**
-	 * Calculate profit margin percentage
-	 *
-	 * Helper for quick margin calculations.
-	 */
 	static calculateMargin(profit: number, revenue: number): number {
 		return revenue > 0 ? (profit / revenue) * 100 : 0;
 	}
 
-	/**
-	 * Check if a discount will be profitable
-	 *
-	 * Quick check without full calculation.
-	 */
+	// Discount ** Quick check without full calculation.
 	static isProfitable(params: ProfitCalculationParams): boolean {
 		const result = ProfitCalculator.calculate(params);
 		return result.isProfitable;
