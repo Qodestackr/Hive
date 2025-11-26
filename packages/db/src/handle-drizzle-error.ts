@@ -2,7 +2,6 @@
  * Drizzle Error Handler for Effect
  * 
  * Converts raw PostgreSQL errors from Drizzle into typed Effect domain errors.
- * This is the COMPLETE PACKAGE for database error handling.
  */
 import { Effect } from "effect"
 import type { ErrorContext } from "@repo/utils"

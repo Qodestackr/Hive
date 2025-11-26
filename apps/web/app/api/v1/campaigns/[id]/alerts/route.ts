@@ -7,10 +7,6 @@ import {
 } from "@repo/schema";
 import { profitAlertService } from "@repo/services";
 
-/**
- * GET /api/v1/campaigns/:id/alerts
- * List alerts for a specific campaign
- */
 export const GET = createWorkspaceRoute({
     outputSchema: PromoProfitAlertListResponseSchema,
 
@@ -42,13 +38,13 @@ export const POST = createWorkspaceRoute({
     outputSchema: PromoProfitAlertResponseSchema,
 
     handler: async (data, { workspace, params }) => {
-        // Ensure campaignId matches route param
-        const alertData = {
-            ...data,
-            campaignId: params.id!,
-        };
-
-        return await profitAlertService.createAlert(alertData, workspace.id);
+        return await profitAlertService.createAlert(
+            {
+                ...(data as Record<string, any>),
+                campaignId: params.id!,
+            },
+            workspace.id
+        );
     },
 
     options: {

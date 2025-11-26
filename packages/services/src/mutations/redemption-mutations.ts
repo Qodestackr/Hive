@@ -7,12 +7,7 @@
 
 import { createId } from "@paralleldrive/cuid2";
 import type { ProfitCalculationResult } from "../calculators/profit-calculator";
-
-// Database types (inferred from schema)
-type PromoCode = any; // Will be inferred from DB usage
-type Product = any;
-type Campaign = any;
-type Customer = any;
+import type { PromoCode, Product, Campaign } from "@repo/db";
 
 export interface FifoResult {
     method: 'fifo' | 'weighted_average' | 'fallback';

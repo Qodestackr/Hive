@@ -16,10 +16,15 @@ export const POST = createWorkspaceRoute({
     outputSchema: ReconciliationResultSchema,
 
     handler: async (data, { workspace }) => {
+        // Destructure with Type Assertion
+        const { productId, actualPhysicalCount } = data as {
+            productId: string;
+            actualPhysicalCount: number
+        };
         return await reconciliationService.reconcileProductStock(
-            data.productId,
+            productId,
             workspace.id,
-            data.actualPhysicalCount
+            actualPhysicalCount
         );
     },
 

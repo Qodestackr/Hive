@@ -6,10 +6,6 @@ import {
 import { profitAlertService } from "@repo/services";
 import { createError } from "@repo/utils";
 
-/**
- * GET /api/v1/campaigns/:id/alerts/:alertId
- * Get a specific alert
- */
 export const GET = createWorkspaceRoute({
     outputSchema: PromoProfitAlertResponseSchema,
 

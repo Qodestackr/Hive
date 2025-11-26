@@ -179,8 +179,6 @@ export function handleDrizzleError(
         )
     }
 
-
-    // FALLBACK: GENERIC DATABASE ERROR
     throw createError.database(
         context.operation || 'query',
         error instanceof Error ? error : new Error(message),

@@ -5,12 +5,8 @@ import {
     SuccessResponseSchema,
 } from "@repo/schema";
 import { productService } from "@repo/services";
-import { z } from "zod";
+import { z } from "@repo/utils";
 
-/**
- * GET /api/v1/products/:id
- * Get single product
- */
 export const GET = createWorkspaceRoute({
     inputSchema: z.void(),
     outputSchema: ProductResponseSchema,
@@ -29,10 +25,6 @@ export const GET = createWorkspaceRoute({
     },
 });
 
-/**
- * PATCH /api/v1/products/:id
- * Update product
- */
 export const PATCH = createWorkspaceRoute({
     inputSchema: ProductUpdateSchema,
     outputSchema: ProductResponseSchema,
@@ -51,10 +43,6 @@ export const PATCH = createWorkspaceRoute({
     },
 });
 
-/**
- * DELETE /api/v1/products/:id
- * Delete product (soft delete)
- */
 export const DELETE = createWorkspaceRoute({
     inputSchema: z.void(),
     outputSchema: SuccessResponseSchema,

@@ -42,29 +42,4 @@ export class GenericDbTimeout extends Data.TaggedError("GenericDbTimeout")<{
     }
 }
 
-export class OrganizationNotFound extends Data.TaggedError("OrganizationNotFound")<{
-    readonly organizationId?: string
-    readonly slug?: string
-}> {
-    readonly errorCode = ErrorCode.RECORD_NOT_FOUND
-    readonly statusCode = 404
-
-    get message() {
-        return `Organization not found: ${this.organizationId ?? this.slug ?? "unknown"}`
-    }
-}
-
-export class NotAMember extends Data.TaggedError("NotAMember")<{
-    readonly userId: string
-    readonly organizationId: string
-}> {
-    readonly errorCode = ErrorCode.FORBIDDEN
-    readonly statusCode = 403
-
-    get message() {
-        return `User '${this.userId}' is not a member of organization '${this.organizationId}'`
-    }
-}
-
 export type CommonDbIssue = GenericDbError | GenericDbTimeout
-export type OrganizationError = OrganizationNotFound | NotAMember

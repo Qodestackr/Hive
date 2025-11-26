@@ -12,7 +12,6 @@ export const POST = createWorkspaceRouteEffect({
 
     handler: (data) =>
         promoCodeService.redeemPromoCodeEffect(data),
-    // organizationId auto-injected from context!
 
     options: {
         operationName: "redeemPromoCode",

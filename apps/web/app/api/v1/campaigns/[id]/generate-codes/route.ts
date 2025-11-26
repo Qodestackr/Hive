@@ -14,7 +14,8 @@ export const POST = createWorkspaceRoute({
     outputSchema: CampaignGenerateCodesResponseSchema,
 
     handler: async (data, { workspace, params }) => {
-        return await campaignStatsService.generateCodes(params.id!, data.count, workspace.id);
+        const { count } = data as { count: number };
+        return await campaignStatsService.generateCodes(params.id!, count, workspace.id);
     },
 
     options: {

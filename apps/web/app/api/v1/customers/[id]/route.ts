@@ -5,12 +5,8 @@ import {
     SuccessResponseSchema,
 } from "@repo/schema";
 import { customerService } from "@repo/services";
-import { z } from "zod";
+import { z } from "@repo/utils";
 
-/**
- * GET /api/v1/customers/:id
- * Get single customer
- */
 export const GET = createWorkspaceRoute({
     inputSchema: z.void(),
     outputSchema: CustomerResponseSchema,
@@ -29,10 +25,6 @@ export const GET = createWorkspaceRoute({
     },
 });
 
-/**
- * PATCH /api/v1/customers/:id
- * Update customer
- */
 export const PATCH = createWorkspaceRoute({
     inputSchema: CustomerUpdateSchema,
     outputSchema: CustomerResponseSchema,
@@ -51,10 +43,6 @@ export const PATCH = createWorkspaceRoute({
     },
 });
 
-/**
- * DELETE /api/v1/customers/:id
- * Delete customer
- */
 export const DELETE = createWorkspaceRoute({
     inputSchema: z.void(),
     outputSchema: SuccessResponseSchema,

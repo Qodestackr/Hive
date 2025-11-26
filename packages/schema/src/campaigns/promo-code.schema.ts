@@ -112,6 +112,21 @@ export const BulkPromoCodeResponseSchema = z.object({
     codes: z.array(PromoCodeResponseSchema),
 }).openapi('BulkPromoCodeResponse');
 
+export const PromoCodeValidateQuerySchema = z.object({
+    code: z.string().min(1, "Promo code is required"),
+});
+
+export const PromoCodeValidateResponseSchema = z.object({
+    code: z.string(),
+    productId: z.string().nullable(),
+    discountType: z.enum(["percentage", "fixed"]),
+    discountValue: z.number(),
+    expiresAt: z.string(),
+    campaignId: z.string().nullable(),
+    isValid: z.literal(true), // Only returns on success
+});
+
+
 export type PromoCode = z.infer<typeof PromoCodeSchema>;
 export type PromoCodeCreate = z.infer<typeof PromoCodeCreateSchema>;
 export type BulkPromoCodeCreate = z.infer<typeof BulkPromoCodeCreateSchema>;
@@ -123,3 +138,5 @@ export type PromoCodeListQuery = z.infer<typeof PromoCodeListQuerySchema>;
 export type PromoCodeResponse = z.infer<typeof PromoCodeResponseSchema>;
 export type PromoCodeListResponse = z.infer<typeof PromoCodeListResponseSchema>;
 export type BulkPromoCodeResponse = z.infer<typeof BulkPromoCodeResponseSchema>;
+export type PromoCodeValidateQuery = z.infer<typeof PromoCodeValidateQuerySchema>;
+export type PromoCodeValidateResponse = z.infer<typeof PromoCodeValidateResponseSchema>;

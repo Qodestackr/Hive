@@ -104,3 +104,7 @@ export const campaigns = pgTable('campaign', {
   index('campaign_org_status_idx').on(table.organizationId, table.status),
   index('campaign_scheduled_status_idx').on(table.scheduledFor, table.status),
 ]);
+
+// Type exports - Single source of truth
+export type Campaign = typeof campaigns.$inferSelect;
+export type CampaignInsert = typeof campaigns.$inferInsert;

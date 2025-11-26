@@ -3,10 +3,6 @@ import { createError, toPromcoError, type PromcoError } from '@repo/utils';
 import type { SaleorContext, SaleorGraphQLError } from '../types';
 import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 
-/**
- * Singleton GraphQL client
- * Authenticated with Saleor app token
- */
 const client = new GraphQLClient(process.env.SALEOR_API_URL || '', {
     headers: {
         'Authorization': `Bearer ${process.env.SALEOR_APP_TOKEN || ''}`,

@@ -1,20 +1,21 @@
 import { createWorkspaceRoute } from "@/lib/api/create-api-route";
 import { CampaignResponseSchema } from "@repo/schema";
 import { campaignService } from "@repo/services/src/campaign.service";
+import { z } from "@repo/utils";
 
 /**
- * GET /api/v1/campaigns/:id
+ * GET `/api/v1/campaigns/:id`
  * 
  * Get campaign by ID with profit totals
  * THE VALIDATION: Shows aggregated results from all promo code redemptions
  * 
- * This is where you KNOW the FIFO engine works:
+ * This is where we know the FIFO engine works:
  * - totalCOGS: Sum of FIFO costs from all redemptions
  * - actualProfit: revenue - discountCost - totalCOGS
  * - isLosingMoney: TRUE if actualProfit < 0
  */
 export const GET = createWorkspaceRoute({
-    // No inputSchema - campaignId comes from params
+    inputSchema: z.void(),
     outputSchema: CampaignResponseSchema,
 
     handler: async (_, { workspace, params }) => {

@@ -4,12 +4,10 @@ import {
     AlertSettingsResponseSchema,
 } from "@repo/schema";
 import { profitAlertService } from "@repo/services";
+import { z } from "@repo/utils";
 
-/**
- * GET /api/v1/campaigns/:id/settings/alerts
- * Get alert settings for campaign
- */
 export const GET = createWorkspaceRoute({
+    inputSchema: z.void(),
     outputSchema: AlertSettingsResponseSchema,
 
     handler: async (_, { workspace, params }) => {
@@ -29,10 +27,6 @@ export const GET = createWorkspaceRoute({
     },
 });
 
-/**
- * PUT /api/v1/campaigns/:id/settings/alerts
- * Update alert settings for campaign
- */
 export const PUT = createWorkspaceRoute({
     inputSchema: AlertSettingsUpdateSchema,
     outputSchema: AlertSettingsResponseSchema,

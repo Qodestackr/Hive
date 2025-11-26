@@ -47,3 +47,7 @@ export const invoices = pgTable('invoice', {
   index('invoice_status_idx').on(table.status),
   index('invoice_due_idx').on(table.dueDate),
 ]);
+
+// Type exports
+export type Invoice = typeof invoices.$inferSelect;
+export type InvoiceInsert = typeof invoices.$inferInsert;

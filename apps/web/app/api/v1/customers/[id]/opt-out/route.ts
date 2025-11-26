@@ -5,10 +5,6 @@ import {
 } from "@repo/schema";
 import { customerService } from "@repo/services";
 
-/**
- * POST /api/v1/customers/:id/opt-out
- * Customer opt-out
- */
 export const POST = createWorkspaceRoute({
     inputSchema: CustomerOptOutSchema,
     outputSchema: CustomerResponseSchema,

@@ -57,3 +57,7 @@ export const products = pgTable('product', {
   index('product_saleor_variant_idx').on(table.saleorVariantId),
   index('product_category_idx').on(table.category),
 ]);
+
+// Type exports - Single source of truth
+export type Product = typeof products.$inferSelect;
+export type ProductInsert = typeof products.$inferInsert;

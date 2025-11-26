@@ -16,6 +16,7 @@ export * from './products/products';
 export * from './products/purchase-orders';
 export * from './products/inventory-movements';
 export * from './products/profit-alerts';
+export * from './products/saleor-integration';
 
 export * from './billing/invoices';
 export * from './billing/payments';

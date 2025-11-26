@@ -23,6 +23,7 @@ export { default as env } from './config/env';
 export * from './errors/error';
 export * from './errors/error-handler';
 export * from './errors/effect-handler';
+export * from './errors/with-error-trace';
 export * from './errors/domain';
 export * from './context';
 
@@ -35,8 +36,8 @@ export {
   isDomainError,
   EffectValidationError,
   GenericDbError, GenericDbTimeout,
-  OrganizationNotFound, NotAMember,
-  PromoCodeNotFound, PromoCodeAlreadyRedeemed, PromoCodeExpired, PromoCodeNoProduct,
+  PromoCodeNotFound, PromoCodeAlreadyRedeemed, 
+  PromoCodeExpired, PromoCodeNoProduct,
   // Database errors
   UniqueConstraintViolation,
   ForeignKeyViolation,
@@ -50,10 +51,12 @@ export {
 } from './errors/domain/index';
 export type {
   DomainErrorBase,
-  CommonDbIssue, OrganizationError, PromoCodeError,
-  // Database error types
+  CommonDbIssue, PromoCodeError,
+  // db error types
   DatabaseConstraintError,
   DatabaseSchemaError,
   DatabaseConnectionIssue,
   DatabaseError
 } from './errors/domain/index';
+
+export * from './functions/url'

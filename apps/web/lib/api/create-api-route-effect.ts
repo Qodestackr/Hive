@@ -1,4 +1,3 @@
-import { NextRequest, NextResponse } from "next/server";
 import { ZodType } from "@repo/schema";
 import { Effect } from "effect";
 import { runEffectAsResponse } from "@repo/utils";
@@ -74,7 +73,6 @@ export function createWorkspaceRouteEffect<TInput, TOutput, TError>(
 
         // Call Effect handler with auto-provided OrganizationContext
         const effect = config.handler(inputData, context).pipe(
-            // Auto-provide OrganizationContext from workspace
             Effect.provideService(OrganizationContext, {
                 organizationId: context.workspace.id
             }),

@@ -1,7 +1,7 @@
 import { createWorkspaceRoute } from "@/lib/api/create-api-route";
 import { CampaignExportCodesResponseSchema } from "@repo/schema";
 import { campaignStatsService } from "@repo/services";
-import { z } from "zod";
+import { z } from "@repo/utils";
 
 /**
  * POST /api/v1/campaigns/:id/export-codes

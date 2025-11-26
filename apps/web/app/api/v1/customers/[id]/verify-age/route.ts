@@ -5,10 +5,6 @@ import {
 } from "@repo/schema";
 import { customerService } from "@repo/services";
 
-/**
- * POST /api/v1/customers/:id/verify-age
- * Verify customer age (COMPLIANCE GOLD)
- */
 export const POST = createWorkspaceRoute({
     inputSchema: CustomerAgeVerificationSchema,
     outputSchema: CustomerResponseSchema,

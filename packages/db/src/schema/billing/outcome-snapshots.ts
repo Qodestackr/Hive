@@ -58,3 +58,7 @@ export const outcomeSnapshots = pgTable('outcome_snapshot', {
   index('outcome_snapshot_org_idx').on(table.organizationId),
   index('outcome_snapshot_period_idx').on(table.periodStart, table.periodEnd),
 ]);
+
+// Type exports
+export type OutcomeSnapshot = typeof outcomeSnapshots.$inferSelect;
+export type OutcomeSnapshotInsert = typeof outcomeSnapshots.$inferInsert;

@@ -7,6 +7,7 @@ export * from "./auth/user.schema.js";
 
 export * from "./billing/plan.schema.js";
 export * from "./billing/subscription.schema.js";
+export * from "./billing/billing.schema.js";
 
 // MARKETING SCHEMAS (Legacy - may be deprecated)
 export * from "./marketing/promotion.schema.js";

@@ -7,10 +7,6 @@ import {
 } from "@repo/schema";
 import { customerService } from "@repo/services";
 
-/**
- * POST /api/v1/customers
- * Create a single customer
- */
 export const POST = createWorkspaceRoute({
     inputSchema: CustomerCreateSchema,
     outputSchema: CustomerResponseSchema,
@@ -29,15 +25,9 @@ export const POST = createWorkspaceRoute({
     },
 });
 
-/**
- * GET /api/v1/customers
- * List customers with filters
- */
 export const GET = createWorkspaceRoute({
     inputSchema: CustomerListQuerySchema,
     outputSchema: CustomerListResponseSchema,
-    inputType: "query",
-
     handler: async (query, { workspace }) => {
         return await customerService.listCustomers(query, workspace.id);
     },

@@ -1,11 +1,13 @@
 import { createWorkspaceRoute } from "@/lib/api/create-api-route";
 import { CampaignStatsSchema } from "@repo/schema";
 import { campaignStatsService } from "@repo/services";
-import { z } from "zod";
+import { z } from "@repo/utils";
 
 /**
- * GET /api/v1/campaigns/:id/stats
+ * GET `/api/v1/campaigns/:id/stats`
+ * 
  * Get campaign stats from immutable promoCode ledger
+ * 
  * THE VALIDATION: Real metrics from actual redemptions
  */
 export const GET = createWorkspaceRoute({

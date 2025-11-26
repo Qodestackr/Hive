@@ -3,7 +3,6 @@ import { AutoPauseActionResponseSchema } from "@repo/schema";
 import { profitAlertService } from "@repo/services";
 
 /**
- * POST /api/v1/campaigns/:id/actions/auto-pause
  * Manually trigger auto-pause check
  * 
  * This allows:

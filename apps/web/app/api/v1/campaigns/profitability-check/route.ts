@@ -7,12 +7,6 @@ import { campaignService } from "@repo/services/src/campaign.service";
 import { Effect } from "effect";
 import { GenericDatabaseError } from "@repo/utils/errors/domain";
 
-/**
- * POST /api/v1/campaigns/profitability-check (Effect-based)
- * 
- * Pre-flight profit check BEFORE campaign launch
- * THE MOAT: Prevents money-losing promos before they go live
- */
 export const POST = createWorkspaceRouteEffect({
     inputSchema: CampaignProfitabilityCheckSchema,
     outputSchema: CampaignProfitabilityResponseSchema,

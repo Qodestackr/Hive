@@ -6,7 +6,7 @@ import {
 import { reconciliationService } from "@repo/services/src/reconciliation.service";
 
 /**
- * POST /api/v1/reconciliation/organization
+ * POST `/api/v1/reconciliation/organization`
  * 
  * Batch reconcile all products for an organization
  * Run nightly as background job to catch systemic discrepancies

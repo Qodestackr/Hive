@@ -11,6 +11,7 @@
     "./auth/user.schema": "./src/auth/user.schema.ts",
     "./billing/billing.schema": "./src/billing/billing.schema.ts",
     "./billing/plan.schema": "./src/billing/plan.schema.ts",
+    "./billing/invoice.schema": "./src/billing/invoice.schema.ts",
     "./billing/subscription.schema": "./src/billing/subscription.schema.ts",
     "./billing/contact.schema": "./src/billing/contact.schema.ts",
     "./marketing/campaign.schema": "./src/marketing/campaign.schema.ts",

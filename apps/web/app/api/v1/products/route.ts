@@ -7,10 +7,6 @@ import {
 } from "@repo/schema";
 import { productService } from "@repo/services";
 
-/**
- * POST /api/v1/products
- * Create a product
- */
 export const POST = createWorkspaceRoute({
     inputSchema: ProductCreateSchema,
     outputSchema: ProductResponseSchema,
@@ -29,15 +25,9 @@ export const POST = createWorkspaceRoute({
     },
 });
 
-/**
- * GET /api/v1/products
- * List products with filters
- */
 export const GET = createWorkspaceRoute({
     inputSchema: ProductListQuerySchema,
     outputSchema: ProductListResponseSchema,
-    inputType: "query",
-
     handler: async (query, { workspace }) => {
         return await productService.listProducts(query, workspace.id);
     },

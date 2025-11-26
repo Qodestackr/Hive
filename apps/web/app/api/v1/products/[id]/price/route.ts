@@ -5,10 +5,6 @@ import {
 } from "@repo/schema";
 import { productService } from "@repo/services";
 
-/**
- * PATCH /api/v1/products/:id/price
- * Quick price update (onboarding)
- */
 export const PATCH = createWorkspaceRoute({
     inputSchema: ProductPriceUpdateSchema,
     outputSchema: ProductResponseSchema,

@@ -5,10 +5,6 @@ import {
 } from "@repo/schema";
 import { customerService } from "@repo/services";
 
-/**
- * POST /api/v1/customers/bulk-import
- * Bulk import customers (CSV)
- */
 export const POST = createWorkspaceRoute({
     inputSchema: BulkCustomerImportSchema,
     outputSchema: BulkCustomerImportResponseSchema,

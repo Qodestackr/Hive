@@ -1,0 +1,584 @@
+import { betterAuth, logger, type BetterAuthOptions } from "better-auth"
+import { prismaAdapter } from "better-auth/adapters/prisma"
+import {
+  admin as adminPlugin,
+  multiSession, organization,
+  customSession,
+  phoneNumber
+} from "better-auth/plugins"
+import { nextCookies } from "better-auth/next-js"
+import db from "@workspace/db"
+import { mapUserRoleToBusiness } from "./role-management"
+import { ac, roles } from "./permissions"
+import { APP_BASE_URL, generateId } from "@workspace/utils"
+import { setupSaleorResourcesForNewUser } from "@workspace/coremmerce/server-only"
+import { PaymentMethodType } from "@workspace/db/enums"
+import { emailService } from "@workspace/notifications"
+import { reverify } from "./reverify"
+
+const ALLOWED_ROLES = ["retailer", "wholesaler", "distributor", "user", "driver", "brand_owner"] as const
+const businessRoles = new Set(["distributor", "retailer", "wholesaler", "brand_owner"])
+const staffRoles = new Set(["user"])
+
+const AUTH_CONFIG = {
+  trustedOrigins: [
+    "http://localhost:3000",
+    "http://46.202.130.243:3000",
+    "http://46.202.130.243:7700",
+    "http://46.202.130.243:8000",
+    "https://commerce.alcorabooks.com",
+    "https://search.alcorabooks.com",
+    "https://alcorabooks.com",
+    "alcorabooks.com",
+    "https://www.alcorabooks.com",
+  ],
+  appName: "Alcorabooks",
+  allowedRoles: ALLOWED_ROLES,
+}
+
+let _authInstance: ReturnType<typeof betterAuth> | null = null;
+
+// Solution: Use plugin wrapper functions to avoid type export issues
+const organizationPlugin = (): ReturnType<typeof organization> =>
+  organization({
+    allowUserToCreateOrganization: true,
+    membershipLimit: 200_0,
+    organizationLimit: 10,
+    cancelPendingInvitationsOnReInvite: true,
+    requireEmailVerificationOnInvitation: false,
+    ac: ac,
+    roles: {
+      owner: roles.owner,
+      admin: roles.admin,
+      wholesaler: roles.wholesaler,
+      retailer: roles.retailer,
+      bartender: roles.bartender,
+      cashier: roles.cashier,
+      finance: roles.finance,
+      driver: roles.driver,
+    },
+    async sendInvitationEmail(data) {
+      try {
+        await emailService.sendUserInviteEmail({
+          email: data.email,
+          inviterName: data.inviter.user.name || 'Someone',
+          inviteeName: data.email.split('@')[0] || data.email,
+          organizationName: data.organization.name,
+          role: Array.isArray(data.role) ? data.role.join(', ') : data.role,
+          inviteToken: data.id,
+          expiresIn: '48 hours', // TODO: calc from data.expiresAt
+        });
+
+        logger.info(`✅ Invitation email sent to ${data.email} for organization ${data.organization.name}`);
+      } catch (error) {
+        logger.error(`❌ Failed to send invitation email to ${data.email}:`, error);
+        throw error; // Re-throw: Better Auth to handle the err
+      }
+    },
+    schema: {
+      organization: {
+        fields: {
+          // Define how organization.metadata maps to our custom fields
+          metadata: "metadata",
+        },
+        additionalFields: {
+          businessType: {
+            type: "string",
+            required: false,
+            defaultValue: "",
+          },
+          description: {
+            type: "string",
+            required: false,
+          },
+          logo: {
+            type: "string",
+            required: false,
+          },
+          city: {
+            type: "string",
+            required: false,
+          },
+          address: {
+            type: "string",
+            required: false,
+          },
+          phoneNumber: {
+            type: "string",
+            required: false,
+          },
+          enableSMS: {
+            type: "boolean",
+            required: false,
+            defaultValue: true,
+          },
+          paymentMethod: {
+            type: "string",
+            required: false,
+          },
+          subscriptionPlan: {
+            type: "string",
+            required: false,
+          },
+          onboardingComplete: {
+            type: "boolean",
+            required: false,
+            defaultValue: false,
+          },
+          channel: {
+            type: "string",
+            required: false,
+            defaultValue: true,
+          },
+        },
+      },
+    },
+    organizationCreation: {
+      beforeCreate: async ({ organization, user }) => {
+        console.log("Inside organizationCreation.beforeCreate", organization)
+        const extendedOrg = {
+          ...organization,
+          slug: organization.slug || generateId(),
+        }
+        console.log("ext-org.user", extendedOrg, user, user.id)
+        return {
+          data: extendedOrg,
+        }
+      },
+      afterCreate: async ({ organization, user }) => {
+        console.log("Inside organizationCreation.beforeCreate", organization)
+        // TODO: Attach Saleor resources
+        console.log(organization, "afterCreate", user)
+      },
+    },
+  });
+
+const adminPluginWrapper = (): ReturnType<typeof adminPlugin> =>
+  adminPlugin({
+    ac: ac,
+    roles,
+    adminRoles: ["owner", "admin"],
+    impersonationSessionDuration: 60 * 60 * 24 * 7,
+  });
+
+const phoneNumberPlugin = (): ReturnType<typeof phoneNumber> =>
+  phoneNumber({
+    allowedAttempts: 3,
+    sendOTP: async ({ phoneNumber, code }, request) => {
+      console.log(`Sending OTP ${code} to ${phoneNumber}`)
+
+      try {
+        // Check if user exists and has a real email (not temp email)
+        const existingUser = await db.user.findFirst({
+          where: {
+            phoneNumber: phoneNumber,
+            NOT: {
+              email: {
+                endsWith: '@alcorabooks.com' // Skip temp emails
+              }
+            }
+          },
+          select: { email: true, name: true }
+        })
+
+        if (existingUser && existingUser.email) {
+          // User exists with real email - send OTP via email instead of SMS
+          console.log(`Sending OTP via email to ${existingUser.email} instead of SMS to ${phoneNumber}`)
+          // await emailService.sendEmail({
+          //   email: existingUser.email,
+          //   name: existingUser.name || 'User',
+          //   otp: code,
+          //   phoneNumber: phoneNumber,
+          // })
+          console.log("✅ OTP sent via email (cost saving)")
+        } else {
+          // New user or user with temp email - send SMS as usual
+          console.log(`Sending OTP via SMS to ${phoneNumber} (new user signup)`)
+
+          // Your existing SMS logic here
+          console.log("AT SMS sent:")
+        }
+      } catch (err) {
+        console.error("OTP sending failed:", err)
+        // Fallback to SMS if email fails
+        if ((err as any).message?.includes('email')) {
+          console.log("Email failed, falling back to SMS")
+          // Your SMS fallback logic here
+        }
+      }
+    },
+    signUpOnVerification: {
+      getTempEmail: (phoneNumber) => {
+        return `${phoneNumber}@alcorabooks.com`
+      },
+      getTempName: (phoneNumber) => {
+        return phoneNumber
+      },
+    },
+    callbackOnVerification: async ({ phoneNumber, user }, request) => {
+      // After successful verification
+      if (user) {
+        console.log(`Login successful for ${phoneNumber}`)
+        // Update last login or any other login logic
+      }
+    },
+    otpLength: 4,
+    expiresIn: 60 * 5, //5mins
+  });
+
+function createAuthConfig(): BetterAuthOptions {
+  return {
+    trustedOrigins: AUTH_CONFIG.trustedOrigins,
+    appName: AUTH_CONFIG.appName,
+    secret: process.env.BETTER_AUTH_SECRET || "0c06fd6be5b8109d7e13630f5e7cabbe6de3ac8b2bb00d437805df9c4743b924",
+    database: prismaAdapter(db, {
+      provider: "postgresql",
+    }),
+    logger: {
+      level: 'debug'
+    },
+    emailAndPassword: {
+      enabled: true,
+      requireEmailVerification: false,
+      minPasswordLength: 8,
+      maxPasswordLength: 128,
+      autoSignIn: true,
+      sendResetPassword: async ({ user, url, token }, request) => {
+        if (!user?.email) {
+          logger.warn(`[sendResetPassword] No email for user id=${user?.id}, skipping reset email`);
+          return;
+        }
+
+        try {
+          const userName = (user as any).name ?? user.email.split("@")[0];
+
+          const result = await emailService.sendPasswordResetEmail({
+            to: user.email,
+            userName,
+            resetUrl: url,
+            supportEmail: "support@alcorabooks.com",
+          });
+
+          if (!result.success) {
+            // Log failure but don't throw — don't want to reveal account state to callers
+            logger.error(
+              `[sendResetPassword] Failed to send password reset email to ${user.email}:`,
+              result.error ?? "unknown error"
+            );
+          } else {
+            logger.info(`[sendResetPassword] Sent password reset email to ${user.email} (token=${token})`);
+          }
+        } catch (err) {
+          logger.error(`[sendResetPassword] Unexpected error sending password reset email to ${user.email}:`, err);
+          // Do not rethrow to avoid leaking implementation details to the public endpoint.
+        }
+      },
+
+      // === onPasswordReset ===
+      onPasswordReset: async ({ user }, request) => {
+        try {
+          logger.info(`[onPasswordReset] Password successfully reset for user ${user.email} (id=${user.id})`);
+
+          // OPTIONAL / RECOMMENDED: security actions you might run here:
+          // 1) Revoke other sessions for the user (if your system supports it).
+          // 2) Record an audit row in your DB: who, when, ip, userAgent.
+          // 3) Send a "password changed" notification email (recommended).
+          //
+          // await emailService.sendEmail({
+          //   to: user.email,
+          //   subject: 'Your Alcora Platform password was changed',
+          //   template: 'PASSWORD_CHANGED' as NotificationTemplate,
+          //   data: { name: user.name ?? user.email.split('@')[0], changedAt: new Date().toISOString() }
+          // });
+
+          // TODO: invalidate other sessions: implement a function like
+          // await revokeAllOtherSessionsForUser(user.id, { exceptSessionId: request?.sessionId });
+
+        } catch (err) {
+          logger.error(`[onPasswordReset] Error during post-reset processing for user ${user.email}:`, err);
+          // don't throw — let the password reset complete for the user even if post-processing fails
+        }
+      },
+    },
+    emailVerification: {
+      sendVerificationEmail: async ({ user, url, token }) => {
+        if (!user?.email) {
+          logger.warn(`⚠️ No email found for user ${user?.id}, skipping signup emails`);
+          return;
+        }
+
+        try {
+          await emailService.sendWelcomeEmail({
+            email: user.email,
+            name: user.name,
+            organizationName: `${user.name}'s organization`,
+            loginUrl: `${APP_BASE_URL}/sign-in`,
+          });
+
+          logger.info(`✅ Welcome + verification emails sent to ${user.email}`);
+        } catch (err) {
+          logger.error(`❌ Failed to send signup emails to ${user.email}:`, err);
+        }
+      },
+      sendOnSignUp: true,
+      autoSignInAfterVerification: true,
+      expiresIn: 3600 // 1 hour
+    },
+    user: {
+      additionalFields: {
+        role: {
+          type: "string",
+          required: true,
+          defaultValue: "user",
+          input: true,
+        },
+        // Track the original business type selection (including "staff")
+        businessType: {
+          type: "string",
+          required: false,
+          input: true,
+        },
+        premium: {
+          type: "boolean",
+          required: false,
+          defaultValue: false,
+          input: false,
+        },
+        // Phone number for SMS notifications not from better-auth auth plugins
+        // @ref https://www.better-auth.com/docs/plugins/phone-number
+        phoneNumber: {
+          type: "string",
+          required: false,
+          input: true,
+        },
+        enableSMS: {
+          type: "boolean",
+          required: false,
+          defaultValue: true,
+          input: true,
+        },
+
+      },
+    },
+    session: {
+      cookieCache: {
+        enabled: true,
+        maxAge: 60 * 60 * 24 * 7,
+      },
+      expiresIn: 60 * 60 * 24 * 7,
+      updateAge: 60 * 60 * 24,
+      additionalFields: {
+        saleorChannelId: { type: "string", required: false },
+        saleorChannelSlug: { type: "string", required: false },
+        organizationId: { type: "string", required: false },
+        activeOrganizationId: { type: "string", required: false },
+        organizationName: { type: "string", required: false },
+        organizationSlug: { type: "string", required: false },
+        businessType: { type: "string", required: false },
+        warehouseId: { type: "string", required: false },
+      },
+    },
+    databaseHooks: {
+      user: {
+        create: {
+          before: async (user, ctx) => {
+            const role = ctx?.body?.additionalFields?.role ?? "user"
+            const businessType = ctx?.body?.additionalFields?.businessType
+
+            if (!ALLOWED_ROLES.includes(role)) {
+              throw new Error("Invalid role assignment")
+            }
+
+            return {
+              data: {
+                ...user,
+                role,
+                businessType // Store the original selection for tracking
+              }
+            }
+          },
+        },
+      },
+      session: {
+        create: {
+          before: async (session, ctx) => {
+            const isSignUp = ctx?.path?.startsWith("/sign-up")
+            if (!isSignUp) return { data: session }
+
+            return db.$transaction(async (tx) => {
+              const user = await tx.user.findUnique({ where: { id: session.userId } })
+              if (!user) return { data: session }
+
+              // Check if user is staff (businessType === "staff")
+              // Staff users should NOT get organizations created automatically
+              const isStaffUser = ctx?.body?.additionalFields?.businessType === "staff"
+
+              if (isStaffUser) {
+                logger.info(`👤 Staff user ${user.id} signed up - skipping organization creation`)
+                return { data: session } // No org creation for staff
+              }
+
+              // Only create orgs for actual business roles
+              if (!businessRoles.has(user.role)) return { data: session }
+
+              // Check if org already exists
+              const existing = await tx.member.findFirst({
+                where: { userId: user.id },
+                include: { organization: true }
+              })
+              if (existing) {
+                return { data: { ...session, activeOrganizationId: existing.organization.id } }
+              }
+
+              // 2️⃣ Create organization for business users (not staff)
+              if (ctx?.path?.startsWith("/sign-up")) {
+                // create organization + membership
+                const org = await tx.organization.create({
+                  data: {
+                    name: `${user.name}'s Organization`,
+                    slug: generateId(),
+                    businessType: mapUserRoleToBusiness(user.role),
+                    paymentMethod: PaymentMethodType.MPESA,
+                    members: { create: { userId: user.id, role: "owner" } },
+                  }
+                })
+
+                logger.info(`✅ Organization created synchronously: ${org.id}`)
+                return { data: { ...session, activeOrganizationId: org.id } }
+              }
+              return { data: session }
+            })
+          },
+          after: async (session, ctx) => {
+            const isSignUp = ctx?.path.startsWith("/sign-up")
+            const orgId = (session as any).activeOrganizationId
+            if (!isSignUp || !orgId) return
+
+            const businessType = ctx?.body?.additionalFields?.businessType
+
+            if (businessType === "staff") {
+              logger.info(`👤 Staff user ${session.userId} - skipping Saleor setup`)
+              return // No Saleor resources for staff
+            }
+
+            // TODO: enqueueSaleorJob
+            try {
+              console.log("Starting Saleor environment setup...")
+              // Setup Saleor resources asynchronously - only for business users
+              await setupSaleorResourcesForNewUser(
+                session.userId,
+                orgId,
+                session.id
+              )
+              logger.info("✅ Provisioned: Saleor resources")
+            } catch (err) {
+              console.error("❌ Error setting up Saleor resources:", err)
+              // Don't throw - let the user continue even if Saleor setup fails
+            }
+          },
+        },
+      },
+    },
+    socialProviders: {
+      google: {
+        clientId: "644434745663-s4idvq7qp0jjqth81me4drpdofkdm7d3.apps.googleusercontent.com",
+        clientSecret: "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",
+        accessType: "offline",
+      },
+    },
+    plugins: [
+      adminPluginWrapper(),
+      multiSession(),
+      nextCookies(),
+      phoneNumberPlugin(),
+      customSession(async ({ user, session }) => {
+        const userRole = (user as any).role
+        const businessType = (user as any).businessType
+
+        // Find organization membership for ALL users (including role="user")
+        // This handles both staff users (role="user" + has membership) and business users
+        let orgId = (session as any).activeOrganizationId
+
+        if (!orgId) {
+          const firstMembership = await db.member.findFirst({
+            where: { userId: user.id },
+            select: { organizationId: true, role: true },
+            orderBy: { createdAt: 'desc' } // Get most recent membership
+          })
+          orgId = firstMembership?.organizationId ?? null
+        }
+
+        // If role="user" and NO organization membership, they're a B2C customer
+        if (userRole === "user" && !orgId) {
+          console.log("🔍 [customSession] B2C customer detected (role=user, no org)")
+          return {
+            ...session,
+            user,
+            role: userRole,
+            organizationId: null,
+            organizationName: null,
+            organizationSlug: null,
+            businessType: null,
+            saleorChannelId: null,
+            saleorChannelSlug: null,
+            warehouseId: null
+          }
+        }
+
+        // For users with organization membership (staff, drivers, business users)
+        const org = orgId
+          ? await db.organization.findUnique({
+            where: { id: orgId },
+            select: {
+              id: true, name: true, slug: true, businessType: true,
+              saleorChannels: { where: { isActive: true }, take: 1, select: { saleorChannelId: true, slug: true } },
+              warehouses: { take: 1, select: { saleorWarehouseId: true } }
+            }
+          })
+          : null
+
+        const enrichedSession = {
+          ...session,
+          user,
+          role: userRole,
+          organizationId: org?.id,
+          organizationName: org?.name,
+          organizationSlug: org?.slug,
+          businessType: org?.businessType,
+          saleorChannelId: org?.saleorChannels[0]?.saleorChannelId,
+          saleorChannelSlug: org?.saleorChannels[0]?.slug,
+          warehouseId: org?.warehouses[0]?.saleorWarehouseId
+        }
+
+        return enrichedSession
+      }),
+      organizationPlugin(),
+      reverify()
+    ],
+  } satisfies BetterAuthOptions
+}
+
+export function createAuth() {
+  if (_authInstance) {
+    return _authInstance;
+  }
+
+  try {
+    const config = createAuthConfig();
+    _authInstance = betterAuth(config);
+    return _authInstance;
+  } catch (error) {
+    console.error('[createAuth] Failed to initialize auth:', error);
+    throw error;
+  }
+}
+
+// ✅ Working solution: Use ReturnType<typeof betterAuth> for proper typing
+export const auth: ReturnType<typeof betterAuth> = new Proxy({} as any, {
+  get(_, prop) {
+    const authInstance = createAuth()
+    return (authInstance as any)[prop]
+  },
+})
+
+export type Auth = ReturnType<typeof createAuth>;

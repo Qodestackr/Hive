@@ -29,13 +29,6 @@ import {
 import { OrganizationContext } from "@repo/utils";
 
 export const promoCodeService = {
-    /**
-     * Effect-based promo code redemption 
-     * 
-     * Returns typed errors instead of throwing exceptions.
-     * Gets organizationId from context - no prop drilling!
-     * All possible failures are in the type signature - compiler enforced!
-     */
     redeemPromoCodeEffect(
         data: PromoCodeRedeem
     ): Effect.Effect<
@@ -46,7 +39,6 @@ export const promoCodeService = {
         OrganizationContext
     > {
         return Effect.gen(function* () {
-            // Get organizationId from context
             const { organizationId } = yield* OrganizationContext;
             const promoCodeRows = yield* withDrizzleErrors(
                 "promo_codes",
@@ -106,14 +98,12 @@ export const promoCodeService = {
                 }));
             }
 
-            // Get FIFO cost (from context - no prop drilling!)
             const quantityRedeemed = data.quantityRedeemed || 1;
             const fifoResult = yield* fifoService.getOldestAvailableBatchEffect(
                 promoCode.productId!,
                 quantityRedeemed
             );
 
-            // Calculate profit (PURE)
             const profit = ProfitCalculator.calculate({
                 basePrice: product.basePrice,
                 quantity: quantityRedeemed,
@@ -192,84 +182,19 @@ export const promoCodeService = {
             never
         >;
     },
-
     /**
-    * Validate promo code without redeeming
-    * 
-    * @param code - Promo code to validate
-    * @param organizationId - Organization context
-    * @returns Validation result
-    */
-    async validatePromoCode(
-        code: string,
-        organizationId: string
-    ): Promise<{ isValid: boolean; reason?: string }> {
-        const promoCode = await withDbOperation({
-            operation: "findUnique",
-            table: "promo_code",
-            context: { organizationId, code }
-        }, () => db
-            .select()
-            .from(promoCodes)
-            .where(and(
-                eq(promoCodes.code, code),
-                eq(promoCodes.organizationId, organizationId)
-            ))
-            .limit(1)
-            .then(rows => rows[0])
-        );
-
-        if (!promoCode) {
-            return { isValid: false, reason: "Code not found" };
-        }
-
-        if (promoCode.isRedeemed) {
-            return { isValid: false, reason: "Code already redeemed" };
-        }
-
-        const expiryDate = new Date(promoCode.expiresAt);
-        if (expiryDate < new Date()) {
-            return { isValid: false, reason: "Code expired" };
-        }
-
-        return { isValid: true };
-    },
-
-    /**
-     * Validate promo code using Effect (NEW - Type-safe version)
+     * Validate promo code using Effect
      * 
      * Returns the actual promo code on success, or typed error on failure.
-     * This version provides full type safety and structured errors.
-     * 
      * @param code - Promo code to validate
      * @param organizationId - Organization context
      * @returns Effect that succeeds with PromoCode or fails with typed error
-     * 
-     * @example
-     * ```typescript
-     * import { Effect } from "effect"
-     * 
-     * const result = await Effect.runPromise(
-     *   promoCodeService.validatePromoCodeEffect("SUMMER20", "org-123")
-     * )
-     * // result is the actual PromoCode object
-     * ```
      */
     validatePromoCodeEffect(
         code: string,
         organizationId: string
     ) {
-        // Import Effect and error handler
-        const { Effect } = require("effect");
-        const { withDrizzleErrors } = require("@repo/db/handle-drizzle-error");
-        const {
-            PromoCodeNotFound,
-            PromoCodeAlreadyRedeemed,
-            PromoCodeExpired
-        } = require("@repo/utils");
-
         return Effect.gen(function* () {
-            // Use withDrizzleErrors for proper DB error handling
             const promoCode = yield* withDrizzleErrors(
                 "promo_codes",
                 "select",
@@ -284,14 +209,12 @@ export const promoCodeService = {
                     .then(rows => rows[0])
             );
 
-            // Check if code exists
             if (!promoCode) {
                 return yield* Effect.fail(
                     new PromoCodeNotFound({ code, organizationId })
                 );
             }
 
-            // Check if already redeemed
             if (promoCode.isRedeemed) {
                 return yield* Effect.fail(
                     new PromoCodeAlreadyRedeemed({
@@ -301,7 +224,6 @@ export const promoCodeService = {
                 );
             }
 
-            // Check if expired
             const expiryDate = new Date(promoCode.expiresAt);
             if (expiryDate < new Date()) {
                 return yield* Effect.fail(
@@ -309,7 +231,6 @@ export const promoCodeService = {
                 );
             }
 
-            // Valid! Return the actual promo code
             return promoCode;
         });
     }

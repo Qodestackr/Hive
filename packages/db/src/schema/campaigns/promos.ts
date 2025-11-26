@@ -66,3 +66,7 @@ export const promoCodes = pgTable('promo_code', {
   index('promo_org_redeemed_idx').on(table.organizationId, table.isRedeemed),
   index('promo_redeemed_date_idx').on(table.redeemedAt),
 ]);
+
+// Type exports - Single source of truth
+export type PromoCode = typeof promoCodes.$inferSelect;
+export type PromoCodeInsert = typeof promoCodes.$inferInsert;

@@ -5,6 +5,7 @@ export * from "./database-errors"
 export * from "./promo-code-errors"
 export * from "./product-errors"
 export * from "./campaign-errors"
+export * from "./billing-errors"
 
 // union of all domain errors. Handles any generic domain error
 import type { PromoCodeError } from "./promo-code-errors"

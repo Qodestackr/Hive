@@ -133,6 +133,98 @@ export class SaleorRateLimitExceeded extends Data.TaggedError("SaleorRateLimitEx
 }
 
 /**
+ * Channel creation failed in Saleor
+ */
+export class SaleorChannelCreationFailed extends Data.TaggedError("SaleorChannelCreationFailed")<{
+    readonly channelName: string;
+    readonly reason: string;
+    readonly saleorErrors?: Array<{ field?: string; message: string; code?: string }>;
+}> {
+    readonly errorCode = ErrorCode.EXTERNAL_SERVICE_ERROR;
+    readonly statusCode = 502;
+
+    get message() {
+        const errorDetails = this.saleorErrors
+            ? `\nSaleor errors: ${JSON.stringify(this.saleorErrors)}`
+            : "";
+        return `Failed to create channel '${this.channelName}' in Saleor: ${this.reason}${errorDetails}`;
+    }
+}
+
+/**
+ * Warehouse creation failed in Saleor
+ */
+export class SaleorWarehouseCreationFailed extends Data.TaggedError("SaleorWarehouseCreationFailed")<{
+    readonly warehouseName: string;
+    readonly reason: string;
+    readonly saleorErrors?: Array<{ field?: string; message: string; code?: string }>;
+}> {
+    readonly errorCode = ErrorCode.EXTERNAL_SERVICE_ERROR;
+    readonly statusCode = 502;
+
+    get message() {
+        const errorDetails = this.saleorErrors
+            ? `\nSaleor errors: ${JSON.stringify(this.saleorErrors)}`
+            : "";
+        return `Failed to create warehouse '${this.warehouseName}' in Saleor: ${this.reason}${errorDetails}`;
+    }
+}
+
+/**
+ * Shipping zone creation failed in Saleor
+ */
+export class SaleorShippingZoneCreationFailed extends Data.TaggedError("SaleorShippingZoneCreationFailed")<{
+    readonly zoneName: string;
+    readonly reason: string;
+    readonly saleorErrors?: Array<{ field?: string; message: string; code?: string }>;
+}> {
+    readonly errorCode = ErrorCode.EXTERNAL_SERVICE_ERROR;
+    readonly statusCode = 502;
+
+    get message() {
+        const errorDetails = this.saleorErrors
+            ? `\nSaleor errors: ${JSON.stringify(this.saleorErrors)}`
+            : "";
+        return `Failed to create shipping zone '${this.zoneName}' in Saleor: ${this.reason}${errorDetails}`;
+    }
+}
+
+/**
+ * Channel activation failed in Saleor
+ */
+export class SaleorChannelActivationFailed extends Data.TaggedError("SaleorChannelActivationFailed")<{
+    readonly channelId: string;
+    readonly reason: string;
+    readonly saleorErrors?: Array<{ field?: string; message: string; code?: string }>;
+}> {
+    readonly errorCode = ErrorCode.EXTERNAL_SERVICE_ERROR;
+    readonly statusCode = 502;
+
+    get message() {
+        const errorDetails = this.saleorErrors
+            ? `\nSaleor errors: ${JSON.stringify(this.saleorErrors)}`
+            : "";
+        return `Failed to activate channel '${this.channelId}' in Saleor: ${this.reason}${errorDetails}`;
+    }
+}
+
+/**
+ * Resource already exists (idempotency check)
+ */
+export class SaleorResourceAlreadyExists extends Data.TaggedError("SaleorResourceAlreadyExists")<{
+    readonly resourceType: "channel" | "warehouse";
+    readonly organizationId: string;
+    readonly existingResourceId: string;
+}> {
+    readonly errorCode = ErrorCode.DUPLICATE_RECORD;
+    readonly statusCode = 409;
+
+    get message() {
+        return `Saleor ${this.resourceType} already exists for organization '${this.organizationId}' (ID: ${this.existingResourceId})`;
+    }
+}
+
+/**
  * Union of all Saleor domain errors
  */
 export type SaleorDomainError =
@@ -142,4 +234,9 @@ export type SaleorDomainError =
     | SaleorProductCreationFailed
     | SaleorPromotionError
     | SaleorInvalidChannelConfig
-    | SaleorRateLimitExceeded;
+    | SaleorRateLimitExceeded
+    | SaleorChannelCreationFailed
+    | SaleorWarehouseCreationFailed
+    | SaleorShippingZoneCreationFailed
+    | SaleorChannelActivationFailed
+    | SaleorResourceAlreadyExists;

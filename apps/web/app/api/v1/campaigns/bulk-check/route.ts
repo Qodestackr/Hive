@@ -6,7 +6,7 @@ import {
 import { profitAlertService } from "@repo/services";
 
 /**
- * POST /api/v1/campaigns/bulk-check
+ * POST `/api/v1/campaigns/bulk-check`
  * Check multiple campaigns at once
  * 
  * Useful for:

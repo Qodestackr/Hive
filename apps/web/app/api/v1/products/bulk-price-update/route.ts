@@ -2,10 +2,6 @@ import { createWorkspaceRoute } from "@/lib/api/create-api-route";
 import { BulkProductPriceUpdateSchema, BulkUpdateResponseSchema } from "@repo/schema";
 import { productService } from "@repo/services";
 
-/**
- * POST /api/v1/products/bulk-price-update
- * Bulk price updates
- */
 export const POST = createWorkspaceRoute({
     inputSchema: BulkProductPriceUpdateSchema,
     outputSchema: BulkUpdateResponseSchema,

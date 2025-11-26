@@ -1,12 +1,8 @@
 import { createWorkspaceRoute } from "@/lib/api/create-api-route";
 import { CampaignResponseSchema } from "@repo/schema";
 import { campaignStatsService } from "@repo/services";
-import { z } from "zod";
+import { z } from "@repo/utils";
 
-/**
- * POST /api/v1/campaigns/:id/resume
- * Resume campaign
- */
 export const POST = createWorkspaceRoute({
     inputSchema: z.void(),
     outputSchema: CampaignResponseSchema,
