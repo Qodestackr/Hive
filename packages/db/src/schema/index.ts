@@ -13,6 +13,8 @@ export * from "./campaigns/responses";
 export * from "./customers/compliance-logs";
 export * from "./customers/customers";
 export * from "./customers/reconciliation-logs";
+export * from "./customers/verifications";
+
 export * from "./messaging/whatsapp-contacts";
 export * from "./messaging/whatsapp-messages";
 export * from "./products/inventory-movements";

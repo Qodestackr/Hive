@@ -25,6 +25,9 @@ export * from "./campaigns/profit-alert.schema.js";
 export * from "./campaigns/promo-code.schema.js";
 export * from "./campaigns/promotion.schema.js";
 
+// Analytics
+export * from "./analytics/analytics.schema.js";
+
 // Commerce
 export * from "./commerce/whatsapp.schema.js";
 
