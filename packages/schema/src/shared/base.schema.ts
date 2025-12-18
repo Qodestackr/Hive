@@ -1,3 +1,4 @@
+import "../zod-extend";
 import { z } from "zod";
 
 export const ID = z

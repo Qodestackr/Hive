@@ -16,11 +16,7 @@ export const inventoryTool = tool({
     execute: async ({ productId, organizationId }) => {
         // Run the Effect workflow to get data
         const program = Effect.gen(function* () {
-            // 1. Get Product Details (Name, Base Price)
-            const product = yield* productService.getProductByIdEffect(productId);
-
-            // 2. Get FIFO Batch Data (Real Cost)
-            // We check for 1 unit just to get the current batch cost
+            const product = yield* productService.getByIdEffect(productId)
             const batch = yield* fifoService.getOldestAvailableBatchEffect(productId, 1);
 
             return {
@@ -44,7 +40,6 @@ export const inventoryTool = tool({
             )
         );
 
-        // Execute the Effect
         return Effect.runPromise(program);
     },
 });

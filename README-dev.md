@@ -43,4 +43,4 @@ When you wake up excited to build — not obligated to grind — you've won. Rep
 - Think "I'll reach out after I finish X"
 - Research a new tool/framework "for fun"
 
-> **Build solutions to pain, not features**
+> **Build solutions to pain, not features**. First principle: Software value lives in understanding problems, not writing solutions. AI commoditizes syntax. Domain knowledge becomes the moat.

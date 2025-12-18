@@ -19,8 +19,12 @@ export * from "./messaging/whatsapp-contacts";
 export * from "./messaging/whatsapp-messages";
 export * from "./products/inventory-movements";
 export * from "./products/products";
+export * from "./products/brands";
 export * from "./products/profit-alerts";
 export * from "./products/purchase-orders";
 export * from "./products/saleor-integration";
+
+export * from "./suppliers/market-intel";
+export * from "./suppliers/subscriptions";
 
 export * from "./relations";

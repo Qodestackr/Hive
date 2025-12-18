@@ -1,6 +1,6 @@
 import { OutcomeInvoiceSchema } from "@repo/schema";
 import { billingService } from "@repo/services/src/billing.service";
-import { z } from "@repo/utils";
+import { z } from "@repo/schema";
 import { Effect } from "effect";
 import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 

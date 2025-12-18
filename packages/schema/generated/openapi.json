@@ -13,23 +13,9 @@
   ],
   "components": {
     "schemas": {
-      "ID": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id"
-        ]
-      },
       "UserResponse": {
         "type": "object",
         "properties": {
-          "id": {
-            "$ref": "#/components/schemas/ID"
-          },
           "email": {
             "type": "string",
             "example": "user@example.com"
@@ -37,6 +23,9 @@
           "name": {
             "type": "string",
             "example": "John Doe"
+          },
+          "id": {
+            "type": "string"
           },
           "createdAt": {
             "type": "string",
@@ -48,9 +37,9 @@
           }
         },
         "required": [
-          "id",
           "email",
           "name",
+          "id",
           "createdAt",
           "updatedAt"
         ]
@@ -2853,18 +2842,23 @@
           "discrepancy"
         ]
       },
+      "ID": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "example": "prod_123"
+      },
       "ReconcileProduct": {
         "type": "object",
         "properties": {
           "productId": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ID"
-              },
-              {
-                "example": "prod_123"
-              }
-            ]
+            "$ref": "#/components/schemas/ID"
           },
           "actualPhysicalCount": {
             "type": "integer",

@@ -25,16 +25,3 @@ export function getCommonPinningStyles<TData>({
 		zIndex: isPinned ? 1 : 0,
 	};
 }
-
-export function formatCurrency(amount: number, currency = "KES"): string {
-	return new Intl.NumberFormat("en-KE", {
-		style: "currency",
-		currency: currency,
-		minimumFractionDigits: 0,
-		maximumFractionDigits: 2,
-	}).format(amount);
-}
-
-export function formatNumber(value: number): string {
-	return new Intl.NumberFormat("en-KE").format(value);
-}

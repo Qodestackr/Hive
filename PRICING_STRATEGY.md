@@ -397,3 +397,5 @@ The outcome-based pricing model reinforces this: "We only charge if we actually 
 That alignment is structural, not rhetorical. And the customer can verify it in real-time.
 
 The goal is to focus on building things that create financial outcomes for customers, then capturing a share of those outcomes.
+
+<!--Master sales, build fast, own your costs, measure outcomes ruthlessly, never run out of cash.-->

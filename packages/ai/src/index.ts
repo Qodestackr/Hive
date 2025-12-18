@@ -7,3 +7,4 @@ export * from "./core/channels";
 export * from "./core/prompts";
 export * from "./agents/back-in-stock.agent";
 export * from "./agents/promo-redemption.agent";
+export { mastra } from "./mastra.config";

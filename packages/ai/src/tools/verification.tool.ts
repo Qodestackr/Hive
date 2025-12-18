@@ -13,10 +13,6 @@ function calculateAge(dateOfBirth: Date | null | undefined): number | null {
     return age;
 }
 
-// ============================================================================
-// SCHEMAS
-// ============================================================================
-
 export const CustomerSegmentSchema = z.object({
     id: z.string(),
     name: z.string(),
@@ -52,10 +48,6 @@ export const VerificationResultSchema = z.object({
 });
 
 export type VerificationResult = z.infer<typeof VerificationResultSchema>;
-
-// ============================================================================
-// VERIFICATION SERVICE
-// ============================================================================
 
 export class VerificationService {
     /**
@@ -95,7 +87,7 @@ export class VerificationService {
 
             const customer = yield* Effect.tryPromise({
                 try: async () => {
-                    const result = await db.db.query.customers.findFirst({
+                    const result = await db.query.customers.findFirst({
                         where: and(
                             eq(customers.id, customerId),
                             eq(customers.organizationId, organizationId)
@@ -139,12 +131,6 @@ export class VerificationService {
         });
     }
 
-    /**
-     * B2B: License Verification
-     * 
-     * Check if business has valid alcohol license
-     * "Licenses keep them locked in" - only licensed businesses can order
-     */
     static verifyLicenseEffect(customerId: string) {
         return Effect.gen(function* () {
             // TODO: Query license table (we'll add this later per user request)
@@ -176,10 +162,6 @@ export class VerificationService {
         });
     }
 }
-
-// ============================================================================
-// SEGMENTATION ENGINE
-// ============================================================================
 
 export class SegmentationEngine {
     /**
@@ -298,10 +280,6 @@ export class SegmentationEngine {
     }
 }
 
-// ============================================================================
-// DETERMINISTIC MESSAGE GENERATOR
-// ============================================================================
-
 /**
  * Generate deterministic messages (100% consistent)
  * 
@@ -333,9 +311,7 @@ export class DeterministicMessageGenerator {
         ORDER_DELIVERED: (orderId: string) => `Order ${orderId} has been delivered. Enjoy!`,
     } as const;
 
-    /**
-     * Generate a message (100% deterministic)
-     */
+
     static generate(
         messageType: keyof typeof DeterministicMessageGenerator.TEMPLATES,
         ...params: any[]

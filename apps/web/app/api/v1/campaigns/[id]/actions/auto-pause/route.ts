@@ -1,6 +1,6 @@
 import { AutoPauseActionResponseSchema } from "@repo/schema";
 import { profitAlertService } from "@repo/services";
-import { z } from "@repo/utils";
+import { z } from "@repo/schema";
 import { createWorkspaceRouteEffect } from "@/lib/api/create-api-route-effect";
 
 export const POST = createWorkspaceRouteEffect({

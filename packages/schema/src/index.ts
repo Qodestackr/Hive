@@ -34,11 +34,18 @@ export * from "./commerce/whatsapp.schema.js";
 // Customers
 export * from "./customers/customer.schema.js";
 
+export * from "./ai/index.js";
+
 // Products
 export * from "./products/inventory-movement.schema.js";
 export * from "./products/product.schema.js";
 export * from "./products/purchase-order.schema.js";
 export * from "./products/reconciliation.schema.js";
+
+export * from './messaging/index.js'
+
+// Suppliers
+export * from "./suppliers/negotiation.schema.js";
 
 // Shared
 export * from "./shared/base.schema.js";

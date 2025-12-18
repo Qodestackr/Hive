@@ -5,8 +5,6 @@ import { Effect } from "effect";
 import { OrganizationContext } from "@repo/utils";
 
 /**
- * AI Tool: Customer Verification
- * 
  * Checks if customer can receive promo (age/license verification)
  * Agent calls this BEFORE sending any promo offers
  */

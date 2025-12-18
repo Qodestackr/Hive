@@ -16,7 +16,6 @@ export interface EnhancedApiOptions extends WithWorkspaceOptions {
 	requireWorkspace?: boolean;
 }
 
-// for endpoints that only need a session (no workspace)
 export type SimpleApiHandler = (params: {
 	req: NextRequest;
 	params: Record<string, string>;
@@ -27,7 +26,7 @@ export type SimpleApiHandler = (params: {
 
 /**
  * Overload #1: workspace‐aware (default when requireWorkspace=true or omitted)
- *   — returns a function whose args & return exactly match your handler `H`
+ *   — returns a function whose args & return exactly match the handler `H`
  */
 export function withEnhancedApiContext<H extends WorkspaceHandler>(
 	handler: H,
@@ -77,10 +76,6 @@ export function withEnhancedApiContext(
 	};
 }
 
-/**
- * Simple API handler that only provides session context
- * For endpoints that don't need workspace/organization context
- */
 function withSimpleApiContext(
 	handler: SimpleApiHandler,
 	options: EnhancedApiOptions,

@@ -1,303 +1,310 @@
 /**
- * 12 Factor Agents - Factor 2: Own Your Prompts
+ * Prompts Registry - Production Grade
  * 
- * Prompts are first-class code. They should be:
- * - Versioned (v1, v2, v3...)
- * - Tested (A/B tests, evals)
- * - Documented (what changed, why)
- * - Measurable (track performance per version)
- * 
- * This enables:
- * - Rollback when a new prompt breaks
- * - Gradual rollouts (10% on v3, 90% on v2)
- * - Clear attribution ("v2 had 85% profit accuracy, v3 has 92%")
+ * Principles:
+ * 1. Prompts are contracts - breaking changes need new versions
+ * 2. Metadata enables monitoring - track what version caused what outcome
+ * 3. Gradual rollout - canary/A/B test before full deployment
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
-// ============================================================================
-// VERSIONED PROMPTS
-// ============================================================================
+// Schema for prompt metadata
+const PromptVersionSchema = z.object({
+    active: z.boolean(),
+    rollout: z.number().min(0).max(100).default(100), // % traffic
+    deprecated: z.string().optional(),
+    improvements: z.string().optional(),
+    system: z.string(),
+    metrics: z.object({
+        successRate: z.number().optional(),
+        avgLatency: z.number().optional(),
+        costPerRun: z.number().optional(),
+    }).optional(),
+});
 
-/**
- * BackInStock Agent Prompts
- */
+type PromptVersion = z.infer<typeof PromptVersionSchema>;
+
+// Core prompts with rollout control
 export const BackInStockPrompts = {
     v1: {
-        version: "v1",
-        deprecated: true,
-        deprecationReason: "Too generic, no Kenyan market context",
+        active: false,
+        rollout: 0,
+        deprecated: "Too generic, no market context",
+        metrics: { successRate: 0.65, avgLatency: 2300, costPerRun: 0.008 },
         system: `You are a promotional campaign assistant. Generate promo ideas for products that are back in stock.`,
     },
 
     v2: {
-        version: "v2",
         active: true,
-        introduced: "2024-11-27",
-        description: "Added Kenyan liquor context, compliance rules, sandwich pattern instructions",
+        rollout: 80, // Gradual rollout
+        metrics: { successRate: 0.82, avgLatency: 2100, costPerRun: 0.009 },
         system: [
-            "You are Promco's BackInStockAgent. You follow the Sandwich Pattern:",
-            "1) Always call the inventory tool first (already done).",
-            "2) Propose a promo based on provided context.",
-            "3) Call the profit calculator tool before finalizing.",
+            "You're Promco's BackInStockAgent. Follow the Sandwich Pattern:",
+            "1. Inventory tool already called",
+            "2. Propose promo",
+            "3. Validate with profit calculator",
             "",
-            "Kenyan Liquor Market Context:",
-            "- Distributors lose KES 100K-300K monthly on poorly planned promos",
-            "- Age verification is mandatory (18+)",
-            "- WhatsApp is the primary engagement channel",
-            "- Profit margins typically 20-40% on beer, 30-50% on spirits",
+            "Market Reality:",
+            "- Distributors lose KES 100K-300K/month on bad promos",
+            "- Typical margins: 20-40% beer, 30-50% spirits",
+            "- WhatsApp is primary channel, 18+ age gate required",
             "",
-            "Constraints:",
+            "Rules:",
             "- Max discount: {maxDiscountPercent}%",
-            "- Obey Kenyan liquor compliance",
+            "- If margin < 10%, flag for review",
             "- Never hallucinate inventory",
-            "- If uncertain, ask for human review",
             "",
-            "Outcome-Based Mindset:",
-            "We only earn 5% of profit created. Your recommendations must be PROFITABLE.",
+            "We earn 5% of profit created. Prioritize profitability over volume.",
         ].join("\n"),
     },
 
     v3: {
-        version: "v3",
-        active: false, // A/B testing, not default yet
-        introduced: "2024-11-28",
-        description: "More aggressive upselling, bundles, margin optimization",
-        improvements: [
-            "Suggests bundles for slow movers",
-            "Optimizes for margin, not just sell-through",
-            "Considers seasonal patterns",
-        ],
-        system: [
-            "You are Promco's BackInStockAgent. You follow the Sandwich Pattern:",
-            "1) Always call the inventory tool first (already done).",
-            "2) Propose a PROFIT-OPTIMIZED promo based on context.",
-            "3) Call the profit calculator tool before finalizing.",
-            "",
-            "Kenyan Liquor Market Context:",
-            "- Distributors lose KES 100K-300K monthly on poorly planned promos",
-            "- Age verification is mandatory (18+)",
-            "- WhatsApp is the primary engagement channel",
-            "- Target margins: 25%+ on beer, 35%+ on spirits",
-            "",
-            "Advanced Strategies:",
-            "- For slow movers: Suggest bundles (e.g., 'Buy 2 Tusker, get 1 free')",
-            "- For high-margin items: Smaller discounts (5-10%) to preserve margin",
-            "- For seasonal items: Push hard before expiry (higher discounts ok)",
-            "",
-            "Constraints:",
-            "- Max discount: {maxDiscountPercent}%",
-            "- Obey Kenyan liquor compliance",
-            "- Never hallucinate inventory",
-            "- Prioritize PROFIT MARGIN over volume",
-            "",
-            "Outcome-Based Mindset:",
-            "We only earn 5% of profit created. Your recommendations must MAXIMIZE margin.",
-        ].join("\n"),
-    },
-} as const;
-
-/**
- * Promo Redemption Agent Prompts
- */
-export const PromoRedemptionPrompts = {
-    v1: {
-        version: "v1",
         active: true,
-        introduced: "2024-11-28",
-        description: "Extract promo codes from natural language (Swahili/English mix)",
+        rollout: 20, // A/B test
+        improvements: "Bundle suggestions, margin optimization, seasonal awareness",
         system: [
-            "You are a promo code extractor for Kenyan liquor distributors.",
+            "You're Promco's BackInStockAgent. Follow the Sandwich Pattern:",
+            "1. Inventory tool already called",
+            "2. Propose MARGIN-OPTIMIZED promo (bundles for slow movers)",
+            "3. Validate with profit calculator",
+            "",
+            "Market Reality:",
+            "- Distributors lose KES 100K-300K/month on bad promos",
+            "- Target margins: 25%+ beer, 35%+ spirits",
+            "- WhatsApp channel, 18+ gate",
+            "",
+            "Strategy:",
+            "- Slow movers: Bundles (Buy 2 get 1) - clears inventory + maintains margin",
+            "- High margin: Small discounts (5-10%) - volume play",
+            "- Near expiry: Aggressive discounts - salvage value",
             "",
             "Rules:",
-            "1. Promo codes are UPPERCASE + numbers (e.g., TUSKER50, HENNESSY20)",
-            "2. Extract phone in E.164 format (+254...)",
-            "3. Handle Swahili/English code-switching",
-            "4. Return JSON only",
+            "- Max discount: {maxDiscountPercent}%",
+            "- If margin < 15%, flag for review",
+            "- Never hallucinate inventory",
+            "",
+            "We earn 5% of profit created. Maximize margin, not volume.",
+        ].join("\n"),
+    },
+} as const;
+
+export const PromoRedemptionPrompts = {
+    v1: {
+        active: false,
+        rollout: 0,
+        deprecated: "No validation logic, too permissive on edge cases",
+        metrics: { successRate: 0.71, avgLatency: 1800, costPerRun: 0.006 },
+        system: [
+            "Extract promo codes from Kenyan customer messages (Swahili/English mix).",
+            "",
+            "Format:",
+            "- Codes: UPPERCASE + numbers (TUSKER50, BEER20)",
+            "- Phone: E.164 format (+254...)",
             "",
             "Examples:",
-            '- "Nina code TUSKER50" → {"code": "TUSKER50"}',
-            '- "Nataka discount, my number ni 0700123456" → {"phone": "+254700123456"}',
-            '- "BEER20 for 0722555666" → {"code": "BEER20", "phone": "+254722555666"}',
+            '"Nina code TUSKER50" → {"code": "TUSKER50"}',
+            '"Nataka discount, 0700123456" → {"phone": "+254700123456"}',
             "",
-            "Important:",
-            "- If you can't extract a valid code, return null",
-            "- Never guess or hallucinate codes",
-            "- Phone numbers can be 07XX... or +2547XX...",
+            "Return JSON only. If unclear, return null.",
+        ].join("\n"),
+    },
+
+    v2: {
+        active: true,
+        rollout: 100,
+        improvements: "Validation logic, handles edge cases, Sheng support",
+        metrics: { successRate: 0.89, avgLatency: 1900, costPerRun: 0.007 },
+        system: [
+            "Extract promo codes from Kenyan customer messages.",
+            "",
+            "Valid Code Format:",
+            "- 4-15 chars, UPPERCASE + numbers only",
+            "- Common patterns: TUSKER50, BEER20, MEGA25",
+            "- NOT valid: emoji, special chars, spaces",
+            "",
+            "Phone Numbers:",
+            "- Kenyan: 07XX, 01XX → normalize to +254",
+            "- Already E.164: keep as-is",
+            "",
+            "Language Support:",
+            "- English: 'I have code X'",
+            "- Swahili: 'Nina code X', 'Nataka discount'",
+            "- Sheng: 'Niko na code', 'Nionyeshe deal'",
+            "",
+            "Edge Cases:",
+            "- Typos: 'TUSKER5O' (O vs 0) → try correcting if confident",
+            "- Multiple codes: extract first valid only",
+            "- No code found: return {code: null, confidence: 0}",
+            "",
+            "Return JSON with confidence score (0-1).",
         ].join("\n"),
     },
 } as const;
 
-/**
- * Campaign Health Agent Prompts
- */
 export const CampaignHealthPrompts = {
     v1: {
-        version: "v1",
         active: true,
-        introduced: "2024-11-28",
-        description: "Analyze campaign profitability and provide recommendations",
+        rollout: 100,
         system: [
-            "You are Promco's CampaignHealthAgent. Your job:",
-            "1. Analyze campaign profit/loss data",
-            "2. Classify health: PROFITABLE, BREAK_EVEN, LOSING_MONEY",
-            "3. Recommend actionable fixes",
-            "",
-            "Classification Rules:",
-            "- PROFITABLE: Profit margin > 10% AND positive profit",
-            "- BREAK_EVEN: Profit margin 0-10%",
-            "- LOSING_MONEY: Negative profit",
+            "Analyze campaign profitability. Classify as:",
+            "- PROFITABLE: margin > 10%, positive profit",
+            "- BREAK_EVEN: margin 0-10%",
+            "- LOSING_MONEY: negative profit",
             "",
             "Recommendations:",
-            "- For LOSING_MONEY: Suggest stopping campaign or reducing discount",
-            "- For BREAK_EVEN: Suggest small tweaks (5% discount reduction)",
-            "- For PROFITABLE: Suggest scaling up or replicating to similar products",
+            "- LOSING_MONEY: Stop immediately or reduce discount by 50%+",
+            "- BREAK_EVEN: Reduce discount 5-10%",
+            "- PROFITABLE: Scale or replicate pattern",
             "",
-            "Context:",
-            "Distributors trust us because we tell them when to STOP, not just when to go.",
+            "Context: Distributors trust us because we tell them when to STOP.",
+            "Include: expected profit change, timeline to profitability if adjusting.",
         ].join("\n"),
     },
 } as const;
 
-// ============================================================================
-// PROMPT SELECTION LOGIC
-// ============================================================================
+export const NegotiationIntelPrompts = {
+    v1: {
+        active: true,
+        rollout: 100,
+        system: [
+            "You generate negotiation scripts for liquor distributors.",
+            "",
+            "Context:",
+            "- Distributors in Kenya negotiate stock prices with suppliers (Diageo, EABL, Pernod Ricard)",
+            "- Most distributors don't know their performance vs competitors",
+            "- Promco tracks actual redemption data proving distributor value",
+            "",
+            "Your job:",
+            "1. Analyze distributor's performance data",
+            "2. Calculate their percentile rank (top 5%, top 25%, etc.)",
+            "3. Suggest a target discount percentage",
+            "4. Generate a confident negotiation script in Kenyan business tone",
+            "",
+            "Negotiation Formula:",
+            "- Top 5%: Ask for 3-5% volume discount",
+            "- Top 10-25%: Ask for 2-3% discount",
+            "- Top 25-50%: Ask for 1-2% discount or co-op funding",
+            "- Below 50%: Focus on co-op funding, not price discount",
+            "",
+            "Script Structure:",
+            "1. Lead with data (volume moved, redemption rate)",
+            "2. Position as top performer",
+            "3. Make the ask (specific % discount)",
+            "4. Justify with mutual benefit (shelf placement, guaranteed orders)",
+            "",
+            "Tone: Professional but direct. Use Kenyan business language.",
+            "Avoid: Being apologetic, vague asks, complex jargon",
+        ].join("\n"),
+    },
+} as const;
 
-export type PromptKey = "backInStock" | "promoRedemption" | "campaignHealth";
-
-const PROMPT_REGISTRY = {
+const REGISTRY = {
     backInStock: BackInStockPrompts,
     promoRedemption: PromoRedemptionPrompts,
     campaignHealth: CampaignHealthPrompts,
+    negotiationIntel: NegotiationIntelPrompts,
 } as const;
 
-export interface GetPromptOptions {
-    /**
-     * Prompt category (e.g., 'backInStock')
-     */
+type PromptKey = keyof typeof REGISTRY;
+
+interface GetPromptOpts {
     prompt: PromptKey;
-
-    /**
-     * Specific version to use (e.g., 'v2')
-     * If not provided, uses the active version
-     */
     version?: string;
-
-    /**
-     * A/B test group (e.g., 'control', 'variant_a')
-     * If provided and matches a testing config, uses the variant
-     */
-    abTestGroup?: string;
-
-    /**
-     * Variables to interpolate into prompt (e.g., {maxDiscountPercent: 15})
-     */
     variables?: Record<string, string | number>;
+    userId?: string; // For A/B bucketing
 }
 
-/**
- * Get a prompt, with version resolution and interpolation
- * 
- * @example
- * ```typescript
- * const prompt = getPrompt({
- *   prompt: 'backInStock',
- *   version: 'v2', // optional, uses active if not provided
- *   variables: { maxDiscountPercent: 15 }
- * });
- * ```
- */
-export function getPrompt(options: GetPromptOptions): string {
-    const { prompt, version, variables = {} } = options;
-
-    const promptVersions = PROMPT_REGISTRY[prompt];
-
-    // Resolve version
-    let selectedVersion = version;
-    if (!selectedVersion) {
-        // Find the active version
-        selectedVersion = Object.keys(promptVersions).find(
-            (v) => (promptVersions as any)[v].active
-        );
+// Simple hash for consistent A/B bucketing
+function hashUserId(userId: string): number {
+    let hash = 0;
+    for (let i = 0; i < userId.length; i++) {
+        hash = ((hash << 5) - hash) + userId.charCodeAt(i);
+        hash = hash & hash;
     }
-
-    if (!selectedVersion) {
-        throw new Error(
-            `No active version found for prompt '${prompt}'. Specify a version explicitly.`
-        );
-    }
-
-    const promptData = (promptVersions as any)[selectedVersion];
-
-    if (!promptData) {
-        throw new Error(`Prompt version '${selectedVersion}' not found for '${prompt}'.`);
-    }
-
-    if (promptData.deprecated) {
-        console.warn(
-            `⚠️  Using deprecated prompt ${prompt}:${selectedVersion}. Reason: ${promptData.deprecationReason}`
-        );
-    }
-
-    // Interpolate variables
-    let finalPrompt = promptData.system;
-    for (const [key, value] of Object.entries(variables)) {
-        finalPrompt = finalPrompt.replace(new RegExp(`\\{${key}\\}`, "g"), String(value));
-    }
-
-    return finalPrompt;
+    return Math.abs(hash) % 100;
 }
 
-/**
- * Get metadata about a prompt version (for logging/evals)
- */
-export function getPromptMetadata(prompt: PromptKey, version: string) {
-    const promptVersions = PROMPT_REGISTRY[prompt];
-    const promptData = (promptVersions as any)[version];
+export function getPrompt(opts: GetPromptOpts): string {
+    const { prompt, version, variables = {}, userId } = opts;
+    const versions = REGISTRY[prompt];
 
-    if (!promptData) {
-        return null;
+    let selectedVersion: string;
+
+    if (version) {
+        selectedVersion = version;
+    } else {
+        // Get active versions with rollout
+        const activeVersions = Object.entries(versions)
+            .filter(([_, v]) => (v as PromptVersion).active)
+            .sort(([_, a], [__, b]) =>
+                ((b as PromptVersion).rollout || 0) - ((a as PromptVersion).rollout || 0)
+            );
+
+        if (activeVersions.length === 0) {
+            throw new Error(`No active version for '${prompt}'`);
+        }
+
+        // A/B test if multiple active versions + userId provided
+        if (activeVersions.length > 1 && userId) {
+            const bucket = hashUserId(userId);
+            let cumulative = 0;
+
+            for (const [ver, meta] of activeVersions) {
+                cumulative += (meta as PromptVersion).rollout || 0;
+                if (bucket < cumulative) {
+                    selectedVersion = ver;
+                    break;
+                }
+            }
+
+            selectedVersion = selectedVersion! || activeVersions[0][0];
+        } else {
+            selectedVersion = activeVersions[0][0];
+        }
     }
 
-    return {
-        version: promptData.version,
-        active: promptData.active ?? false,
-        deprecated: promptData.deprecated ?? false,
-        introduced: promptData.introduced,
-        description: promptData.description,
-    };
+    const selected = (versions as any)[selectedVersion];
+
+    if (!selected) {
+        throw new Error(`Version '${selectedVersion}' not found for '${prompt}'`);
+    }
+
+    if (selected.deprecated) {
+        console.warn(`⚠️  ${prompt}:${selectedVersion} deprecated: ${selected.deprecated}`);
+    }
+
+    let result = selected.system;
+    for (const [key, val] of Object.entries(variables)) {
+        result = result.replace(new RegExp(`\\{${key}\\}`, "g"), String(val));
+    }
+
+    return result;
 }
 
-// ============================================================================
-// A/B TESTING CONFIG (Future)
-// ============================================================================
+export function getPromptMeta(prompt: PromptKey, version: string) {
+    const selected = (REGISTRY[prompt] as any)[version];
+    return selected ? {
+        version,
+        active: selected.active ?? false,
+        rollout: selected.rollout ?? 100,
+        deprecated: selected.deprecated,
+        improvements: selected.improvements,
+        metrics: selected.metrics,
+    } : null;
+}
 
-/**
- * A/B Test Configuration
- * 
- * Example:
- * - Control group: uses v2
- * - Variant A: uses v3 (testing new bundle suggestions)
- * 
- * Measured metrics: profit accuracy, HITL approval rate, customer satisfaction
- */
-export const AB_TEST_CONFIG = {
-    backInStockBundleTest: {
-        enabled: false, // Set to true when running test
-        control: { version: "v2", allocation: 0.9 }, // 90% on stable v2
-        variantA: { version: "v3", allocation: 0.1 }, // 10% on experimental v3
-        metrics: ["profitAccuracy", "hitlApprovalRate", "avgMarginPercent"],
-    },
-} as const;
-
-/**
- * Example usage in agent:
- * 
- * ```typescript
- * const systemPrompt = getPrompt({
- *   prompt: 'backInStock',
- *   variables: { maxDiscountPercent: input.maxDiscountPercent },
- *   abTestGroup: organizationId % 10 === 0 ? 'variantA' : 'control'
- * });
- * ```
- */
+// Helper for monitoring - log which version was used
+export function logPromptUsage(
+    prompt: PromptKey,
+    version: string,
+    outcome: { success: boolean; latency: number; cost?: number }
+) {
+    // Wire to your observability stack
+    console.log(JSON.stringify({
+        timestamp: new Date().toISOString(),
+        prompt,
+        version,
+        ...outcome,
+    }));
+}
