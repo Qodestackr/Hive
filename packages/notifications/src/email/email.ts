@@ -8,8 +8,7 @@ import type {
 import { PasswordResetEmail, UserInviteEmail, WelcomeEmail } from "./templates";
 import { VerificationEmail } from "./templates/verification-email";
 
-export const resend = new Resend("re_ShPG17FF_B2FShDxtWMf1uCzsERr8KoDJ"); //env.RESEND_API_KEY
-
+export const resend = new Resend(env.RESEND_API_KEY);
 export class EmailService {
 	private from: string;
 
