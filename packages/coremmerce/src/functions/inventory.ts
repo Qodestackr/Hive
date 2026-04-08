@@ -1,20 +1,3 @@
-/**
- * Pure Inventory Functions
- *
- * CONTRAST WITH OLD CODE (purchase-order-service.ts):
- * ❌ Mixed concerns (checkout + order creation in one giant function)
- * ❌ Error handling with try/catch returning { success: false }
- * ❌ Console.error everywhere
- * ❌ Lost error context
- *
- * NEW APPROACH (this file):
- * ✅ Single-responsibility functions
- * ✅ Throw PromcoError (let services handle composition)
- * ✅ Type-safe with generated GraphQL types
- * ✅ Preserve all error context
- * ✅ Easy to test (pure functions)
- */
-
 import { createError } from "@repo/utils";
 import {
 	executeMutation,
