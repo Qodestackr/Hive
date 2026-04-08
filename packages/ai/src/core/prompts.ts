@@ -1,12 +1,3 @@
-/**
- * Prompts Registry - Production Grade
- * 
- * Principles:
- * 1. Prompts are contracts - breaking changes need new versions
- * 2. Metadata enables monitoring - track what version caused what outcome
- * 3. Gradual rollout - canary/A/B test before full deployment
- */
-
 import { z } from 'zod';
 
 // Schema for prompt metadata
