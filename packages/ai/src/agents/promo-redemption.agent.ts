@@ -8,26 +8,6 @@ import { getPrompt } from "../core/prompts";
 import { customerVerificationTool } from "../tools/customer-verification-ai.tool";
 import { DeterministicMessageGenerator } from "../tools/verification.tool";
 
-// ============================================================================
-// PROMO REDEMPTION AGENT
-// ============================================================================
-
-/**
- * Handles conversational promo code redemption
- * 
- * Flow:
- * 1. Extract code + phone from natural language
- * 2. Validate code in database
- * 3. Check compliance (age verification)
- * 4. Create draft order
- * 5. (Future: HITL if high-value)
- * 6. Finalize order
- */
-
-// ============================================================================
-// SCHEMAS
-// ============================================================================
-
 const ExtractionResultSchema = z.object({
     code: z.string().nullable(),
     phone: z.string().nullable(),
@@ -189,13 +169,6 @@ export class PromoRedemptionAgent {
         });
     }
 
-    /**
-     * Extract promo code + phone from natural language
-     * 
-     * Handles Swahili/English mix:
-     * - "Nina code TUSKER50" → { code: "TUSKER50" }
-     * - "BEER20 for 0722555666" → { code: "BEER20", phone: "+254722555666" }
-     */
     static extractCodeEffect(messageText: string) {
         return Effect.tryPromise({
             try: async () => {
