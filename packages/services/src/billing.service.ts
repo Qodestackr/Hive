@@ -12,6 +12,7 @@ import db, {
 	sql,
 	withDrizzleErrors,
 } from "@repo/db";
+import { mastra } from "@repo/ai";
 import { OrganizationContext } from "@repo/utils";
 import {
 	type DatabaseError,
@@ -268,6 +269,131 @@ export const billingService = {
 					totalPages: Math.ceil(count / limit),
 				},
 			};
+		});
+	},
+
+	/**
+	 * Get invoice with campaign breakdown from outcome snapshot
+	 * Used for AI insight generation
+	 */
+	getInvoiceWithCampaignBreakdownEffect(
+		invoiceId: string,
+	): Effect.Effect<
+		{
+			invoice: Invoice;
+			campaignBreakdown: Array<{
+				name: string;
+				profit: number;
+				revenue: number;
+				captures: number;
+			}>;
+			totalProfit: number;
+			capturesCount: number;
+		},
+		InvoiceNotFound | DatabaseError,
+		OrganizationContext
+	> {
+		return Effect.gen(function* () {
+			const { organizationId } = yield* OrganizationContext;
+
+			const invoice = yield* billingService.getInvoiceEffect(invoiceId);
+
+			const snapshotRows = yield* withDrizzleErrors(
+				"outcome_snapshots",
+				"findByInvoice",
+				() =>
+					db
+						.select()
+						.from(outcomeSnapshots)
+						.where(
+							and(
+								eq(outcomeSnapshots.invoiceId, invoiceId),
+								eq(outcomeSnapshots.organizationId, organizationId),
+							),
+						)
+						.limit(1),
+			);
+
+			const snapshot = snapshotRows[0];
+			if (!snapshot) {
+				return yield* Effect.fail(
+					new GenericDatabaseError({
+						operation: "findByInvoice",
+						table: "outcome_snapshots",
+						pgCode: undefined,
+						detail: "No outcome snapshot found for invoice",
+						originalError: new Error("Snapshot not found"),
+					}),
+				);
+			}
+
+			const campaignBreakdown = (snapshot.campaignBreakdown || []) as Array<{
+				name: string;
+				profit: number;
+				revenue: number;
+				captures: number;
+			}>;
+
+			return {
+				invoice,
+				campaignBreakdown,
+				totalProfit: snapshot.profit,
+				capturesCount: snapshot.capturesCount,
+			};
+		});
+	},
+
+	/**
+	 * Generate AI insight for invoice
+	 * Analyzes campaign performance and provides strategic recommendations
+	 */
+	generateInvoiceInsightEffect(
+		periodStart: Date,
+		periodEnd: Date,
+		campaignBreakdown: Array<{
+			name: string;
+			profit: number;
+			revenue: number;
+			captures: number;
+		}>,
+		totalProfit: number,
+		capturesCount: number,
+		profitThreshold: number = 10000,
+	): Effect.Effect<string, Error, never> {
+		return Effect.gen(function* (_) {
+			const agent = mastra.getAgent('billingInsightAgent');
+			if (!agent) {
+				return yield* _(Effect.fail(new Error('Billing insight agent not found')));
+			}
+
+			const analysisData = {
+				periodStart: periodStart.toISOString().split('T')[0],
+				periodEnd: periodEnd.toISOString().split('T')[0],
+				campaigns: campaignBreakdown.map((c) => ({
+					name: c.name,
+					profit: c.profit,
+					revenue: c.revenue,
+					captures: c.captures,
+					belowThreshold: c.profit < profitThreshold,
+				})),
+				totalProfit,
+				capturesCount,
+			};
+
+			const response = yield* _(
+				Effect.tryPromise({
+					try: async () =>
+						agent.generate([
+							{
+								role: 'user',
+								content: JSON.stringify(analysisData, null, 2),
+							},
+						]),
+					catch: (error) => new Error(`AI insight generation failed: ${error}`),
+				}),
+			);
+
+			return response.text;
 		});
 	},
 };

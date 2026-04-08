@@ -1,0 +1,5 @@
+// Promco tracks every promo redemption across all distributors
+// Aggregates data to calculate national percentile rankings
+// Distributor discovers they're "Top 5%" (with receipts)
+// AI generates negotiation script based on performance tier
+// Distributor negotiates better pricing → Higher margins

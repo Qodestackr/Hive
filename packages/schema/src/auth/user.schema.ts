@@ -27,10 +27,10 @@ export const UserUpdateSchema = z
 
 export const UserResponseSchema = z
 	.object({
-		id: ID,
 		email: z.string().openapi({ example: "user@example.com" }),
 		name: z.string().openapi({ example: "John Doe" }),
 	})
+	.merge(ID)
 	.merge(Timestamps)
 	.openapi("UserResponse");
 

@@ -5,6 +5,7 @@ export const businessTypeEnum = pgEnum("business_type", [
 	"wholesaler",
 	"distributor",
 	"brand_owner",
+	"supplier",
 ]);
 
 export const subscriptionStatusEnum = pgEnum("subscription_status", [

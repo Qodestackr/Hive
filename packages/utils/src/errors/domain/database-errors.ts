@@ -153,6 +153,21 @@ export class GenericDatabaseError extends Data.TaggedError(
 	}
 }
 
+export class DatabaseQueryError extends Data.TaggedError("DatabaseQueryError")<{
+	readonly operation: string;
+	readonly table: string | undefined;
+	readonly pgCode?: string;
+	readonly detail?: string;
+	readonly originalError: unknown;
+}> {
+	readonly errorCode = ErrorCode.DATABASE_ERROR;
+	readonly statusCode = 500;
+
+	get message() {
+		return `Database query failed during '${this.operation}'${this.table ? ` on table '${this.table}'` : ""}`;
+	}
+}
+
 // Type Unions
 export type DatabaseConstraintError =
 	| UniqueConstraintViolation
@@ -170,4 +185,5 @@ export type DatabaseError =
 	| DatabaseConstraintError
 	| DatabaseSchemaError
 	| DatabaseConnectionIssue
-	| GenericDatabaseError;
+	| GenericDatabaseError
+	| DatabaseQueryError;

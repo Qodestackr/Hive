@@ -2735,15 +2735,12 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        ID: {
-            id: string;
-        };
         UserResponse: {
-            id: components["schemas"]["ID"];
             /** @example user@example.com */
             email: string;
             /** @example John Doe */
             name: string;
+            id: string;
             /** Format: date-time */
             createdAt: string;
             /** Format: date-time */
@@ -3551,8 +3548,12 @@ export interface components {
              */
             requiresAction?: boolean;
         };
+        /** @example prod_123 */
+        ID: {
+            id: string;
+        };
         ReconcileProduct: {
-            productId: components["schemas"]["ID"] & unknown;
+            productId: components["schemas"]["ID"];
             /**
              * @description Optional manual physical count override
              * @example 50

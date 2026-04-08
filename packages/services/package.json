@@ -5,11 +5,13 @@
 	"main": "./src/index.ts",
 	"types": "./src/index.ts",
 	"exports": {
+		".": "./src/index.ts",
 		"./*": "./src/*.ts"
 	},
 	"dependencies": {
 		"@repo/db": "workspace:*",
 		"@repo/schema": "workspace:*",
+		"@repo/ai": "workspace:*",
 		"@repo/utils": "workspace:*",
 		"@repo/coremmerce": "workspace:*",
 		"@paralleldrive/cuid2": "^3.0.4"

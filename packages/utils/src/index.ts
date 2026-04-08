@@ -40,6 +40,7 @@ export {
 	EffectValidationError,
 	ForeignKeyViolation,
 	GenericDatabaseError,
+	DatabaseQueryError,
 	GenericDbError,
 	GenericDbTimeout,
 	isDomainError,
