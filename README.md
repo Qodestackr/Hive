@@ -1,95 +1,100 @@
-# Promco
+# Hive
 
-Most liquor distributors aren't losing money because customers bargain too hard. They're losing it because pricing is guesswork.
+Most liquor distributors aren't losing money because customers bargain too hard. They're losing it because pricing decisions are made in isolation, without the data swarm that should guide them.
 
-The decisions that should be data-driven are made in motion: between stock shelves, messages from suppliers, and pressure to move product before it expires. When someone finally checks the books, the damage is already done.
+The decisions that should be collective intelligence are made solo: between stock shelves, supplier pressure, and the urgency to move product before it expires. When someone finally checks the books, the damage is already done.
 
-## Existing Tools Don't Help
+## The Problem
 
-The industry has endless software: POS systems, loyalty tools, invoicing apps, inventory spreadsheets, WhatsApp ordering flows. They all record what happened. None help decide what should happen.
+You're running blind. Every promo is a bet. Every discount is a guess. Your team operates like individual bees without the hive.
+
+The industry has endless tools: POS systems, loyalty apps, inventory spreads, WhatsApp flows. They all record what happened. None help you decide what should happen before the damage is done.
 
 They don't:
-- Calculate true cost after freight, breakage, supplier delays
-- Warn you when a promo will destroy your margin
-- Show profit before you launch a campaign
-- Care whether you're profitable, just whether the transaction was stored
+- Calculate true cost after freight, breakage, delays
+- Warn you when a discount will destroy margin
+- Show profit before you launch
+- Connect inventory truth to pricing decisions
 
 ## The Uncomfortable Truth
 
 Profit doesn't form at the moment of sale. It forms at the moment of decision.
 
-If profit only becomes visible when you check the books, the damage was already done. Profit actually forms when you choose:
-- What to stock
-- How to price it
-- When to discount
-- How aggressively to push product
+When you choose what to stock, how to price it, when to discount it, how hard to push it—that's where profit is born or lost. By the time you check the books weeks later, you've already lost the battle.
 
-The real business battle isn't selling. It's deciding what price makes sense in the first place.
+The real edge isn't in selling. It's in deciding what price actually makes sense.
 
-## The Solution: Promco
+## The Solution: Hive
 
-Promco is built for the thinking moment, not the checkout moment.
+Hive is the collective intelligence between inventory and pricing.
 
-It's the brain that sits between inventory and pricing decisions. Instead of spreadsheets and guesswork, Promco gives clarity:
-- What's profitable
-- What's risky
-- What could work better
+It's the swarm that sees what you can't alone. Instead of spreadsheets and hunches, Hive gives you:
+- What's actually profitable (FIFO-true, not guessed)
+- What's risky before you launch
+- What moves product AND makes money
 
-By tracking stock levels, FIFO costs, and past performance, promotions stop being wild experiments. They become informed moves with predictable outcomes.
+By connecting stock levels, real costs, and campaign performance, every promo becomes an informed decision, not a desperate move.
 
 ### How It Works
 
-Before you launch a promo, Promco tells you:
+Before you launch a 20 percent discount on Hennessy:
 
-Current FIFO cost: KES 9,200 per bottle. Selling price after 20 percent discount: KES 8,800. Loss per redemption: KES 400.
+Hive tells you: Current FIFO cost per bottle: KES 9,200. Price after discount: KES 8,800. You lose KES 400 per redemption.
 
-Alternative: Try 10 percent off instead. Profit per bottle: KES 700. Or push Jameson instead, slow mover with 45 percent margin.
+Hive suggests: Try 10 percent instead. You make KES 700 profit per bottle. Or push Jameson (slow mover, 45 percent margin).
 
-No more guessing. No more losses discovered weeks later.
+No guessing. No losses discovered later. Just math.
 
-## Why Promco is Different
+## Why Hive is Different
 
-### Money Saved Equals Money Earned
+### Money Saved is Money You Keep
 
-Most marketing tools are spend engines. They help you blast messages and track clicks. Promco is a profit engine.
+Most marketing tools are spend engines. They cost you money upfront. Hive is a profit engine. You only pay when profit actually happens.
 
-Traditional marketing tools: Pay us to send messages. Spend money now, hope for ROI later. Monthly fee regardless of results. Track clicks and opens.
+Traditional tools: Pay monthly. Hope for ROI. Track activity.
+Hive: We prevent losses. Save money you would have lost. Pay only on profit created.
 
-Promco: We prevent you from losing money. Save money you would have lost. Pay only on profit created. Track actual profit per promo.
+Every dollar a distributor spends on traditional tools leaves their pocket immediately. Every dollar Hive saves on a bad promo never leaves it.
 
-The difference is fundamental. Every dollar a distributor spends on marketing tools comes out of their pocket first, with uncertain ROI later. Every dollar Promco saves by preventing a bad promo is pure profit they would have lost. It never left their pocket.
+### FIFO Profit, Not Revenue Vanity
 
-### The Only System That Tracks FIFO Profit
+Everyone else shows redemptions and sales volume. Hive shows actual profit using real inventory costs.
 
-Everyone else tracks redemptions and revenue. Only Promco tracks actual profit using FIFO inventory costs.
-
-When you redeem "Hennessy 20 percent off," we know which batch it came from, the exact unit cost at purchase time, whether you made or lost money on that specific redemption, and real-time campaign P and L.
+When you redeem a Hennessy discount, Hive knows:
+- Which batch it came from (oldest first, FIFO)
+- Exact unit cost at purchase time
+- Whether this specific redemption made or lost money
+- Real-time campaign profit/loss (not 30 days later)
 
 This isn't promo tracking. It's profit intelligence.
 
-## Built For Kenyan Distributors
+## Built for Kenyan Spirits Distribution
 
-Promco is designed for the realities of Kenya's liquor market:
-- Compliance built in: Age verification, licensed venue tracking, KRA eTIMS integration
-- WhatsApp first: Customer engagement via WhatsApp, the way business actually happens
-- Master catalog: 1,000 plus SKUs pre-loaded, just activate what you sell and update prices
-- Outcome based pricing: Pay only when we create profit
+Hive understands your market:
+- Age verification (21+) built in, compliant
+- Licensed venue tracking for regulatory reality
+- KRA eTIMS integration, no workarounds
+- WhatsApp-native, the way business actually happens
+- 1,000+ pre-loaded SKUs (just activate what you sell)
+- Outcome-based pricing (you pay for profit, not access)
 
-## Quick Start
+## Get Started
 
-1. Sync your catalog (1 minute): Activate products you sell from the 1,000 SKU master list
-2. Update prices (2 minutes): Set your selling prices
-3. Record first stock arrival (2 minutes): Product, quantity, unit cost
-4. Create campaign with profit check (3 minutes): See if it's profitable before launch
-5. Send promo codes via WhatsApp (2 minutes): Age verified customers only
+1. Sync catalog (1 min): Activate your products
+2. Set prices (2 min): Your selling prices
+3. Record stock arrival (2 min): Product, qty, cost
+4. Plan a promo (3 min): See if it's profitable before launch
+5. Send via WhatsApp (2 min): Age-verified customers only
 
 ## What You Get
 
-- Pre-flight profit checks (prevent losing campaigns)
-- Real-time campaign P and L (know profitability as redemptions happen)
-- FIFO cost tracking (accurate profit per SKU)
-- Age verification and compliance (built in, Kenya regulations)
-- WhatsApp integration (promo delivery plus customer capture)
+- Pre-flight profit checks (kill bad promos before they cost you)
+- Real-time campaign P and L (know profitability as it happens)
+- FIFO cost tracking (accurate per-SKU profit)
+- Age verification and compliance (built in)
+- WhatsApp integration (delivery + customer capture)
 - Profit alerts (get warned if a campaign goes negative)
 
-When you make decisions with visibility instead of anxiety, you stop surviving and start steering. Promco exists for that shift.
+When you decide with visibility instead of anxiety, you stop surviving and start steering.
+
+Hive exists for that shift.
