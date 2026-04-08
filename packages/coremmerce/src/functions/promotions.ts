@@ -1,21 +1,3 @@
-/**
- * Pure Promotion Functions
- *
- * CONTRAST WITH OLD CODE (commerce-promotions.ts):
- * ❌ Class-based with hidden dependencies
- * ❌ Raw fetch() calls instead of typed client
- * ❌ Building mutation strings manually (error-prone)
- * ❌ Generic error handling
- * ❌ Built for a different product (bulk pricing, not campaigns)
- *
- * NEW APPROACH (this file):
- * ✅ Pure functions (no class, explicit dependencies)
- * ✅ Use typed GraphQL client
- * ✅ Generated types from codegen
- * ✅ Specific errors (SaleorPromotionError)
- * ✅ Built for Promco campaigns (metadata linking, flexible rules)
- */
-
 import { executeSaleorRequest } from "../client/saleor-client";
 import { SaleorPromotionError } from "../errors/saleor-errors";
 import {
