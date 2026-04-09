@@ -44,8 +44,7 @@ const getRedisInstance = () => {
 
 	if (!redisInstance) {
 		const getRedisUrl = (): string => {
-			const redisUrl =
-				"redis://default:ZPFyGd2ClDSZ4YHQFSzzUZNJ9bIvZgOF@redis-18280.c341.af-south-1-1.ec2.redns.redis-cloud.com:18280";
+			const redisUrl = process.env.REDIS_URL!;
 
 			if (!redisUrl) {
 				console.error("REDIS_URL is not defined");
